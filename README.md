@@ -11,4 +11,9 @@ Repository for the WEmulate Backend written in Python.
     virtualenv venv 
 4. Activate virtualenv
     source venv/bin/activate
-5. 
+5. Install all requirements
+   pip install -r requirements.txt
+6. Start WSGI
+   cd interfaces
+   gunicorn --bind 0.0.0.0:5000 /wsgi:app 
+
