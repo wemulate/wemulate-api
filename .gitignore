@@ -115,4 +115,4 @@ dmypy.json
 .pyre/
 
 # DB File
-interfaces/interfaces.db
+*.db
