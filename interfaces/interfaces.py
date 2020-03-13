@@ -44,13 +44,15 @@ for name in netifaces.interfaces():
         db.session.close()
 
 @api.route('/api/v1/interfaces/')
+@api.route('/api/v1/interfaces')
 class InterfaceList(Resource):
     def get(self):
         return jsonify((Interface.query.all()))
         """
         returns a list of available interfaces and related information
         """
-@api.route('/api/v1/interfaces/<string:name>'/)
+@api.route('/api/v1/interfaces/<string:name>/')
+@api.route('/api/v1/interfaces/<string:name>')
 class Delay(Resource):
     def get(self, name):
         interface = Interface.query.filter_by(physical_name=name).first_or_404()
@@ -59,6 +61,7 @@ class Delay(Resource):
         returns information about specific interface
         """
 
+@api.route('/api/v1/interfaces/<string:name>/delay/')
 @api.route('/api/v1/interfaces/<string:name>/delay')
 class Delay(Resource):
     def get(self, name):
