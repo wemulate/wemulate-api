@@ -96,6 +96,3 @@ class Delay(Resource):
         command = f"sudo tc qdisc del dev {name} root netem delay 0"
         os.system(command)
         return command
- 
-        
-      
