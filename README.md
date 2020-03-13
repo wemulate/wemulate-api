@@ -15,5 +15,5 @@ Repository for the WEmulate Backend written in Python.
    pip install -r requirements.txt
 6. Start WSGI
    cd interfaces
-   gunicorn --bind 0.0.0.0:5000 /wsgi:app 
+   gunicorn --bind 0.0.0.0:5000 wsgi:app 
 
