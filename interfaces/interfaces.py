@@ -1,8 +1,8 @@
-from flask import Flask, request,jsonify
+from flask import Flask, request, jsonify
 from flask_restplus import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from dataclasses import dataclass
-import netifaces 
+import netifaces
 import os
 
 
@@ -14,6 +14,7 @@ db = SQLAlchemy(app)
 # class hostname(db.Model):
 #    id = db.Column(db.Integer, primary_key=True)
 #    name = db.Column(db.String(50), unique=True, nullable=False)
+
 
 @dataclass
 class Interface(db.Model):
@@ -43,6 +44,7 @@ for name in netifaces.interfaces():
         db.session.rollback()
         db.session.close()
 
+
 @api.route('/api/v1/interfaces/')
 @api.route('/api/v1/interfaces')
 class InterfaceList(Resource):
@@ -51,6 +53,8 @@ class InterfaceList(Resource):
         """
         returns a list of available interfaces and related information
         """
+
+
 @api.route('/api/v1/interfaces/<string:name>/')
 @api.route('/api/v1/interfaces/<string:name>')
 class Delay(Resource):
@@ -60,6 +64,7 @@ class Delay(Resource):
         """
         returns information about specific interface
         """
+
 
 @api.route('/api/v1/interfaces/<string:name>/delay/')
 @api.route('/api/v1/interfaces/<string:name>/delay')
