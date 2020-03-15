@@ -17,8 +17,8 @@ stages:
 init:
   stage: init
   script:
-    - "virtualenv backend"
-    - ". venv/bin/activate"
+    - "virtualenv venv"
+    - "source venv/bin/activate"
     - "pip3 install -r requirements.txt"
   
 linting-site:
