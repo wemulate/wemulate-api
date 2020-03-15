@@ -75,7 +75,7 @@ class Delay(Resource):
         """
         returns delay of specific interface
         """
-    
+
     def put(self, name):
         interface = Interface.query.filter_by(physical_name=name).first_or_404()
         delay = request.form['value']
@@ -89,6 +89,7 @@ class Delay(Resource):
         command = f"sudo tc qdisc add dev {name} root netem delay {delay}ms"
         os.system(command)
         return command
+
     def delete(self, name):
         interface = Interface.query.filter_by(physical_name=name).first_or_404()
         try:
