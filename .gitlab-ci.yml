@@ -8,11 +8,6 @@ stages:
   - init
   - linting
   - build 
-  
-# before_script:
-#   - "virtualenv backend"
-#   - "source venv/bin/activate"
-#   - "pip3 install -r requirements.txt"
 
 init:
   stage: init
@@ -24,7 +19,7 @@ init:
 linting-site:
   stage: linting
   script:
-    - "pylint interfaces"
+    - "flake8 --max-line-length=120 **/*.py"
 
 # run_tests:
 #   stage: test
@@ -34,7 +29,6 @@ linting-site:
 build-site:
   stage: build
   script:
-    - "cd interfaces/"
     - "tar cvfz ../wemulate-backend.tgz ./*"
   artifacts:
     expire_in: 1 week
