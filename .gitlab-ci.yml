@@ -1,0 +1,29 @@
+image: python:3.7.7
+
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - linting
+  - build 
+  
+before_script:
+  - "virtualenv backend"
+  - "source venv/bin/activate"
+  - "pip install -r requirements.txt"
+  
+linting-site:
+  stage: linting
+  script:
+    - "pylint interfaces"
+  
+build-site:
+  stage: build
+  script:
+    - "cd interfaces/"
+    - "tar cvfz ../wemulate-backend.tgz ./*"
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - wemulate-backend.tgz
