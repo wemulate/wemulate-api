@@ -2,21 +2,34 @@ image: wemulate/backend-cicd:1.0
 
 cache:
   paths:
-    - node_modules/
+    - venv/
 
 stages:
+  - init
   - linting
   - build 
   
-before_script:
-  - "virtualenv backend"
-  - "source venv/bin/activate"
-  - "pip3 install -r requirements.txt"
+# before_script:
+#   - "virtualenv backend"
+#   - "source venv/bin/activate"
+#   - "pip3 install -r requirements.txt"
+
+init:
+  stage: init
+  script:
+    - "virtualenv backend"
+    - "source venv/bin/activate"
+    - "pip3 install -r requirements.txt"
   
 linting-site:
   stage: linting
   script:
     - "pylint interfaces"
+
+# run_tests:
+#   stage: test
+#   script:
+#     - "python tests.py"
   
 build-site:
   stage: build
