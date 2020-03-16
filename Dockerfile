@@ -1,9 +1,15 @@
 FROM python:3.7.7
 
-RUN apt-get update && apt-get upgrade -y
+WORKDIR /usr/src/app
 
-RUN apt-get install pylint -y
+COPY ./requirements.txt .
 
-RUN pip3 install virtualenv
+RUN apt update
 
-CMD [ "bash" ]
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 5000
+
+COPY . .
+
+CMD [ "gunicorn", "--bind", "0.0.0.0:5000", "interfaces/wsgi:app" ]
