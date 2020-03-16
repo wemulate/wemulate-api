@@ -16,11 +16,11 @@ init:
     - "source venv/bin/activate"
     - "pip3 install -r requirements.txt"
   
-# linting-site:
-#   stage: linting
-#   script:
-#     - "source venv/bin/activate"
-#     - "flake8 --max-line-length=120 **/*.py"
+linting-site:
+  stage: linting
+  script:
+    - "source venv/bin/activate"
+    - "flake8 --max-line-length=120 **/*.py"
   
 build-docker:
   stage: build
