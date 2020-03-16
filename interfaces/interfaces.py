@@ -57,7 +57,7 @@ class InterfaceList(Resource):
 
 @api.route('/api/v1/interfaces/<string:name>/')
 @api.route('/api/v1/interfaces/<string:name>')
-class Delay(Resource):
+class Interface(Resource):
     def get(self, name):
         interface = Interface.query.filter_by(physical_name=name).first_or_404()
         return jsonify(interface)
