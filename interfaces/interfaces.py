@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from dataclasses import dataclass
 import netifaces
 import os
+from pepper import Pepper
 
 
 app = Flask(__name__)
@@ -29,9 +30,19 @@ class Interface(db.Model):
     delay = db.Column(db.Integer)
 
 
+class SaltApi(object):
+    def __init__(self):
+        self.api = Pepper('http://localhost:8000')
+        self.api.login('salt', 'EPJ@2020!!', 'sharedsecret')
+    def execute(self, name, delay):
+        return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.set_delay', 'arg': [name, delay]}])
+
 db.drop_all()
 db.create_all()
 db.session.commit()
+
+salt_api = SaltApi()
+
 
 for name in netifaces.interfaces():
     new_interface = Interface(physical_name=name)
@@ -57,7 +68,7 @@ class InterfaceList(Resource):
 
 @api.route('/api/v1/interfaces/<string:name>/')
 @api.route('/api/v1/interfaces/<string:name>')
-class Interface(Resource):
+class FlaskInterface(Resource):
     def get(self, name):
         interface = Interface.query.filter_by(physical_name=name).first_or_404()
         return jsonify(interface)
@@ -77,18 +88,20 @@ class Delay(Resource):
         """
 
     def put(self, name):
+        
         interface = Interface.query.filter_by(physical_name=name).first_or_404()
         delay = request.form['value']
-        try:
-            interface.delay = delay
-            db.session.add(interface)
-            db.session.commit()
-        except Exception as e:
-            return(f"Failed to update the delay for the interface {name} in the DB - reason: {e}")
-            db.session.rollback()
-        command = f"sudo tc qdisc add dev {name} root netem delay {delay}ms"
-        os.system(command)
-        return command
+        return salt_api.execute(name, delay)
+        # try:
+        #     interface.delay = delay
+        #     db.session.add(interface)
+        #     db.session.commit()
+        # except Exception as e:
+        #     return(f"Failed to update the delay for the interface {name} in the DB - reason: {e}")
+        #     db.session.rollback()
+        # command = f"sudo tc qdisc add dev {name} root netem delay {delay}ms"
+        # os.system(command)
+        # return command
 
     def delete(self, name):
         interface = Interface.query.filter_by(physical_name=name).first_or_404()
