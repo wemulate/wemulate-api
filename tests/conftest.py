@@ -1,7 +1,7 @@
-#import pytest
+# import pytest
 
-#from interfaces.interfaces import *
+# from interfaces.interfaces import *
 
-#@pytest.fixture
-#def app():
+# @pytest.fixture
+# def app():
 #    return app
