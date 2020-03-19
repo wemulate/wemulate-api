@@ -12,6 +12,7 @@ stages:
 
 init:
   stage: init
+  script:
     - "virtualenv venv"
     - "source venv/bin/activate"
     - "pip3 install -r requirements.txt"
