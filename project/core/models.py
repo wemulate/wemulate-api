@@ -1,5 +1,5 @@
-from core import db
 import json
+from core import db
 
 
 class HostModel(db.Model):

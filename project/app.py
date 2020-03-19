@@ -2,9 +2,14 @@ from flask_restplus import Resource, fields
 from core import db, create_app
 from core.models import HostModel, InterfaceModel
 from apis import create_salt_api
+from localhost import create_localhost
 
 app, api, host_ns = create_app()
 salt_api = create_salt_api()
+
+# Create localhost with all interfaces
+# Just for demo and prototype
+create_localhost()
 
 # Parser and Models
 host_parser = api.parser()
