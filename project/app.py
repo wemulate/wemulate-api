@@ -1,28 +1,12 @@
-from flask import Flask, request, jsonify
-from flask_restplus import Api, Resource, fields
-from flask_sqlalchemy import SQLAlchemy
-from dataclasses import dataclass
-import netifaces
-import os
-from pepper import Pepper
+from flask_restplus import Resource, fields
+from core import db, create_app
+from core.models import HostModel, InterfaceModel
+from apis import create_salt_api
 
+app, api, host_ns = create_app()
+salt_api = create_salt_api()
 
-app = Flask(__name__)
-# Todo: Run guncorn 
-# app.wsgi_app = ProxyFix(app.wsgi_app)
-api = Api(app, version='1.0', title='WEmulate API',
-    description='REST API for WEmulate ',
-)
-
-host_ns = api.namespace('Host and Interface Operations', description='CRUD Hosts and Interfaces', path='/api/v1/hosts')
-
-#Not used yet
-#profile_ns = api.namespace('Profile Operations', description='Profile Operations', path='/api/v1/profiles') 
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:wemulateEPJ2020@localhost'
-db = SQLAlchemy(app)
-
-
+# Parser and Models
 host_parser = api.parser()
 host_parser.add_argument('name', type=str, help='hostname of the device/minion')
 host_parser.add_argument('physically', type=bool, help='define if device is physically or not')
@@ -51,51 +35,17 @@ host_put_model = api.model('host_put', {
     'available': fields.Boolean
 })
 
-
-
-class HostModel(db.Model):
-    __tablename__ = 'host'
-    host_id = db.Column(
-        db.Integer,
-        primary_key=True,
-        autoincrement=True
-    )
-    name = db.Column(db.String(50), nullable=False)
-    physically = db.Column(db.Boolean, default=False)
-    available = db.Column(db.Boolean, default=True)
-    interfaces = db.relationship(
-        'InterfaceModel',
-        backref='host',
-        lazy=False,
-        cascade='delete',
-        order_by='asc(InterfaceModel.int_id)')
-
-    def __init__(self, name, physically):
-        self.name = name
-        if physically is not None:
-            self.physically = physically
-
-    def __repr__(self):
-        return json.dumps({
-            'host_id': self.host_id,
-            'name': self.name,
-            'physically': self.physically,
-            'available': self.available
-        })
-
-
-
 interface_model = api.model('interface', {
 'int_id': fields.Integer,
 'host_id': fields.Integer,
 'logical_name': fields.String,
 'physical_name': fields.String,
-'delay': fields.Integer,
+'delay': fields.Integer
 })
 
 interface_post_model = api.model('interface_post', {
 'physical_name': fields.String(required=True),
-'logical_name': fields.String,
+'logical_name': fields.String
 })
 
 interface_put_model =  api.model('interface_put', {
@@ -104,70 +54,6 @@ interface_put_model =  api.model('interface_put', {
 'delay': fields.Integer
 })
 
-class InterfaceModel(db.Model):
-    __tablename__ = 'interface'
-    int_id = db.Column(
-        db.Integer,
-        primary_key=True,
-        autoincrement=True)
-    logical_name = db.Column(db.String(50))
-    physical_name = db.Column(db.String(50), nullable=False)
-    delay = db.Column(db.Integer, default=0)
-    host_id = db.Column(db.Integer, db.ForeignKey('host.host_id'), nullable=False)
-    
-    def __init__(self, physical_name,host_id, logical_name=None):
-        self.physical_name = physical_name
-        if not logical_name:
-            self.logical_name = self.physical_name
-        else:
-            self.logical_name = logical_name
-        self.host_id = host_id
-    def __repr__(self):
-        return json.dumps({
-            'int_id': self.id,
-            'logical_name': self.logical_name,
-            'physical_name': self.physical_name,
-            'delay': self.delay,
-            'host_id': self.host_id
-        })
-
-
-
-class SaltApi(object):
-    def __init__(self):
-        self.api = Pepper('http://localhost:8000')
-        self.api.login('salt', 'EPJ@2020!!', 'sharedsecret')
-    def set_delay(self, name, delay):
-        return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.set_delay', 'arg': [name, delay]}])
-    def remove_delay(self, name):
-        return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.remove_delay', 'arg': name}])
-
-
-db.drop_all()
-db.create_all()
-
-salt_api = SaltApi()
-
-
-# Add localhost by starting appliction --> therefore localhost has always host_id = 1
-localhost = HostModel(name='localhost', physically=False)
-try:
-    db.session.add(localhost)
-    db.session.commit()
-except Exception as e:
-    print(f'Failed to add localhost --> {e}')
-
-
-for name in netifaces.interfaces():
-    new_interface = InterfaceModel(name, 1) #localhost has always host_id = 1
-    print(name)
-    try:
-        db.session.add(new_interface)
-        db.session.commit()
-    except Exception as e:
-        print(f"Failed to create the interfaces entry for {name} in the DB - reason: {e}")
-        db.session.rollback()
-        db.session.close()
 
 @host_ns.route('/', '')
 class HostList(Resource):
@@ -203,7 +89,7 @@ class HostById(Resource):
         return HostModel.query.filter_by(host_id=host_id).first_or_404()
 
     @host_ns.doc('update_host')
-    @host_ns.expect(host_put_model, validate=True)
+    @host_ns.expect(body=[host_put_model], validate=True)
     @host_ns.marshal_with(host_model, code=200)
     @host_ns.response(400, '{"message": "Missing required properties"}')
     def put(self, host_id):
@@ -243,7 +129,7 @@ class HostById(Resource):
         api.abort(404, f"Host with {host_id} not found")
 
 
-@host_ns.route('/<int:host_id>/interfaces', '/<int:host_id>/interfaces')
+@host_ns.route('/<int:host_id>/interfaces/', '/<int:host_id>/interfaces')
 @host_ns.response(404, '{"message": "Host not found"}')
 @host_ns.param('host_id', 'The host identifier')
 class InterfaceList(Resource):
@@ -268,7 +154,7 @@ class InterfaceList(Resource):
             db.session.rollback()
         return interface, 201
 
-@host_ns.route('/<int:host_id>/interfaces/<int:int_id>/', '/<int:host_id>/interfaces/<int:int_id>/')
+@host_ns.route('/<int:host_id>/interfaces/<int:int_id>/', '/<int:host_id>/interfaces/<int:int_id>')
 @host_ns.response(404, '{"message": "Host or Interface not found"}')
 @host_ns.param('host_id', 'The host identifier')
 @host_ns.param('int_id', 'The interface identifier')
@@ -328,7 +214,4 @@ class IntById(Resource):
                 api.abort(500, f"Failed to delete Interface with {host_id}")
             return '', 204
         api.abort(404, f"Interface with {int_id} not found")
-
-
-
 
