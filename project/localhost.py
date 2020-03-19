@@ -4,8 +4,7 @@ from core.models import HostModel, InterfaceModel
 
 
 def create_localhost():
-    # Add localhost by starting appliction \
-    # therefore localhost has always host_id = 1
+    # Add localhost by starting appliction therefore localhost has always host_id = 1
     localhost = HostModel(name='localhost', physically=False)
     try:
         db.session.add(localhost)
@@ -21,9 +20,6 @@ def create_localhost():
             db.session.add(new_interface)
             db.session.commit()
         except Exception as e:
-            print(
-                f"Failed to create the interfaces entry for \
-                {name} in the DB - reason: {e}"
-            )
+            print(f"Failed to create the interfaces entry for {name} in the DB - reason: {e}")
             db.session.rollback()
             db.session.close()

@@ -8,6 +8,6 @@ class SaltApi(object):
 
     def set_delay(self, name, delay):
         return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.set_delay', 'arg': [name, delay]}])
-        
+
     def remove_delay(self, name):
         return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.remove_delay', 'arg': name}])
