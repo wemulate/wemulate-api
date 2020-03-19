@@ -11,6 +11,7 @@ Jinja2==2.11.1
 jsonschema==3.2.0
 MarkupSafe==1.1.1
 netifaces==0.10.9
+psycopg2==2.8.4
 pyrsistent==0.15.7
 pytz==2019.3
 salt-pepper==0.7.5
