@@ -4,23 +4,32 @@ cache:
   paths:
     - venv/
 
+before_script:
+  - "virtualenv venv"
+  - "source venv/bin/activate"
+  - "pip3 install -r requirements.txt"
+
 stages:
-  - init
   - linting
   - build 
 
-init:
-  stage: init
-  script:
-    - "virtualenv venv"
-    - "source venv/bin/activate"
-    - "pip3 install -r requirements.txt"
-  
 linting-site:
   stage: linting
   script:
-    - "source venv/bin/activate"
     - "flake8 --max-line-length=120 **/*.py"
+
+pytest:
+  stage: testing
+  script:
+    - export PYTHONPATH="$PYTHONPATH:."
+    - python -c "import sys;print(sys.path)"
+    - python3 -m pytest
+
+coverage:
+  stage: testing
+  script:
+    - "python3 -m coverage run --source './' --omit './venv/*' -m pytest"
+    - "coverage report -m"
   
 build-docker:
   stage: build

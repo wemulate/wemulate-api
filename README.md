@@ -22,7 +22,7 @@ Repository for the WEmulate Backend written in Python.
 5. Start the Salt-Master and Salt-Minion with `sudo salt-master` and `sudo salt-minion`
    * **Hint**: [Run Salt as unpriviledged user](https://docs.saltstack.com/en/master/ref/configuration/nonroot.html#configuration-non-root-user)
 6. Check if the Public Key has been accepted: `salt-key -L`
-7. Add API config to master (in /etc/master.d/api.conf):
+7. Add API config to master (in `/etc/salt/master.d/api.conf`):
 ```yaml
 rest_cherrypy:
   port: 8000
@@ -30,7 +30,7 @@ rest_cherrypy:
 external_auth:
     sharedsecret:
         salt: ['.*', '@wheel', '@jobs', '@runner']
-sharedsecret: "EPJ@2020!!"```
+sharedsecret: "EPJ@2020!!"
 ```
 8. Copy the module to the minion:
    * Copy the module folder in the FILE_ROOTS (default /srv/salt/_modules)
