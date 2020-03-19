@@ -4,19 +4,22 @@ cache:
   paths:
     - venv/
 
-before_script:
-  - "virtualenv venv"
-  - "source venv/bin/activate"
-  - "pip3 install -r requirements.txt"
-
 stages:
+  - init
   - linting
   - testing
   - build 
 
+init:
+  stage: init
+    - "virtualenv venv"
+    - "source venv/bin/activate"
+    - "pip3 install -r requirements.txt"
+
 linting-site:
   stage: linting
   script:
+    - "source venv/bin/activate"
     - "flake8 --max-line-length=120 **/*.py"
 
 pytest:
