@@ -1,5 +1,6 @@
 from core import db
-from json import dumps
+import json
+
 
 class HostModel(db.Model):
     __tablename__ = 'host'
@@ -41,15 +42,20 @@ class InterfaceModel(db.Model):
     logical_name = db.Column(db.String(50))
     physical_name = db.Column(db.String(50), nullable=False)
     delay = db.Column(db.Integer, default=0)
-    host_id = db.Column(db.Integer, db.ForeignKey('host.host_id'), nullable=False)
-    
-    def __init__(self, physical_name,host_id, logical_name=None):
+    host_id = db.Column(
+        db.Integer,
+        db.ForeignKey('host.host_id'),
+        nullable=False
+    )
+
+    def __init__(self, physical_name, host_id, logical_name=None):
         self.physical_name = physical_name
         if not logical_name:
             self.logical_name = self.physical_name
         else:
             self.logical_name = logical_name
         self.host_id = host_id
+
     def __repr__(self):
         return json.dumps({
             'int_id': self.id,
