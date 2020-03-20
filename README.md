@@ -22,6 +22,7 @@ Repository for the WEmulate Backend written in Python.
    * `sudo vim /etc/salt/master`
    * Change the line `# auto_accept: False` to `auto_accept: True`
 5. Start the Salt-Master and Salt-Minion with `sudo salt-master` and `sudo salt-minion`
+   or start it as daemon: `sudo salt-master -d` and `sudo salt-minion -d`
    * **Hint**: [Run Salt as unpriviledged user](https://docs.saltstack.com/en/master/ref/configuration/nonroot.html#configuration-non-root-user)
 6. Check if the Public Key has been accepted: `salt-key -L`
 7. Add API config to master (in `/etc/salt/master.d/api.conf`):
