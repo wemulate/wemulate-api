@@ -35,7 +35,7 @@ external_auth:
         salt: ['.*', '@wheel', '@jobs', '@runner']
 sharedsecret: "EPJ@2020!!"
 ```
-8. Copy the module to the minion:
+8. Copy the module (found in the git repo under salt/modules) to the minion:
    * Copy the module folder in the FILE_ROOTS (default /srv/salt/_modules)
    * Sync the files from the master to the minions --> `sudo salt-run saltutil.sync_all`
    * (Eventually first run `sudo salt '*' saltutil.clear_cache`)
