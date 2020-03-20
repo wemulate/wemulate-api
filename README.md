@@ -7,8 +7,10 @@ Repository for the WEmulate Backend written in Python.
 2. Install **virtualenv** using pip3 `sudo pip3 install virtualenv`
 3. Create a virtual environment `virtualenv venv`
 4. Activate virtualenv `source venv/bin/activate`
-5. Install all requirements `pip install -r requirements.txt`
-6. Start WSGI `cd interfaces; gunicorn --bind 0.0.0.0:5000 wsgi:app`
+5. Install Postgres and Python extensions: `sudo apt-get install libpq-dev python-dev`
+6. Install all requirements `pip install -r requirements.txt`
+7. Start Postgres (DB) container: `docker run --name wemulate-db -e POSTGRES_PASSWORD=wemulateEPJ2020 -d -p 5432:5432 postgres`
+7. Start WSGI `cd interfaces; gunicorn --bind 0.0.0.0:5000 wsgi:app`
 
 ### Salt
 1. `sudo apt install -y salt-master salt-minion salt-api`
