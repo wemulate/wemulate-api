@@ -1,6 +1,9 @@
 from flask import Flask
 from flask_restplus import Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
+
+
 db = SQLAlchemy()
 
 
@@ -12,7 +15,7 @@ def create_app():
     app.app_context().push()
     db.drop_all()  # Used for Test Purposes
     db.create_all()
-
+    CORS(app)
     api = Api(
         app,
         version='1.0',
