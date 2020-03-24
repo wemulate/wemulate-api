@@ -41,7 +41,7 @@ def set_delay(interface_name, delay):
     return f'Delay of {delay}ms was successfully added to interface {interface_name}'
 
 def remove_delay(interface_name):
-        '''
+    '''
     Return string "Delay was successfully removed from interface <interface name>"
     CLI Example:
     .. code-block:: bash
