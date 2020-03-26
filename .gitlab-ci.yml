@@ -45,6 +45,8 @@ build-docker:
     - docker:dind
   script:
     - "docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY"
-    - "docker build -f Dockerfile -t gitlab.dev.ifs.hsr.ch:45023/epj/2020/wemulate/wemulate-backend ."
-    - "docker push gitlab.dev.ifs.hsr.ch:45023/epj/2020/wemulate/wemulate-backend"
+    - "docker build -f Dockerfile -t gitlab.dev.ifs.hsr.ch:45023/epj/2020/wemulate/wemulate-backend:$CI_COMMIT_SHA ."
+    - "docker push gitlab.dev.ifs.hsr.ch:45023/epj/2020/wemulate/wemulate-backend:$CI_COMMIT_SHA"
+    - "docker tag gitlab.dev.ifs.hsr.ch:45023/epj/2020/wemulate/wemulate-backend:$CI_COMMIT_SHA gitlab.dev.ifs.hsr.ch:45023/epj/2020/wemulate/wemulate-backend:latest"
+    - "docker push gitlab.dev.ifs.hsr.ch:45023/epj/2020/wemulate/wemulate-backend:latest"
 

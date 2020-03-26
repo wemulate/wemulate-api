@@ -12,4 +12,4 @@ EXPOSE 5000
 
 COPY . .
 
-CMD [ "gunicorn", "--bind", "0.0.0.0:5000", "interfaces/wsgi:app" ]
+CMD [ "gunicorn", "-b", "0.0.0.0:5000", "project/wsgi:app" ]
