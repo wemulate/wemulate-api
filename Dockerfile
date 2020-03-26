@@ -12,4 +12,6 @@ EXPOSE 5000
 
 COPY . .
 
+WORKDIR /usr/src/app/project
+
 CMD [ "gunicorn", "-b", "0.0.0.0:5000", "project/wsgi:app" ]
