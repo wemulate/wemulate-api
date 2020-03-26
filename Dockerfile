@@ -14,4 +14,4 @@ COPY . .
 
 WORKDIR /usr/src/app/project
 
-CMD [ "gunicorn", "-b", "0.0.0.0:5000", "project/wsgi:app" ]
+CMD [ "gunicorn", "-b", "0.0.0.0:5000", "wsgi:app" ]
