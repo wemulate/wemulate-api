@@ -1,0 +1,20 @@
+{% set tag = salt.pillar.get('event_tag') %}
+{% set data = salt.pillar.get('event_data') %}
+
+accept_minion_key:
+  salt.wheel:
+    - name: key.accept
+    - match: {{ data.id }}
+
+wait_for_connection:
+  salt.wait_for_event:
+  - name: {{ tag }}
+  - id_list:
+    - {{ data.id }}
+  - require:
+    - accept_minion_key
+
+sync_all_modules:
+  salt.runner:
+  - name: saltutil.sync_all
+
