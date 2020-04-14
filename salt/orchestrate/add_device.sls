@@ -14,6 +14,10 @@ wait_for_connection:
   - require:
     - accept_minion_key
 
+clear_cache:
+  module.run:
+    - name: saltutil.clear_cache
+
 sync_all_modules:
   salt.runner:
   - name: saltutil.sync_all
