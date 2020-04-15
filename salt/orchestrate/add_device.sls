@@ -15,9 +15,11 @@ wait_for_connection:
     - accept_minion_key
 
 clear_cache:
-  module.run:
-  - name: saltutil.clear_cache
+  salt.function:
+    - name: saltutil.clear_cache
+    - tgt: {{ data.id }}
 
 sync_all_modules:
-  module.run:
-  - name: saltutil.sync_all~                                    
+  salt.function:
+    - name: saltutil.sync_all
+    - tgt: {{ data.id }}
