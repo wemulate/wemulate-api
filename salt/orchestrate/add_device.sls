@@ -20,6 +20,4 @@ clear_cache:
 
 sync_all_modules:
   module.run:
-  - name: saltutil.sync_all
-
-~                                    
+  - name: saltutil.sync_all~                                    
