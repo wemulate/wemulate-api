@@ -16,10 +16,10 @@ wait_for_connection:
 
 clear_cache:
   module.run:
-    - name: saltutil.clear_cache
+  - name: saltutil.clear_cache
 
 sync_all_modules:
-  salt.runner:
+  module.run:
   - name: saltutil.sync_all
 
 ~                                    
