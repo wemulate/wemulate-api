@@ -5,6 +5,10 @@ from core import db, create_app
 from core.models import ProfileModel, DeviceModel, InterfaceModel, LogicalInterfaceModel
 from core.models import ConnectionModel, ParameterModel, OnOffTimerModel
 
+''' ##### Prerequisites ##### '''
+
+''' ADD env var: export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' '''
+
 ''' RUN TEST with ` pytest -v test_db_models.py --disable-pytest-warnings` '''
 
 ''' ##### Create DB and necessary parts ##### '''
@@ -172,5 +176,7 @@ def test_create_parameter():
     test_parameter = create_parameter("delay", 100, test_connection.connection_id)
     parameter_from_db = find_parameter_in_database(test_parameter.parameter_id)
     assert compare_parameter(test_parameter, parameter_from_db, test_connection)
+
+
 
 # Todo Implement OnOffTimer 
