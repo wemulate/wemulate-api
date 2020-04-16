@@ -1,6 +1,5 @@
 from flask_restplus import Resource, fields
 from flask import jsonify
-import json
 from core import db, create_app
 from apis import create_salt_api
 from core.models import ProfileModel, DeviceModel
@@ -90,7 +89,6 @@ class HostList(Resource):
     @device_ns.doc(model=device_list_model)
     def get(self):
         '''Show all Devices with related Information'''
-        resource_fields = {'devices': {fields.List(fields.Nested(device_model))}}
         all_devices = DeviceModel.query.all()
         return jsonify(devices=[device.serialize() for device in all_devices])
 
