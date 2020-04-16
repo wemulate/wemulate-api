@@ -125,6 +125,8 @@ def test_create_device_without_interfaces():
     test_device = create_device("wemulate", test_profile.profile_id)
     device_from_db = find_device_in_database(test_device.device_id)
     assert compare_device(test_device, device_from_db, test_profile)
+    # Test if management ip == local loopback address
+    assert device_from_db.management_ip == '127.0.0.1'
 
 def test_create_interface_without_logical_interface():
     test_profile = create_profile("default-wemulate")
