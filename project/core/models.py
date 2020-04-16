@@ -27,7 +27,6 @@ class ProfileModel(db.Model):
         }
         )
 
-
 class DeviceModel(db.Model):
     __tablename__ = 'device'
     device_id = db.Column(
@@ -42,6 +41,8 @@ class DeviceModel(db.Model):
         db.ForeignKey('profile.profile_id'),
         nullable=False
     )
+    active_profile = db.relationship(ProfileModel, backref='device', uselist=False)
+
     interfaces = db.relationship(
         'InterfaceModel',
         backref='device',
@@ -60,8 +61,16 @@ class DeviceModel(db.Model):
             'device_id': self.device_id,
             'device_name': self.device_name,
             'management_ip': self.management_ip,
-            'active_profile': self.active_profile.profile_name
+            'active_profile_id': self.active_profile_id
         })
+
+    def serialize(self):
+        return {
+            'device_id': self.device_id,
+            'device_name': self.device_name,
+            'management_ip': self.management_ip,
+            'active_profile_name': self.active_profile.profile_name
+        }
 
 
 class InterfaceModel(db.Model):

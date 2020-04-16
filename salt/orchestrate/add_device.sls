@@ -23,3 +23,15 @@ sync_all_modules:
   salt.function:
     - name: saltutil.sync_all
     - tgt: {{ data.id }}
+
+add_device_to_database:
+  salt.runner:
+    - name: http.query
+    - url: http://127.0.0.1/api/v1/devices
+    - method: POST
+    - header_dict:
+        "Accept": "application/json"
+        "Content-Type": "application/json"
+    - backend: requests
+    - data_render: True
+    - data: '{"device_name": "{{ data.id }}"}'
