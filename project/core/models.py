@@ -36,6 +36,7 @@ class DeviceModel(db.Model):
         autoincrement=True
     )
     device_name = db.Column(db.String(50), nullable=False)
+    management_ip = db.Column(db.String(16), nullable=False)
     active_profile_id = db.Column(
         db.Integer,
         db.ForeignKey('profile.profile_id'),
@@ -49,14 +50,16 @@ class DeviceModel(db.Model):
         order_by='asc(InterfaceModel.interface_id)'
     )
 
-    def __init__(self, device_name, profile_id):
+    def __init__(self, device_name, profile_id, management_ip='127.0.0.1'):
         self.device_name = device_name
+        self.management_ip = management_ip
         self.active_profile_id = profile_id
 
     def __repr__(self):
         return json.dumps({
             'device_id': self.device_id,
             'device_name': self.device_name,
+            'management_ip': self.management_ip,
             'active_profile': self.active_profile.profile_name
         })
 
