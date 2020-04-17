@@ -2,10 +2,8 @@ from core.models import LogicalInterfaceModel
 import string
 from core import db
 
-ALPHABET = list(string.ascii_uppercase)
-
 def create_logical_interfaces():
-    for character in ALPHABET:
+    for character in list(string.ascii_uppercase):
         logical_interface = LogicalInterfaceModel("LAN-" + character)
         try:
             db.session.add(logical_interface)
