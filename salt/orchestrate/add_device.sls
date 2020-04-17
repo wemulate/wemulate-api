@@ -27,7 +27,7 @@ sync_all_modules:
 add_device_to_database:
   salt.runner:
     - name: http.query
-    - url: http://127.0.0.1/api/v1/devices
+    - url: http://wemulate_traefik/api/v1/devices
     - method: POST
     - header_dict:
         "Accept": "application/json"
