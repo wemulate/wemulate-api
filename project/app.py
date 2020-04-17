@@ -117,7 +117,6 @@ class HostList(Resource):
             # Return Format: {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}
             salt_return = salt_api.get_interfaces()
             physical_interface_names = salt_return['return'][0][device.device_name]
-            print(physical_interface_names)
             interface_number = 1
             for physical_name in physical_interface_names:
                 logical_interface = LogicalInterfaceModel.query.filter_by(logical_interface_id=interface_number).first()
