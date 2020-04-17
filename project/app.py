@@ -3,9 +3,8 @@ from flask import jsonify
 from core import db, create_app
 from apis import create_salt_api
 from core.models import ProfileModel, DeviceModel
+from core.models import InterfaceModel, LogicalInterfaceModel
 from core.logical_interface import create_logical_interfaces
-# Not needed for device creation:
-# InterfaceModel, LogicalInterfaceModel
 # from core.models import ConnectionModel, ParameterModel, OnOffTimerModel
 
 
@@ -114,8 +113,22 @@ class HostList(Resource):
                 device = DeviceModel(device_name, profile.profile_id, management_ip)
             db.session.add(device)
             db.session.commit()
+
+            # Return Format: {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}
+            salt_return = salt_api.get_interfaces()
+            physical_interface_names = salt_return['return'][0][device.device_name]
+            print(physical_interface_names)
+            interface_number = 1
+            for physical_name in physical_interface_names:
+                logical_interface = LogicalInterfaceModel.query.filter_by(logical_interface_id=interface_number).first()
+                interface = InterfaceModel(physical_name, device.device_id, logical_interface.logical_interface_id)
+                interface_number += 1
+                db.session.add(logical_interface)
+                db.session.add(interface)
+                db.session.commit()
         except Exception:
             db.session.rollback()
+
         return device, 201
 
 
