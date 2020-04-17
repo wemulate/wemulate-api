@@ -40,6 +40,7 @@ def set_delay(interface_name, delay):
     __salt__['cmd.run'](command)
     return f'Delay of {delay}ms was successfully added to interface {interface_name}'
 
+
 def remove_delay(interface_name):
     '''
     Return string "Delay was successfully removed from interface <interface name>"
@@ -55,3 +56,11 @@ def remove_delay(interface_name):
     command = f'sudo tc qdisc del dev {interface_name} root netem delay 0ms'
     __salt__['cmd.run'](command)
     return f'Delay was successfully removed from interface {interface_name}'
+
+
+def get_interfaces():
+    interfaces_list = []
+    for name in netifaces.interfaces():
+        if name.startswith(("eth","en")):
+            interfaces_list.append(name)
+    return interfaces_list
