@@ -41,11 +41,11 @@ class DeviceModel(db.Model):
         db.ForeignKey('profile.profile_id'),
         nullable=False
     )
-    active_profile = db.relationship(ProfileModel, backref='device', uselist=False)
-
+    backref = db.backref('belongs_to_device', uselist=False)
+    active_profile = db.relationship(ProfileModel, backref=backref, uselist=False)
     interfaces = db.relationship(
         'InterfaceModel',
-        backref='device',
+        backref=backref,
         lazy=False,
         cascade='delete',
         order_by='asc(InterfaceModel.interface_id)'
@@ -73,6 +73,25 @@ class DeviceModel(db.Model):
         }
 
 
+class LogicalInterfaceModel(db.Model):
+    __tablename__ = 'logical_interface'
+    logical_interface_id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+    logical_name = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, logical_name):
+        self.logical_name = logical_name
+
+    def __repr__(self):
+        return json.dumps({
+            'logical_interface_id': self.logical_interface_id,
+            'logical_name': self.logical_name
+        })
+
+
 class InterfaceModel(db.Model):
     __tablename__ = 'interface'
     interface_id = db.Column(
@@ -86,11 +105,13 @@ class InterfaceModel(db.Model):
         db.ForeignKey('device.device_id'),
         nullable=False
     )
-    has_logical_interface_id: db.Column(
+    has_logical_interface_id = db.Column(
         db.Integer,
         db.ForeignKey('logical_interface.logical_interface_id'),
         nullable=True
     )
+    backref = db.backref('physical_interfaces')
+    has_logical_interface = db.relationship(LogicalInterfaceModel, backref=backref, uselist=False)
     interface_status = db.Column(db.Enum('up', 'down', name='interface_status_enum'), nullable=False, default='up')
 
     def __init__(self, physical_name, device_id, has_logical_interface_id=None):
@@ -115,25 +136,6 @@ class InterfaceModel(db.Model):
                 'device_id': self.belongs_to_device_id,
                 'status': self.interface_status
             })
-
-
-class LogicalInterfaceModel(db.Model):
-    __tablename__ = 'logical_interface'
-    logical_interface_id = db.Column(
-        db.Integer,
-        primary_key=True,
-        autoincrement=True
-    )
-    logical_name = db.Column(db.String(50), nullable=False)
-
-    def __init__(self, logical_name):
-        self.logical_name = logical_name
-
-    def __repr__(self):
-        return json.dumps({
-            'logical_interface_id': self.logical_interface_id,
-            'logical_name': self.logical_name
-        })
 
 
 class ConnectionModel(db.Model):
