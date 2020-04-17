@@ -11,3 +11,6 @@ class SaltApi(object):
 
     def remove_delay(self, name):
         return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.remove_delay', 'arg': name}])
+
+    def get_interfaces(self):
+        return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.get_interfaces'}])
