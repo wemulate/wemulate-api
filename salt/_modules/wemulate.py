@@ -11,6 +11,7 @@ Parameters are packet loss, delay, jitter and bandwith (more will follow)-to uni
 :platform:   unix
 '''
 
+import netifaces
 
 __virtualname__ = 'wemulate'
 
