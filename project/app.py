@@ -3,6 +3,7 @@ from flask import jsonify
 from core import db, create_app
 from apis import create_salt_api
 from core.models import ProfileModel, DeviceModel
+from core.logical_interface import create_logical_interfaces
 # Not needed for device creation:
 # InterfaceModel, LogicalInterfaceModel
 # from core.models import ConnectionModel, ParameterModel, OnOffTimerModel
@@ -10,7 +11,7 @@ from core.models import ProfileModel, DeviceModel
 
 app, api, device_ns = create_app()
 salt_api = create_salt_api()
-
+create_logical_interfaces()
 
 # Parser and Models
 device_parser = api.parser()
