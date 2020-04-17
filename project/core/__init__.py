@@ -21,12 +21,13 @@ def create_app():
         version='1.0',
         title='WEmulate API',
         description='REST API for WEmulate ',
+        doc='/api/v1'
     )
 
-    host_ns = api.namespace(
-        'Host and Interface Operations',
-        description='CRUD Hosts and Interfaces',
-        path='/api/v1/hosts'
+    device_ns = api.namespace(
+        'Device Operations',
+        description='Execute all operations belonging to a wemulate device',
+        path='/api/v1/devices'
     )
     # Not used yet
     # profile_ns = api.namespace(
@@ -35,4 +36,4 @@ def create_app():
     #  path='/api/v1/profiles'
     # )
 
-    return app, api, host_ns
+    return app, api, device_ns
