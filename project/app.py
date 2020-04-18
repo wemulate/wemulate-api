@@ -44,7 +44,7 @@ device_parser.add_argument(
 # )
 
 
-device_model = api.model('device_get', {
+device_model = api.model('device_model', {
     'active_profile_name': fields.String(attribute='active_profile.profile_name'),
     'device_id': fields.Integer,
     'device_name': fields.String,
@@ -52,24 +52,26 @@ device_model = api.model('device_get', {
 })
 
 
-device_list_model = api.model('device_list', {
+device_list_model = api.model('device_list_model', {
     'devices': fields.List(fields.Nested(device_model)),
 })
 
 
-device_post_model = api.model('device_post', {
+device_post_model = api.model('device_post_model', {
     'device_name': fields.String(required=True),
     'management_ip': fields.String
 })
 
+interface_model = api.model('interface_model', {
+    'interface_id': fields.Integer,
+    'logical_name': fields.String(attribute='has_logical_interface.logical_name'),
+    'physical_name': fields.String,
+})
 
-# interface_model = api.model('interface', {
-#     'int_id': fields.Integer,
-#     'host_id': fields.Integer,
-#     'logical_name': fields.String,
-#     'physical_name': fields.String,
-#     'delay': fields.Integer
-# })
+
+interface_list_model = api.model('interface_list_model', {
+    'interfaces': fields.List(fields.Nested(interface_model)),
+})
 
 # interface_post_model = api.model('interface_post', {
 #     'physical_name': fields.String(required=True),
@@ -84,11 +86,11 @@ device_post_model = api.model('device_post', {
 
 
 @device_ns.route('/')
-class HostList(Resource):
+class Device(Resource):
     @device_ns.doc('list_devices')
     @device_ns.doc(model=device_list_model)
     def get(self):
-        '''Show all Devices with related Information'''
+        '''Fetch a List of Devices with related Information'''
         all_devices = DeviceModel.query.all()
         return jsonify(devices=[device.serialize() for device in all_devices])
 
@@ -127,11 +129,21 @@ class HostList(Resource):
                 db.session.commit()
         except Exception:
             db.session.rollback()
-
         return device, 201
 
 
-# @device_ns.route('/<int:host_id>/', '/<int:host_id>')
+@device_ns.route('/<int:device_id>/interfaces/')
+@device_ns.response(404, '{"message": "Device not found"}')
+@device_ns.param('device_id', 'The device identifier')
+class InterfaceList(Resource):
+    @device_ns.doc('list_interfaces')
+    @device_ns.doc(model=interface_list_model)
+    def get(self, device_id):
+        '''Fetch all Interfaces of a specific Device'''
+        all_interfaces_of_device = InterfaceModel.query.filter_by(belongs_to_device_id=device_id).all()
+        return jsonify(interfaces=[interface.serialize() for interface in all_interfaces_of_device])
+
+# @device_ns.route('/<int:device_id>')
 # @device_ns.response(404, '{"message": "Host not found"}')
 # @device_ns.param('host_id', 'The host identifier')
 # class HostById(Resource):

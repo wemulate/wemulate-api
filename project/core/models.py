@@ -125,7 +125,7 @@ class InterfaceModel(db.Model):
                 'interface_id': self.interface_id,
                 'physical_name': self.physical_name,
                 'has_logical_interface_id': self.has_logical_interface_id,
-                'device_id': self.belongs_to_device_id,
+                'belongs_to_device_id': self.belongs_to_device_id,
                 'status': self.interface_status
             })
         else:
@@ -133,9 +133,16 @@ class InterfaceModel(db.Model):
                 'interface_id': self.interface_id,
                 'physical_name': self.physical_name,
                 'has_logical_interface_id': None,
-                'device_id': self.belongs_to_device_id,
+                'belongs_to_device_id': self.belongs_to_device_id,
                 'status': self.interface_status
             })
+
+    def serialize(self):
+        return {
+            'interface_id': self.interface_id,
+            'logical_name': self.has_logical_interface.logical_name,
+            'physical_name': self.physical_name
+        }
 
 
 class ConnectionModel(db.Model):
