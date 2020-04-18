@@ -27,7 +27,7 @@ def create_app():
     device_ns = api.namespace(
         'Device Operations',
         description='Execute all operations belonging to a wemulate device',
-        path='/api/v1/devices'
+        path='/api/v1/devices/'
     )
     # Not used yet
     # profile_ns = api.namespace(

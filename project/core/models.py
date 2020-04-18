@@ -41,11 +41,11 @@ class DeviceModel(db.Model):
         db.ForeignKey('profile.profile_id'),
         nullable=False
     )
-    active_profile = db.relationship(ProfileModel, backref='device', uselist=False)
-
+    backref = db.backref('belongs_to_device', uselist=False)
+    active_profile = db.relationship(ProfileModel, backref=backref, uselist=False)
     interfaces = db.relationship(
         'InterfaceModel',
-        backref='device',
+        backref=backref,
         lazy=False,
         cascade='delete',
         order_by='asc(InterfaceModel.interface_id)'
@@ -73,50 +73,6 @@ class DeviceModel(db.Model):
         }
 
 
-class InterfaceModel(db.Model):
-    __tablename__ = 'interface'
-    interface_id = db.Column(
-        db.Integer,
-        primary_key=True,
-        autoincrement=True
-    )
-    physical_name = db.Column(db.String(50), nullable=False)
-    belongs_to_device_id = db.Column(
-        db.Integer,
-        db.ForeignKey('device.device_id'),
-        nullable=False
-    )
-    has_logical_interface_id: db.Column(
-        db.Integer,
-        db.ForeignKey('logical_interface.logical_interface_id'),
-        nullable=True
-    )
-    interface_status = db.Column(db.Enum('up', 'down', name='interface_status_enum'), nullable=False, default='up')
-
-    def __init__(self, physical_name, device_id, has_logical_interface_id=None):
-        self.physical_name = physical_name
-        self.belongs_to_device_id = device_id
-        self.has_logical_interface_id = has_logical_interface_id
-
-    def __repr__(self):
-        if self.has_logical_interface_id is not None:
-            return json.dumps({
-                'interface_id': self.interface_id,
-                'physical_name': self.physical_name,
-                'has_logical_interface_id': self.has_logical_interface_id,
-                'device_id': self.belongs_to_device_id,
-                'status': self.interface_status
-            })
-        else:
-            return json.dumps({
-                'interface_id': self.interface_id,
-                'physical_name': self.physical_name,
-                'has_logical_interface_id': None,
-                'device_id': self.belongs_to_device_id,
-                'status': self.interface_status
-            })
-
-
 class LogicalInterfaceModel(db.Model):
     __tablename__ = 'logical_interface'
     logical_interface_id = db.Column(
@@ -134,6 +90,59 @@ class LogicalInterfaceModel(db.Model):
             'logical_interface_id': self.logical_interface_id,
             'logical_name': self.logical_name
         })
+
+
+class InterfaceModel(db.Model):
+    __tablename__ = 'interface'
+    interface_id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+    physical_name = db.Column(db.String(50), nullable=False)
+    belongs_to_device_id = db.Column(
+        db.Integer,
+        db.ForeignKey('device.device_id'),
+        nullable=False
+    )
+    has_logical_interface_id = db.Column(
+        db.Integer,
+        db.ForeignKey('logical_interface.logical_interface_id'),
+        nullable=True
+    )
+    backref = db.backref('physical_interfaces')
+    has_logical_interface = db.relationship(LogicalInterfaceModel, backref=backref, uselist=False)
+    interface_status = db.Column(db.Enum('up', 'down', name='interface_status_enum'), nullable=False, default='up')
+
+    def __init__(self, physical_name, device_id, has_logical_interface_id=None):
+        self.physical_name = physical_name
+        self.belongs_to_device_id = device_id
+        self.has_logical_interface_id = has_logical_interface_id
+
+    def __repr__(self):
+        if self.has_logical_interface_id is not None:
+            return json.dumps({
+                'interface_id': self.interface_id,
+                'physical_name': self.physical_name,
+                'has_logical_interface_id': self.has_logical_interface_id,
+                'belongs_to_device_id': self.belongs_to_device_id,
+                'status': self.interface_status
+            })
+        else:
+            return json.dumps({
+                'interface_id': self.interface_id,
+                'physical_name': self.physical_name,
+                'has_logical_interface_id': None,
+                'belongs_to_device_id': self.belongs_to_device_id,
+                'status': self.interface_status
+            })
+
+    def serialize(self):
+        return {
+            'interface_id': self.interface_id,
+            'logical_name': self.has_logical_interface.logical_name,
+            'physical_name': self.physical_name
+        }
 
 
 class ConnectionModel(db.Model):
