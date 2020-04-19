@@ -13,7 +13,6 @@ Parameters are packet loss, delay, jitter and bandwith (more will follow)-to uni
 
 import os
 import netifaces
-from jinja2 import Template
 from pyroute2 import IPRoute
 
 __virtualname__ = 'wemulate'
@@ -76,23 +75,20 @@ def add_connection(connection_name, interface1_name, interface2_name):
         if not any(include_str == x.rstrip('\r\n') for x in f):
             f.write(include_str + '\n')
 
-    template = Template("# Bridge Setup {{ con_name }}\nauto {{ con_name }}\niface {{ con_name }} inet manual\n    bridge_ports {{ if1_name }} {{ if2_name }}\n    bridge_stp off\n")
-    template_rendered = template.render(con_name=connection_name, if1_name=interface1_name, if2_name=interface2_name)
+    connection_template = f"# Bridge Setup {connection_name}\nauto {connection_name}\niface {connection_name} inet manual\n    bridge_ports {interface1_name} {interface2_name}\n    bridge_stp off\n"
 
     with open(f"/etc/network/interfaces.d/{connection_name}", "w") as file:
-        file.write(template_rendered)
+        file.write(connection_template)
 
     __salt__['cmd.run']("sudo systemctl restart networking.service")
-    return template_rendered
+    return connection_template
 
 
-def remove_connection(connection_name, interface1_name, interface2_name):
+def remove_connection(connection_name):
     ip = IPRoute()
     x = ip.link_lookup(ifname=connection_name)[0]
     ip.link("set", index=x, state="down")
 
-
-    __salt__['cmd.run'](f"sudo brctl delif {connection_name} {interface1_name} {interface2_name}")
     __salt__['cmd.run'](f"sudo brctl delbr {connection_name}")
 
     connection_file = f"/etc/network/interfaces.d/{connection_name}"
