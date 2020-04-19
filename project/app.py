@@ -4,8 +4,9 @@ from core import db, create_app
 from apis import create_salt_api
 from core.models import ProfileModel, DeviceModel
 from core.models import InterfaceModel, LogicalInterfaceModel
+from core.models import ConnectionModel
+# , ParameterModel, OnOffTimerModel
 from core.logical_interface import create_logical_interfaces
-# from core.models import ConnectionModel, ParameterModel, OnOffTimerModel
 
 
 app, api, device_ns = create_app()
@@ -73,6 +74,31 @@ interface_list_model = api.model('interface_list_model', {
     'interfaces': fields.List(fields.Nested(interface_model)),
 })
 
+connection_model = api.model('connection_model', {
+    'connection_name': fields.String,
+    'connection_id': fields.String,
+    'interface1': fields.String,
+    'interface2': fields.String,
+    'delay': fields.Integer,
+    'packet_loss': fields.Integer,
+    'bandwidth': fields.Integer,
+    'jitter': fields.Integer
+})
+
+
+connection_list_model = api.model('connection_list_model', {
+    'connections': fields.List(fields.Nested(connection_model)),
+})
+
+
+device_information_model = api.model('configuration_model', {
+    'active_profile_name': fields.String(attribute='active_profile.profile_name'),
+    'device_id': fields.Integer,
+    'device_name': fields.String,
+    'management_ip': fields.String,
+    'connections': fields.List(fields.Nested(connection_model)),
+    'interfaces': fields.List(fields.Nested(interface_model)),
+})
 # interface_post_model = api.model('interface_post', {
 #     'physical_name': fields.String(required=True),
 #     'logical_name': fields.String
@@ -87,7 +113,7 @@ interface_list_model = api.model('interface_list_model', {
 
 @device_ns.route('/')
 class Device(Resource):
-    @device_ns.doc('list_devices')
+    @device_ns.doc('fetch_devices')
     @device_ns.doc(model=device_list_model)
     def get(self):
         '''Fetch a List of Devices with related Information'''
@@ -132,16 +158,86 @@ class Device(Resource):
         return device, 201
 
 
+@device_ns.route('/<int:device_id>/')
+@device_ns.response(404, '{"message": Device or allocated Profile not found!"}')
+@device_ns.doc('fetch_device_information')
+@device_ns.doc(model=device_information_model)
+@device_ns.param('device_id', 'The device identifier')
+class DeviceInformation(Resource):
+    def get(self, device_id):
+        '''Fetch a Device Information and Configuration'''
+        error_message = "Device or allocated Profile not found!"
+
+        device = DeviceModel.query.filter_by(device_id=device_id).first_or_404(description=error_message)
+        data = device.serialize()
+
+        all_interfaces_of_device = InterfaceModel.query.filter_by(belongs_to_device_id=device_id).all()
+        data['interfaces'] = [interface.serialize() for interface in all_interfaces_of_device]
+
+        active_device_profile = \
+            ProfileModel.query.filter_by(belongs_to_device=device).first_or_404(description=error_message)
+        data['connections'] = [connection.serialize() for connection in active_device_profile.connections]
+        return jsonify(data)
+
+    def put(self, device_id):
+        #args, etc.
+        
+
+
 @device_ns.route('/<int:device_id>/interfaces/')
-@device_ns.response(404, '{"message": "Device not found"}')
+@device_ns.response(404, '{"message": "Device or allocated Profile not found!"}')
 @device_ns.param('device_id', 'The device identifier')
 class InterfaceList(Resource):
-    @device_ns.doc('list_interfaces')
+    @device_ns.doc('fetch_interfaces')
     @device_ns.doc(model=interface_list_model)
     def get(self, device_id):
         '''Fetch all Interfaces of a specific Device'''
         all_interfaces_of_device = InterfaceModel.query.filter_by(belongs_to_device_id=device_id).all()
         return jsonify(interfaces=[interface.serialize() for interface in all_interfaces_of_device])
+
+@device_ns.route('/<int:device_id>/connections/')
+@device_ns.response(404, '{"message": "Device not found"}')
+@device_ns.param('device_id', 'The device identifier')
+class ConnectionList(Resource):
+    @device_ns.doc('fetch_connections')
+    @device_ns.doc(model=connection_list_model)
+    def get(self, device_id):
+        '''Fetch all Connections of a specific Device'''
+        error_message = "Device or allocated Profile not found!"
+        device = DeviceModel.query.filter_by(device_id=device_id).first_or_404(description=error_message)
+
+        active_device_profile = \
+            ProfileModel.query.filter_by(belongs_to_device=device).first_or_404(description=error_message)
+
+        return jsonify(connections=[connection.serialize() for connection in active_device_profile.connections])
+
+
+
+# {
+#   "connections": [
+    # {
+    #   "connection": "Connection1",
+    #   "connection_id": 1,
+    #   "interface1": "LAN A",
+    #   "interface2": "LAN B",
+    #   "delay": 0,
+    #   "packet_loss": 5,
+    #   "bandwidth": 100,
+    #   "jitter": 5
+    # },
+    # {
+    #   "connection": "Connection2",
+    #   "connection_id": 2,
+    #   "interface1": "LAN C",
+    #   "interface2": "LAN D",
+    #   "delay": 0,
+    #   "packet_loss": 5,
+    #   "bandwidth": 100,
+    #   "jitter": 5
+    # }
+#   ]
+# }
+
 
 # @device_ns.route('/<int:device_id>')
 # @device_ns.response(404, '{"message": "Host not found"}')

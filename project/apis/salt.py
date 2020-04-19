@@ -16,7 +16,10 @@ class SaltApi(object):
         return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.get_interfaces'}])
 
     def add_connection(self, connection_name, interface1_name, interface2_name):
-        return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.add_connection', 'arg': [connection_name, interface1_name, interface2_name]}])
+        return self.api.low(
+            [{'client': 'local', 'tgt': '*', 'fun': 'wemulate.add_connection', 'arg': [
+                connection_name, interface1_name, interface2_name]}])
 
     def remove_connection(self, connection_name):
-        return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.add_connection', 'arg': [connection_name]}])
+        return self.api.low([
+            {'client': 'local', 'tgt': '*', 'fun': 'wemulate.add_connection', 'arg': [connection_name]}])

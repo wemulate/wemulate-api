@@ -11,7 +11,7 @@ class ProfileModel(db.Model):
     profile_name = db.Column(db.String(50))
     connections = db.relationship(
         'ConnectionModel',
-        backref='profile',
+        backref='belongs_to_profile',
         lazy=False,
         cascade='delete',
         order_by='asc(ConnectionModel.connection_name)'
@@ -159,10 +159,16 @@ class ConnectionModel(db.Model):
         db.ForeignKey('logical_interface.logical_interface_id'),
         nullable=False
     )
+    first_logical_interface = db.relationship(
+        LogicalInterfaceModel, foreign_keys=[first_logical_interface_id], uselist=False
+    )
     second_logical_interface_id = db.Column(
         db.Integer,
         db.ForeignKey('logical_interface.logical_interface_id'),
         nullable=False
+    )
+    second_logical_interface = db.relationship(
+        LogicalInterfaceModel, foreign_keys=[second_logical_interface_id], uselist=False
     )
     belongs_to_profile_id = db.Column(
         db.Integer,
@@ -195,6 +201,31 @@ class ConnectionModel(db.Model):
             'belongs_to_profile_id': self.belongs_to_profile_id
         })
 
+    def serialize(self):
+        delay = 0
+        packet_loss = 0
+        bandwith = 100
+        jitter: 0
+
+        for parameter in self.parameters:
+            if parameter.parameter_name == 'delay':
+                delay = parameter.value
+            if parameter.parameter_name == 'packet_loss':
+                packet_loss = parameter.value
+            if parameter.parameter_name == 'bandwidth':
+                bandwith = parameter.bandwith
+            if parameter.parameter_name == 'jitter':
+                jitter = parameter.value
+        return {
+            'connection_name': self.connection_name,
+            'connection_id': self.connection_id,
+            'interface1': self.first_logical_interface.logical_name,
+            'interface2': self.second_logical_interface.logical_name,
+            'delay': delay,
+            'packet_loss': packet_loss,
+            'bandwidth': bandwith,
+            'jitter': jitter,
+        }
 
 class ParameterModel(db.Model):
     __tablename__ = 'parameter'

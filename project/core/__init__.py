@@ -21,7 +21,7 @@ def create_app():
         version='1.0',
         title='WEmulate API',
         description='REST API for WEmulate ',
-        doc='/api/v1'
+        doc='/api/v1/'
     )
 
     device_ns = api.namespace(
