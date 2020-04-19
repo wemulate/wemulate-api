@@ -197,15 +197,17 @@ class ConnectionModel(db.Model):
             'connection_name': self.connection_name,
             'bidirectional': self.bidirectional,
             'first_logical_interface_id': self.first_logical_interface_id,
+            'first_logical_interface_name': self.first_logical_interface.logical_name,
             'second_logical_interface_id': self.second_logical_interface_id,
+            'second_logical_interface_name': self.second_logical_interface.logical_name,
             'belongs_to_profile_id': self.belongs_to_profile_id
         })
 
     def serialize(self):
         delay = 0
         packet_loss = 0
-        bandwith = 100
-        jitter: 0
+        bandwidth = 100
+        jitter = 0
 
         for parameter in self.parameters:
             if parameter.parameter_name == 'delay':
@@ -213,7 +215,7 @@ class ConnectionModel(db.Model):
             if parameter.parameter_name == 'packet_loss':
                 packet_loss = parameter.value
             if parameter.parameter_name == 'bandwidth':
-                bandwith = parameter.bandwith
+                bandwidth = parameter.value
             if parameter.parameter_name == 'jitter':
                 jitter = parameter.value
         return {
@@ -223,7 +225,7 @@ class ConnectionModel(db.Model):
             'interface2': self.second_logical_interface.logical_name,
             'delay': delay,
             'packet_loss': packet_loss,
-            'bandwidth': bandwith,
+            'bandwidth': bandwidth,
             'jitter': jitter,
         }
 
@@ -235,7 +237,7 @@ class ParameterModel(db.Model):
         autoincrement=True
     )
     parameter_name = db.Column(
-        db.Enum('bandwith', 'delay', 'packer_loss', 'jitter', name='parameter_name_enum'), nullable=False
+        db.Enum('bandwidth', 'delay', 'packet_loss', 'jitter', name='parameter_name_enum'), nullable=False
     )
     value = db.Column(db.Integer, nullable=False)
     belongs_to_connection_id = db.Column(
