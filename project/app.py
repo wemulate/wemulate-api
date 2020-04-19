@@ -216,9 +216,8 @@ class DeviceInformation(Resource):
             active_connection = next(
                 (connection for connection in active_device_connections
                  if connection.first_logical_interface is logical_interface1
-                 and connection.second_logical_interface is logical_interface2
-                )
-                , None
+                 and connection.second_logical_interface is logical_interface2),
+                None
             )
             try:
                 if active_connection is None:
@@ -370,8 +369,6 @@ class ConnectionList(Resource):
             ProfileModel.query.filter_by(belongs_to_device=device).first_or_404(description=error_message)
 
         return jsonify(connections=[connection.serialize() for connection in active_device_profile.connections])
-
-
 
 # {
 #   "connections": [
