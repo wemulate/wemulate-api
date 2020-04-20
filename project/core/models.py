@@ -177,7 +177,7 @@ class ConnectionModel(db.Model):
     )
     parameters = db.relationship(
         'ParameterModel',
-        backref='connection',
+        backref='belongs_to_connection',
         lazy=False,
         cascade='delete',
         order_by='asc(ParameterModel.parameter_name)'
@@ -206,7 +206,7 @@ class ConnectionModel(db.Model):
     def serialize(self):
         delay = 0
         packet_loss = 0
-        bandwidth = 100
+        bandwidth = 1000
         jitter = 0
 
         for parameter in self.parameters:
@@ -220,7 +220,6 @@ class ConnectionModel(db.Model):
                 jitter = parameter.value
         return {
             'connection_name': self.connection_name,
-            'connection_id': self.connection_id,
             'interface1': self.first_logical_interface.logical_name,
             'interface2': self.second_logical_interface.logical_name,
             'delay': delay,
