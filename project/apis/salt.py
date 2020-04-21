@@ -6,12 +6,6 @@ class SaltApi(object):
         self.api = Pepper(url)
         self.api.login(user, sharedsecret, 'sharedsecret')
 
-    def set_delay(self, name, delay):
-        return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.set_delay', 'arg': [name, delay]}])
-
-    def remove_delay(self, name):
-        return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.remove_delay', 'arg': name}])
-
     def get_interfaces(self):
         return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.get_interfaces'}])
 
@@ -20,3 +14,9 @@ class SaltApi(object):
 
     def remove_connection(self, connection_name):
         return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.add_connection', 'arg': [connection_name]}])
+
+    def set_parameters(self, interface_name, parameters):
+        return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.set_parameters', 'arg': [interface_name, parameters]}])
+
+    def remove_parameters(self, interface_name):
+        return self.api.low([{'client': 'local', 'tgt': '*', 'fun': 'wemulate.remove_parameters', 'arg': [interface_name]}])

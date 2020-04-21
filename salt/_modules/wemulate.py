@@ -14,8 +14,10 @@ Parameters are packet loss, delay, jitter and bandwith (more will follow)-to uni
 import os
 import netifaces
 from pyroute2 import IPRoute
+import logging
 
 __virtualname__ = 'wemulate'
+log = logging.getLogger(__name__)
 
 def __virtual__():
     return __virtualname__
@@ -24,42 +26,6 @@ def __virtual__():
 # ----------------------------------------------------------------------------------------------------------------------
 # callable functions
 # ----------------------------------------------------------------------------------------------------------------------
-
-
-def set_delay(interface_name, delay):
-    '''
-    Return string "Delay of <delay>ms was successfully added to interface <interface name>"
-    CLI Example:
-    .. code-block:: bash
-        salt '*' wemulate.set_delay ens123 100
-    Example output:
-    .. code-block:: python
-        Delay of 100ms was successfully added to interface ens123
-    :param dest:
-    :return:
-    '''
-
-    command = f'sudo tc qdisc add dev {interface_name} root netem delay {delay}ms'
-    __salt__['cmd.run'](command)
-    return f'Delay of {delay}ms was successfully added to interface {interface_name}'
-
-
-def remove_delay(interface_name):
-    '''
-    Return string "Delay was successfully removed from interface <interface name>"
-    CLI Example:
-    .. code-block:: bash
-        salt '*' wemulate.remove_delay ens123
-    Example output:
-    .. code-block:: python
-         Delay was successfully remove from interface ens123
-    :param dest:
-    :return:
-    '''
-    command = f'sudo tc qdisc del dev {interface_name} root netem delay 0ms'
-    __salt__['cmd.run'](command)
-    return f'Delay was successfully removed from interface {interface_name}'
-
 
 def get_interfaces():
     interfaces_list = []
@@ -98,3 +64,58 @@ def remove_connection(connection_name):
         print("file does not exist")
 
     return f"Successfully removed connection {connection_name}"
+
+
+def set_parameters(interface_name, parameters):
+    base_command = f'sudo tc qdisc add dev {interface_name} '
+    netem_command = base_command + 'root handle 1: netem'
+    tbf_command = base_command + 'parent 1: handle 2: tbf'
+
+    netem_command = add_delay(netem_command, parameters)
+    netem_command = add_jitter(netem_command, parameters)
+    netem_command = add_packetloss(netem_command, parameters)
+    tbf_command = add_bandwidth(tbf_command, parameters)
+
+    if any(parameter in parameters for parameter in ("delay", "jitter", "packetloss")):
+        __salt__['cmd.run'](netem_command)
+        log.info(netem_command)
+
+    if "bandwidth" in parameters:
+        __salt__['cmd.run'](tbf_command)
+        log.info(tbf_command)
+
+    return "Successfully added parameters"
+
+
+def add_delay(command, parameters):
+    if "delay" in parameters:
+        return command + ' ' + f'delay {parameters["delay"]}ms'
+    return command
+
+
+def add_jitter(command, parameters):
+    if "jitter" in parameters:
+        jitter = parameters["jitter"] / 2
+        if "delay" in parameters:
+            return command + ' ' + f'{jitter}ms distribution normal'
+        else:
+            return command + ' ' + f'delay 0.1ms {jitter}ms distribution normal'
+    return command
+
+
+def add_packetloss(command, parameters):
+    if "packetloss" in parameters:
+        return command + ' ' + f'loss {parameters["packetloss"]}%'
+    return command
+
+
+def add_bandwidth(command, parameters):
+    if "bandwidth" in parameters:
+        return command + ' ' + f'rate {parameters["bandwidth"]}mbit burst 32kb latency 100ms'
+
+
+def remove_parameters(interface_name):
+    command = f'sudo tc qdisc del dev {interface_name} root'
+    __salt__['cmd.run'](command)
+    return f"Successfully removed parameters"
+
