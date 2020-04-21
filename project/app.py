@@ -312,6 +312,23 @@ def update_parameters(all_parameters, active_connection, parameters_to_apply, pa
             if(value != 0):
                 parameters_to_apply['packet_loss'] = value
     return parameter_changed
+
+
+def remove_existing_connections(device, active_device_connections):
+    for connection_to_delete in active_device_connections:
+        interface_to_remove_parameter = get_first_physical_interface(
+            device,
+            connection_to_delete.first_logical_interface
+        )
+
+        salt_api.remove_parameters(device.device_name, interface_to_remove_parameter)
+
+        db.session.delete(connection_to_delete)
+        salt_api.remove_connection(
+            device.device_name,
+            connection_to_delete.connection_name
+        )
+        db.session.commit()
 # Routes
 
 
@@ -458,13 +475,7 @@ class DeviceInformation(Resource):
                 db.session.rollback()
                 api.abort(400, str(e))
 
-        for connection_to_delete in active_device_connections:
-            db.session.delete(connection_to_delete)
-            salt_api.remove_connection(
-                device.device_name,
-                connection_to_delete.connection_name
-            )
-            db.session.commit()
+        remove_existing_connections(device, active_device_connections)
 
         return jsonify(connections=[connection.serialize() for connection in active_device_profile.connections])
 
