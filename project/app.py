@@ -244,7 +244,13 @@ def add_parameter(parameter_name, value, connection_id):
     db.session.add(parameter_to_add)
 
 
-def update_connection(device, new_connection_name, active_connection,physical_interface1_name, physical_interface2_name):
+def update_connection(
+    device,
+    new_connection_name,
+    active_connection,
+    physical_interface1_name,
+    physical_interface2_name
+):
     salt_api.remove_connection(
         device.device_name,
         active_connection.connection_name

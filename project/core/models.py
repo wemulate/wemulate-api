@@ -1,6 +1,7 @@
 import json
 from core import db
 
+
 class ProfileModel(db.Model):
     __tablename__ = 'profile'
     profile_id = db.Column(
@@ -26,6 +27,7 @@ class ProfileModel(db.Model):
             'profile_name': self.profile_name
         }
         )
+
 
 class DeviceModel(db.Model):
     __tablename__ = 'device'
@@ -227,6 +229,7 @@ class ConnectionModel(db.Model):
             'bandwidth': bandwidth,
             'jitter': jitter,
         }
+
 
 class ParameterModel(db.Model):
     __tablename__ = 'parameter'
