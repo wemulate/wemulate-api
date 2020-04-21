@@ -257,7 +257,7 @@ def update_connection(device, new_connection_name, active_connection):
     db.session.add(active_connection)
 
 
-def update_parameters(all_parameters, active_connection, parameters_to_apply):
+def update_parameters(all_parameters, active_connection, parameters_to_apply, parameter_changed):
     actual_bandwidth = next(
         parameter for parameter in active_connection.parameters
         if parameter.parameter_name == 'bandwidth')
