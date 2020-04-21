@@ -13,7 +13,8 @@ app, api, device_ns = create_app()
 salt_api = create_salt_api()
 create_logical_interfaces()
 
-# Parser and Models
+# Parser
+
 device_parser = api.parser()
 device_parser.add_argument(
     'device_name',
@@ -33,6 +34,8 @@ connection_config_parser.add_argument(
     type=list,
     location='json'
 )
+
+# Models
 
 device_model = api.model('device_model', {
     'active_profile_name': fields.String(attribute='active_profile.profile_name'),
@@ -87,6 +90,131 @@ device_information_model = api.model('device_information_model', {
 })
 
 # Helper Functions
+def parse_device_arguments():
+    args = device_parser.parse_args()
+    device_name = args['device_name']
+    management_ip = args['management_ip']
+    return device_name, management_ip
+
+def device_exists(device_name):
+    device_exists = DeviceModel.query.filter_by(device_name=device_name).first()
+    return device_exists
+
+def add_profile(device_name):
+    profile_to_add = ProfileModel("default_" + device_name)
+    db.session.add(profile_to_add)
+    db.session.commit()
+    return profile_to_add
+
+def add_device(device_name, profile_id, management_ip):
+    if(management_ip is None):
+        device = DeviceModel(device_name, profile_id)
+    else:
+        device = DeviceModel(device_name, profile_id, management_ip)
+    db.session.add(device)
+    db.session.commit()
+    return device
+
+def create_device_interfaces(device):
+    # Return Format: {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}
+    salt_return = salt_api.get_interfaces(device.device_name)
+    physical_interface_names = salt_return['return'][0][device.device_name]
+    interface_number = 1
+    for physical_name in physical_interface_names:
+        logical_interface = LogicalInterfaceModel.query.filter_by(logical_interface_id=interface_number).first()
+        interface = InterfaceModel(physical_name, device.device_id, logical_interface.logical_interface_id)
+        interface_number += 1
+        db.session.add(logical_interface)
+        db.session.add(interface)
+        db.session.commit()
+
+def get_device(device_id):
+    return DeviceModel.query.filter_by(device_id=device_id).first_or_404(description="Device not found!")
+
+def get_active_profile(device):
+    return ProfileModel.query.filter_by(belongs_to_device=device).first_or_404(description='Profile not found!')
+
+def parse_connection_arguments():
+    args = connection_config_parser.parse_args()
+    return args['connections']
+
+def get_all_interfaces(device):
+    return InterfaceModel.query.filter_by(belongs_to_device_id=device.device_id).all()
+
+def get_first_logical_interface(connection):
+    return LogicalInterfaceModel.query.filter_by(logical_name=connection['interface1']).first()
+
+def get_second_logical_interface(connection):
+    return LogicalInterfaceModel.query.filter_by(logical_name=connection['interface2']).first()
+
+def get_active_connection(logical_interface1, logical_interface2, active_device_connections):
+    return next(
+               (connection for connection in active_device_connections
+                if connection.first_logical_interface is logical_interface1
+                and connection.second_logical_interface is logical_interface2), None
+    )
+
+def get_first_physical_interface(device, logical_interface1):
+    return next(
+               (interface.physical_name for interface in device.interfaces
+               if interface.has_logical_interface is logical_interface1), None
+    )
+
+def get_second_physical_interface(device, logical_interface2):
+    return next(
+               (interface.physical_name for interface in device.interfaces
+               if interface.has_logical_interface is logical_interface2), None
+    )
+
+def add_connection(connection_name, logical_interface1, logical_interface2, active_device_profile):
+    connection_to_add = ConnectionModel(
+        connection_name,
+        logical_interface1.logical_interface_id,
+        logical_interface2.logical_interface_id,
+        active_device_profile.profile_id
+    )
+    db.session.add(connection_to_add)
+    db.session.commit()
+    return connection_to_add
+
+def add_all_parameters(all_parameters, connection, parameters):
+    for key, value in all_parameters.items():
+        if(key == 'bandwidth'):
+            add_parameter(
+                'bandwidth',
+                value,
+                connection.connection_id
+            )
+            if(value != 1000):
+                parameters['bandwidth'] = value
+
+        if(key == 'delay'):
+            add_parameter(
+                'delay',
+                value,
+                connection.connection_id
+            )
+            if(value != 0):
+                parameters['delay'] = value
+
+        if(key == 'packet_loss'):
+            add_parameter(
+                'packet_loss',
+                value,
+                connection.connection_id
+            )
+            if(value != 0):
+                parameters['packet_loss'] = value
+
+        if(key == 'jitter'):
+            add_parameter(
+                'jitter',
+                value,
+                connection.connection_id
+            )
+            if(value != 0):
+                parameters['jitter'] = value
+        parameter_changed = True
 
 def add_parameter(parameter_name, value, connection_id):
     parameter_to_add = ParameterModel(
@@ -95,6 +223,65 @@ def add_parameter(parameter_name, value, connection_id):
         connection_id
     )
     db.session.add(parameter_to_add)
+
+def update_connection(device, new_connection_name, active_connection):
+    salt_api.remove_connection(
+        device.device_name,
+        active_connection.connection_name
+    )
+    salt_api.add_connection(
+        device.device_name,
+        new_connection_name,
+    )
+    active_connection.connection_name = new_connection_name
+    db.session.add(active_connection)
+
+def update_parameters(all_parameters, active_connection, parameters_to_apply):
+    actual_bandwidth = next(
+        parameter for parameter in active_connection.parameters
+        if parameter.parameter_name == 'bandwidth')
+    actual_delay = next(
+        parameter for parameter in active_connection.parameters
+        if parameter.parameter_name == 'delay'
+    )
+    actual_jitter = next(
+        parameter for parameter in active_connection.parameters
+        if parameter.parameter_name == 'jitter'
+    )
+    actual_packet_loss = next(
+        parameter for parameter in active_connection.parameters
+        if parameter.parameter_name == 'packet_loss'
+    )
+
+    for key, value in all_parameters.items():
+        if(key == 'bandwidth'):
+            if(value != actual_bandwidth.value):
+                actual_bandwidth.value = value
+                parameter_changed = True
+                db.session.add(actual_bandwidth)
+            if(value != 1000):
+                parameters_to_apply['bandwidth'] = value
+        if(key == 'delay'):
+            if(value != actual_delay.value):
+                actual_delay.value = value
+                parameter_changed = True
+                db.session.add(actual_delay)
+            if(value != 0):
+                parameters_to_apply['delay'] = value
+        if(key == 'jitter'):
+            if(value != actual_jitter.value):
+                actual_jitter.value = value
+                parameter_changed = True
+                db.session.add(actual_jitter)
+            if(value != 0):
+                parameters_to_apply['jitter'] = value
+        if(key == 'packet_loss'):
+            if(value != actual_packet_loss.value):
+                actual_packet_loss.value = value
+                parameter_changed = True
+                db.session.add(actual_packet_loss)
+            if(value != 0):
+                parameters_to_apply['packet_loss'] = value
 
 # Routes
 
@@ -110,37 +297,16 @@ class Device(Resource):
     @device_ns.doc('create_device')
     @device_ns.expect(device_post_model, validate=True)
     @device_ns.marshal_with(device_model, code=201)
-    @device_ns.response(400, '{"message": Device Name <device_name> is already in use!"}')
+    @device_ns.response(400, '{"message": Device <device_name> is already in use!"}')
     def post(self):
         '''Create a new Device'''
-        args = device_parser.parse_args()
-        device_name = args['device_name']
-        device_name_exists = DeviceModel.query.filter_by(device_name=device_name).first()
-        if device_name_exists:
-            api.abort(400, f"Device Name {device_name} is already used!")
-        management_ip = args['management_ip']
-        profile = ProfileModel("default_" + device_name)
+        device_name, management_ip = parse_device_arguments()
+        if(device_exists(device_name)):
+            api.abort(400, f"Device {device_name} is already used!")
         try:
-            db.session.add(profile)
-            db.session.commit()
-            if(management_ip is None):
-                device = DeviceModel(device_name, profile.profile_id)
-            else:
-                device = DeviceModel(device_name, profile.profile_id, management_ip)
-            db.session.add(device)
-            db.session.commit()
-
-            # Return Format: {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}
-            salt_return = salt_api.get_interfaces(device.device_name)
-            physical_interface_names = salt_return['return'][0][device.device_name]
-            interface_number = 1
-            for physical_name in physical_interface_names:
-                logical_interface = LogicalInterfaceModel.query.filter_by(logical_interface_id=interface_number).first()
-                interface = InterfaceModel(physical_name, device.device_id, logical_interface.logical_interface_id)
-                interface_number += 1
-                db.session.add(logical_interface)
-                db.session.add(interface)
-                db.session.commit()
+            profile = add_profile(device_name)
+            device = add_device(device_name, profile.profile_id, management_ip)
+            create_device_interfaces(device)
         except Exception:
             db.session.rollback()
         return device, 201
@@ -154,17 +320,16 @@ class DeviceInformation(Resource):
     @device_ns.response(404, '{"message": Device or allocated Profile not found!"}')
     def get(self, device_id):
         '''Fetch a Device Information and Configuration'''
-        error_message = "Device or allocated Profile not found!"
 
-        device = DeviceModel.query.filter_by(device_id=device_id).first_or_404(description=error_message)
+        device = get_device(device_id)
+        active_device_profile = get_active_profile(device)
         data = device.serialize()
 
-        all_interfaces_of_device = InterfaceModel.query.filter_by(belongs_to_device_id=device_id).all()
+        all_interfaces_of_device = get_all_interfaces(device)
         data['interfaces'] = [interface.serialize() for interface in all_interfaces_of_device]
 
-        active_device_profile = \
-            ProfileModel.query.filter_by(belongs_to_device=device).first_or_404(description=error_message)
         data['connections'] = [connection.serialize() for connection in active_device_profile.connections]
+
         return jsonify(data)
 
     @device_ns.doc('update_connection_config')
@@ -174,54 +339,47 @@ class DeviceInformation(Resource):
     @device_ns.response(400, '{"message": Bad Physical Interface Mapping in {<connection>}!"}')
     def put(self, device_id):
         '''Update Device Connection Configuration'''
-        error_message = "Device or allocated Profile not found!"
-        args = connection_config_parser.parse_args()
-        connections = args['connections']
+        connections = parse_connection_arguments()
+        device = get_device(device_id)
 
-        device = DeviceModel.query.filter_by(device_id=device_id).first_or_404(description=error_message)
-        active_device_profile = ProfileModel.query.filter_by(
-            belongs_to_device=device).first_or_404(description=error_message)
+        active_device_profile = get_active_profile(device,)
         active_device_connections = active_device_profile.connections.copy()
 
         for connection in connections:
-            logical_interface1 = LogicalInterfaceModel.query\
-                .filter_by(logical_name=connection['interface1']).first()
+            logical_interface1 = get_first_logical_interface(connection)
+            logical_interface2 = get_second_logical_interface(connection)
 
-            logical_interface2 = LogicalInterfaceModel.query\
-                .filter_by(logical_name=connection['interface2']).first()
-            active_connection = next(
-                (connection for connection in active_device_connections
-                 if connection.first_logical_interface is logical_interface1
-                 and connection.second_logical_interface is logical_interface2),
-                None
-            )
+            active_connection = get_active_connection(logical_interface1, logical_interface2, active_device_connections)
+
             connection_name = connection['connection_name']
             bandwidth_value = connection['bandwidth']
             delay_value = connection['delay']
             packet_loss_value = connection['packet_loss']
             jitter_value = connection['jitter']
+            all_parameters = {
+                'bandwidth': bandwidth_value,
+                'delay': delay_value,
+                'packet_loss': packet_loss_value,
+                'jitter': jitter_value
+            }
+            parameters_to_apply = {}
+            parameter_changed = False
 
             try:
                 if active_connection is None:
-                    physical_interface1_name = next(
-                        (interface.physical_name for interface in device.interfaces
-                         if interface.has_logical_interface is logical_interface1), None)
+                    physical_interface1_name = get_first_physical_interface(device, logical_interface1)
 
-                    physical_interface2_name = next(
-                        (interface.physical_name for interface in device.interfaces
-                         if interface.has_logical_interface is logical_interface2), None)
+                    physical_interface2_name = get_second_physical_interface(device, logical_interface2)
 
                     if(physical_interface1_name is None or physical_interface2_name is None):
                         raise Exception(f'Bad Physical Interface Mapping in {connection}!')
-                    connection_to_add = ConnectionModel(
-                        connection_name,
-                        logical_interface1.logical_interface_id,
-                        logical_interface2.logical_interface_id,
-                        active_device_profile.profile_id
-                    )
 
-                    db.session.add(connection_to_add)
-                    db.session.commit()
+                    new_connection = add_connection(
+                        connection_name,
+                        logical_interface1,
+                        logical_interface2,
+                        active_device_profile
+                    )
 
                     salt_api.add_connection(
                         device.device_name,
@@ -230,128 +388,31 @@ class DeviceInformation(Resource):
                         physical_interface2_name
                     )
 
-                    if(bandwidth_value != 1000):
-                        add_parameter(
-                            'bandwidth',
-                            bandwidth_value,
-                            connection_to_add.connection_id
-                        )
-
-                    if(delay_value != 0):
-                        add_parameter(
-                            'delay',
-                            delay_value,
-                            connection_to_add.connection_id
-                        )
-
-                    if(packet_loss_value != 0):
-                        add_parameter(
-                            'packet_loss',
-                            packet_loss_value,
-                            connection_to_add.connection_id
-                        )
-
-                    if(jitter_value != 0):
-                        add_parameter(
-                            'jitter',
-                            jitter_value,
-                            connection_to_add.connection_id
-                        )
-
+                    add_all_parameters(all_parameters, new_connection, parameters_to_apply)
                     db.session.commit()
-
-                    # Todo: execute salt module
-                    # salt_api.add_jitter(
-                    # device.device_name,
-                    # connection['connection_name'],
-                    # connection['jitter']
-                    # )
 
                 else:
                     if(connection_name != active_connection.connection_name):
-                        salt_api.remove_connection(
-                            device.device_name,
-                            active_connection.connection_name
-                        )
+                        update_connection(device, connection_name, active_connection)
 
-                        salt_api.add_connection(
-                            device.device_name,
-                            connection_name,
-                        )
-                        active_connection.connection_name = connection_name
+                    update_parameters(all_parameters, active_connection, parameters_to_apply)
 
-                    actual_bandwidth = next(
-                        (parameter.value for parameter in active_connection.parameters
-                            if parameter.parameter_name == 'bandwidth'),
-                        1000
-                    )
-                    if(bandwidth_value != actual_bandwidth):
-                        if(actual_bandwidth == 1000):
-                            add_parameter(
-                                'bandwidth',
-                                bandwidth_value,
-                                active_connection.connection_id
-                            )
-                        else:
-                            actual_bandwidth.value = bandwidth_value
-                            db.session.add(actual_bandwidth)
-
-                    actual_delay = next(
-                        (parameter.value for parameter in active_connection.parameters
-                            if parameter.parameter_name == 'delay'),
-                        0
-                    )
-                    if(delay_value != actual_delay):
-                        if(actual_delay == 0):
-                            add_parameter(
-                                'delay',
-                                delay_value,
-                                active_connection.connection_id
-                            )
-                        else:
-                            actual_delay.value = delay_value
-                            db.session.add(actual_delay)
-
-                    actual_jitter = next(
-                        (parameter.value for parameter in active_connection.parameters
-                            if parameter.parameter_name == 'jitter'),
-                        0
-                    )
-                    if(jitter_value != actual_jitter):
-                        if(actual_jitter == 0):
-                            add_parameter(
-                                'jitter',
-                                jitter_value,
-                                active_connection.connection_id
-                            )
-                        else:
-                            actual_jitter.value = jitter_value
-                            db.session.add(actual_jitter)
-
-                    actual_packet_loss = next(
-                        (parameter.value for parameter in active_connection.parameters
-                            if parameter.parameter_name == 'packet_loss'),
-                        0
-                    )
-                    if(packet_loss_value != actual_packet_loss):
-                        if(actual_packet_loss == 0):
-                            add_parameter(
-                                'packet_loss',
-                                packet_loss_value,
-                                active_connection.connection_id
-                            )
-                        else:
-                            actual_packet_loss.value = packet_loss_value
-                            db.session.add(actual_packet_loss)
                     db.session.commit()
                     active_device_connections.remove(active_connection)
+
+                if parameter_changed and parameters_to_apply != {}:
+                    print(f"Apply parameters {parameters_to_apply} with salt_module")
+                    # Todo: execute salt module
+                    # salt_api.add_parameters(
+                    # device.device_name,
+                    # connection['connection_name'],
+                    # parameters
+                    # )
+
             except Exception as e:
                 db.session.rollback()
                 api.abort(400, str(e))
 
-        # Todo: Delete all connections which remain in active_device_connection
-        # This are the connection which aren't mentioned in the sent configuration
-        # and therefore have to be deleted
         for connection_to_delete in active_device_connections:
             db.session.delete(connection_to_delete)
             salt_api.remove_connection(
@@ -370,10 +431,8 @@ class InterfaceList(Resource):
     @device_ns.doc(model=interface_list_model)
     def get(self, device_id):
         '''Fetch all Interfaces of a specific Device'''
-        error_message = "Device or allocated Profile not found!"
-        device = DeviceModel.query.filter_by(device_id=device_id).first_or_404(description=error_message)
-
-        all_interfaces_of_device = InterfaceModel.query.filter_by(belongs_to_device_id=device.device_id).all()
+        device = get_device(device_id)
+        all_interfaces_of_device = get_all_interfaces(device)
         return jsonify(interfaces=[interface.serialize() for interface in all_interfaces_of_device])
 
 @device_ns.route('/<int:device_id>/connections/')
@@ -384,10 +443,7 @@ class ConnectionList(Resource):
     @device_ns.doc(model=connection_list_model)
     def get(self, device_id):
         '''Fetch all Connections of a specific Device'''
-        error_message = "Device or allocated Profile not found!"
-        device = DeviceModel.query.filter_by(device_id=device_id).first_or_404(description=error_message)
-
-        active_device_profile = \
-            ProfileModel.query.filter_by(belongs_to_device=device).first_or_404(description=error_message)
+        device = get_device(device_id)
+        active_device_profile = get_active_profile(device)
 
         return jsonify(connections=[connection.serialize() for connection in active_device_profile.connections])
