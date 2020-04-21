@@ -90,21 +90,26 @@ device_information_model = api.model('device_information_model', {
 })
 
 # Helper Functions
+
+
 def parse_device_arguments():
     args = device_parser.parse_args()
     device_name = args['device_name']
     management_ip = args['management_ip']
     return device_name, management_ip
 
+
 def device_exists(device_name):
     device_exists = DeviceModel.query.filter_by(device_name=device_name).first()
     return device_exists
+
 
 def add_profile(device_name):
     profile_to_add = ProfileModel("default_" + device_name)
     db.session.add(profile_to_add)
     db.session.commit()
     return profile_to_add
+
 
 def add_device(device_name, profile_id, management_ip):
     if(management_ip is None):
@@ -114,6 +119,7 @@ def add_device(device_name, profile_id, management_ip):
     db.session.add(device)
     db.session.commit()
     return device
+
 
 def create_device_interfaces(device):
     # Return Format: {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}
@@ -128,24 +134,31 @@ def create_device_interfaces(device):
         db.session.add(interface)
         db.session.commit()
 
+
 def get_device(device_id):
     return DeviceModel.query.filter_by(device_id=device_id).first_or_404(description="Device not found!")
 
+
 def get_active_profile(device):
     return ProfileModel.query.filter_by(belongs_to_device=device).first_or_404(description='Profile not found!')
+
 
 def parse_connection_arguments():
     args = connection_config_parser.parse_args()
     return args['connections']
 
+
 def get_all_interfaces(device):
     return InterfaceModel.query.filter_by(belongs_to_device_id=device.device_id).all()
+
 
 def get_first_logical_interface(connection):
     return LogicalInterfaceModel.query.filter_by(logical_name=connection['interface1']).first()
 
+
 def get_second_logical_interface(connection):
     return LogicalInterfaceModel.query.filter_by(logical_name=connection['interface2']).first()
+
 
 def get_active_connection(logical_interface1, logical_interface2, active_device_connections):
     return next(
@@ -154,17 +167,20 @@ def get_active_connection(logical_interface1, logical_interface2, active_device_
                 and connection.second_logical_interface is logical_interface2), None
     )
 
+
 def get_first_physical_interface(device, logical_interface1):
     return next(
                (interface.physical_name for interface in device.interfaces
                 if interface.has_logical_interface is logical_interface1), None
     )
 
+
 def get_second_physical_interface(device, logical_interface2):
     return next(
                (interface.physical_name for interface in device.interfaces
                 if interface.has_logical_interface is logical_interface2), None
     )
+
 
 def add_connection(connection_name, logical_interface1, logical_interface2, active_device_profile):
     connection_to_add = ConnectionModel(
@@ -176,6 +192,7 @@ def add_connection(connection_name, logical_interface1, logical_interface2, acti
     db.session.add(connection_to_add)
     db.session.commit()
     return connection_to_add
+
 
 def add_all_parameters(all_parameters, connection, parameters, parameter_changed):
     for key, value in all_parameters.items():
@@ -215,6 +232,8 @@ def add_all_parameters(all_parameters, connection, parameters, parameter_changed
             if(value != 0):
                 parameters['jitter'] = value
     parameter_changed = True
+    return parameter_changed
+
 
 def add_parameter(parameter_name, value, connection_id):
     parameter_to_add = ParameterModel(
@@ -223,6 +242,7 @@ def add_parameter(parameter_name, value, connection_id):
         connection_id
     )
     db.session.add(parameter_to_add)
+
 
 def update_connection(device, new_connection_name, active_connection):
     salt_api.remove_connection(
@@ -236,7 +256,8 @@ def update_connection(device, new_connection_name, active_connection):
     active_connection.connection_name = new_connection_name
     db.session.add(active_connection)
 
-def update_parameters(all_parameters, active_connection, parameters_to_apply, parameter_changed):
+
+def update_parameters(all_parameters, active_connection, parameters_to_apply):
     actual_bandwidth = next(
         parameter for parameter in active_connection.parameters
         if parameter.parameter_name == 'bandwidth')
@@ -282,8 +303,9 @@ def update_parameters(all_parameters, active_connection, parameters_to_apply, pa
                 db.session.add(actual_packet_loss)
             if(value != 0):
                 parameters_to_apply['packet_loss'] = value
-
+    return parameter_changed
 # Routes
+
 
 @device_ns.route('/')
 class Device(Resource):
@@ -389,6 +411,7 @@ class DeviceInformation(Resource):
                     )
 
                     add_all_parameters(all_parameters, new_connection, parameters_to_apply, parameter_changed)
+                    parameter_changed
                     db.session.commit()
 
                 else:
@@ -433,6 +456,7 @@ class InterfaceList(Resource):
         device = get_device(device_id)
         all_interfaces_of_device = get_all_interfaces(device)
         return jsonify(interfaces=[interface.serialize() for interface in all_interfaces_of_device])
+
 
 @device_ns.route('/<int:device_id>/connections/')
 @device_ns.response(404, '{"message": "Device not found"}')
