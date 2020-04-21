@@ -244,7 +244,7 @@ def add_parameter(parameter_name, value, connection_id):
     db.session.add(parameter_to_add)
 
 
-def update_connection(device, new_connection_name, active_connection):
+def update_connection(device, new_connection_name, active_connection,physical_interface1_name, physical_interface2_name):
     salt_api.remove_connection(
         device.device_name,
         active_connection.connection_name
@@ -252,6 +252,8 @@ def update_connection(device, new_connection_name, active_connection):
     salt_api.add_connection(
         device.device_name,
         new_connection_name,
+        physical_interface1_name,
+        physical_interface2_name
     )
     active_connection.connection_name = new_connection_name
     db.session.add(active_connection)
@@ -387,15 +389,15 @@ class DeviceInformation(Resource):
             parameters_to_apply = {}
             parameter_changed = False
 
+            physical_interface1_name = get_first_physical_interface(device, logical_interface1)
+
+            physical_interface2_name = get_second_physical_interface(device, logical_interface2)
+
+            if(physical_interface1_name is None or physical_interface2_name is None):
+                raise Exception(f'Bad Physical Interface Mapping in {connection}!')
+
             try:
                 if active_connection is None:
-                    physical_interface1_name = get_first_physical_interface(device, logical_interface1)
-
-                    physical_interface2_name = get_second_physical_interface(device, logical_interface2)
-
-                    if(physical_interface1_name is None or physical_interface2_name is None):
-                        raise Exception(f'Bad Physical Interface Mapping in {connection}!')
-
                     new_connection = add_connection(
                         connection_name,
                         logical_interface1,
@@ -421,7 +423,13 @@ class DeviceInformation(Resource):
 
                 else:
                     if(connection_name != active_connection.connection_name):
-                        update_connection(device, connection_name, active_connection)
+                        update_connection(
+                            device,
+                            connection_name,
+                            active_connection,
+                            physical_interface1_name,
+                            physical_interface2_name
+                        )
 
                     parameter_changed = update_parameters(
                         all_parameters,
