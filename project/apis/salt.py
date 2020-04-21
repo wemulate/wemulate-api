@@ -16,7 +16,7 @@ class SaltApi(object):
 
     def remove_connection(self, device_name, connection_name):
         return self.api.low([
-            {'client': 'local', 'tgt': device_name, 'fun': 'wemulate.add_connection', 'arg': [connection_name]}])
+            {'client': 'local', 'tgt': device_name, 'fun': 'wemulate.remove_connection', 'arg': [connection_name]}])
 
     def set_parameters(self, device_name, interface_name, parameters):
         return self.api.low(
