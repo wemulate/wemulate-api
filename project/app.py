@@ -439,8 +439,9 @@ class DeviceInformation(Resource):
             db.session.delete(connection_to_delete)
             salt_api.remove_connection(
                 device.device_name,
-                active_connection.connection_name
+                connection_to_delete.connection_name
             )
+            db.session.commit()
 
         return jsonify(connections=[connection.serialize() for connection in active_device_profile.connections])
 
