@@ -410,24 +410,33 @@ class DeviceInformation(Resource):
                         physical_interface2_name
                     )
 
-                    add_all_parameters(all_parameters, new_connection, parameters_to_apply, parameter_changed)
-                    parameter_changed
+                    parameter_changed = add_all_parameters(
+                        all_parameters,
+                        new_connection,
+                        parameters_to_apply,
+                        parameter_changed
+                    )
+
                     db.session.commit()
 
                 else:
                     if(connection_name != active_connection.connection_name):
                         update_connection(device, connection_name, active_connection)
 
-                    update_parameters(all_parameters, active_connection, parameters_to_apply, parameter_changed)
+                    parameter_changed = update_parameters(
+                        all_parameters,
+                        active_connection,
+                        parameters_to_apply,
+                        parameter_changed
+                    )
 
                     db.session.commit()
                     active_device_connections.remove(active_connection)
-
                 if parameter_changed and parameters_to_apply != {}:
-                    print(f"Apply parameters {parameters_to_apply} with salt_module")
+                    interface_to_apply = get_first_physical_interface(device, logical_interface1)
                     salt_api.set_parameters(
                         device.device_name,
-                        connection['connection_name'],
+                        interface_to_apply,
                         parameters_to_apply
                     )
 
