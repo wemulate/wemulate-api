@@ -157,13 +157,13 @@ def get_active_connection(logical_interface1, logical_interface2, active_device_
 def get_first_physical_interface(device, logical_interface1):
     return next(
                (interface.physical_name for interface in device.interfaces
-               if interface.has_logical_interface is logical_interface1), None
+                if interface.has_logical_interface is logical_interface1), None
     )
 
 def get_second_physical_interface(device, logical_interface2):
     return next(
                (interface.physical_name for interface in device.interfaces
-               if interface.has_logical_interface is logical_interface2), None
+                if interface.has_logical_interface is logical_interface2), None
     )
 
 def add_connection(connection_name, logical_interface1, logical_interface2, active_device_profile):
@@ -402,12 +402,11 @@ class DeviceInformation(Resource):
 
                 if parameter_changed and parameters_to_apply != {}:
                     print(f"Apply parameters {parameters_to_apply} with salt_module")
-                    # Todo: execute salt module
-                    # salt_api.add_parameters(
-                    # device.device_name,
-                    # connection['connection_name'],
-                    # parameters
-                    # )
+                    salt_api.set_parameters(
+                        device.device_name,
+                        connection['connection_name'],
+                        parameters_to_apply
+                    )
 
             except Exception as e:
                 db.session.rollback()
