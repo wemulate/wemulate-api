@@ -77,7 +77,7 @@ connection_list_model = api.model('connection_list_model', {
     'connections': fields.List(fields.Nested(connection_model)),
 })
 
-device_information_model = api.model('configuration_model', {
+device_information_model = api.model('device_information_model', {
     'active_profile_name': fields.String(attribute='active_profile.profile_name'),
     'device_id': fields.Integer,
     'device_name': fields.String,
@@ -195,7 +195,7 @@ class DeviceInformation(Resource):
                  and connection.second_logical_interface is logical_interface2),
                 None
             )
-
+            connection_name = connection['connection_name']
             bandwidth_value = connection['bandwidth']
             delay_value = connection['delay']
             packet_loss_value = connection['packet_loss']
@@ -214,7 +214,7 @@ class DeviceInformation(Resource):
                     if(physical_interface1_name is None or physical_interface2_name is None):
                         raise Exception(f'Bad Physical Interface Mapping in {connection}!')
                     connection_to_add = ConnectionModel(
-                        connection['connection_name'],
+                        connection_name,
                         logical_interface1.logical_interface_id,
                         logical_interface2.logical_interface_id,
                         active_device_profile.profile_id
@@ -225,7 +225,7 @@ class DeviceInformation(Resource):
 
                     salt_api.add_connection(
                         device.device_name,
-                        connection['connection_name'],
+                        connection_name,
                         physical_interface1_name,
                         physical_interface2_name
                     )
@@ -268,7 +268,7 @@ class DeviceInformation(Resource):
                     # )
 
                 else:
-                    if(connection['connection_name'] != active_connection.connection_name):
+                    if(connection_name != active_connection.connection_name):
                         salt_api.remove_connection(
                             device.device_name,
                             active_connection.connection_name
@@ -276,9 +276,9 @@ class DeviceInformation(Resource):
 
                         salt_api.add_connection(
                             device.device_name,
-                            connection['connection_name'],
+                            connection_name,
                         )
-                        active_connection.connection_name = connection['connection_name']
+                        active_connection.connection_name = connection_name
 
                     actual_bandwidth = next(
                         (parameter.value for parameter in active_connection.parameters
