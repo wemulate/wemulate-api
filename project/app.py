@@ -177,7 +177,7 @@ def add_connection(connection_name, logical_interface1, logical_interface2, acti
     db.session.commit()
     return connection_to_add
 
-def add_all_parameters(all_parameters, connection, parameters):
+def add_all_parameters(all_parameters, connection, parameters, parameter_changed):
     for key, value in all_parameters.items():
         if(key == 'bandwidth'):
             add_parameter(
@@ -236,7 +236,7 @@ def update_connection(device, new_connection_name, active_connection):
     active_connection.connection_name = new_connection_name
     db.session.add(active_connection)
 
-def update_parameters(all_parameters, active_connection, parameters_to_apply):
+def update_parameters(all_parameters, active_connection, parameters_to_apply, parameter_changed):
     actual_bandwidth = next(
         parameter for parameter in active_connection.parameters
         if parameter.parameter_name == 'bandwidth')
@@ -388,14 +388,14 @@ class DeviceInformation(Resource):
                         physical_interface2_name
                     )
 
-                    add_all_parameters(all_parameters, new_connection, parameters_to_apply)
+                    add_all_parameters(all_parameters, new_connection, parameters_to_apply, parameter_changed)
                     db.session.commit()
 
                 else:
                     if(connection_name != active_connection.connection_name):
                         update_connection(device, connection_name, active_connection)
 
-                    update_parameters(all_parameters, active_connection, parameters_to_apply)
+                    update_parameters(all_parameters, active_connection, parameters_to_apply, parameter_changed)
 
                     db.session.commit()
                     active_device_connections.remove(active_connection)
