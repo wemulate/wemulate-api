@@ -214,7 +214,7 @@ def add_all_parameters(all_parameters, connection, parameters, parameter_changed
             )
             if(value != 0):
                 parameters['jitter'] = value
-        parameter_changed = True
+    parameter_changed = True
 
 def add_parameter(parameter_name, value, connection_id):
     parameter_to_add = ParameterModel(
