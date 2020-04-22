@@ -104,14 +104,14 @@ def device_exists(device_name):
     return device_exists
 
 
-def add_profile(device_name):
+def add_profile_to_db(device_name):
     profile_to_add = ProfileModel("default_" + device_name)
     db.session.add(profile_to_add)
     db.session.commit()
     return profile_to_add
 
 
-def add_device(device_name, profile_id, management_ip):
+def add_device_to_db(device_name, profile_id, management_ip):
     if(management_ip is None):
         device = DeviceModel(device_name, profile_id)
     else:
@@ -152,12 +152,8 @@ def get_all_interfaces(device):
     return InterfaceModel.query.filter_by(belongs_to_device_id=device.device_id).all()
 
 
-def get_first_logical_interface(connection):
-    return LogicalInterfaceModel.query.filter_by(logical_name=connection['interface1']).first()
-
-
-def get_second_logical_interface(connection):
-    return LogicalInterfaceModel.query.filter_by(logical_name=connection['interface2']).first()
+def get_logical_interface(logical_interface_name):
+    return LogicalInterfaceModel.query.filter_by(logical_name=logical_interface_name).first()
 
 
 def get_active_connection(logical_interface1, logical_interface2, active_device_connections):
@@ -168,21 +164,14 @@ def get_active_connection(logical_interface1, logical_interface2, active_device_
     )
 
 
-def get_first_physical_interface(device, logical_interface1):
+def get_physical_interface(device, logical_interface):
     return next(
                (interface.physical_name for interface in device.interfaces
-                if interface.has_logical_interface is logical_interface1), None
+                if interface.has_logical_interface is logical_interface), None
     )
 
 
-def get_second_physical_interface(device, logical_interface2):
-    return next(
-               (interface.physical_name for interface in device.interfaces
-                if interface.has_logical_interface is logical_interface2), None
-    )
-
-
-def add_connection(connection_name, logical_interface1, logical_interface2, active_device_profile):
+def add_connection_to_db(connection_name, logical_interface1, logical_interface2, active_device_profile):
     connection_to_add = ConnectionModel(
         connection_name,
         logical_interface1.logical_interface_id,
@@ -194,10 +183,10 @@ def add_connection(connection_name, logical_interface1, logical_interface2, acti
     return connection_to_add
 
 
-def add_all_parameters(all_parameters, connection, parameters, parameter_changed):
+def add_all_parameters_to_db(all_parameters, connection, parameters, parameter_changed):
     for key, value in all_parameters.items():
         if(key == 'bandwidth'):
-            add_parameter(
+            add_parameter_to_db(
                 'bandwidth',
                 value,
                 connection.connection_id
@@ -206,7 +195,7 @@ def add_all_parameters(all_parameters, connection, parameters, parameter_changed
                 parameters['bandwidth'] = value
 
         if(key == 'delay'):
-            add_parameter(
+            add_parameter_to_db(
                 'delay',
                 value,
                 connection.connection_id
@@ -215,7 +204,7 @@ def add_all_parameters(all_parameters, connection, parameters, parameter_changed
                 parameters['delay'] = value
 
         if(key == 'packet_loss'):
-            add_parameter(
+            add_parameter_to_db(
                 'packet_loss',
                 value,
                 connection.connection_id
@@ -224,7 +213,7 @@ def add_all_parameters(all_parameters, connection, parameters, parameter_changed
                 parameters['packet_loss'] = value
 
         if(key == 'jitter'):
-            add_parameter(
+            add_parameter_to_db(
                 'jitter',
                 value,
                 connection.connection_id
@@ -235,7 +224,7 @@ def add_all_parameters(all_parameters, connection, parameters, parameter_changed
     return parameter_changed
 
 
-def add_parameter(parameter_name, value, connection_id):
+def add_parameter_to_db(parameter_name, value, connection_id):
     parameter_to_add = ParameterModel(
         parameter_name,
         value,
@@ -316,7 +305,7 @@ def update_parameters(all_parameters, active_connection, parameters_to_apply, pa
 
 def remove_existing_connections(device, active_device_connections):
     for connection_to_delete in active_device_connections:
-        interface_to_remove_parameter = get_first_physical_interface(
+        interface_to_remove_parameter = get_physical_interface(
             device,
             connection_to_delete.first_logical_interface
         )
@@ -351,8 +340,8 @@ class Device(Resource):
         if(device_exists(device_name)):
             api.abort(400, f"Device {device_name} is already used!")
         try:
-            profile = add_profile(device_name)
-            device = add_device(device_name, profile.profile_id, management_ip)
+            profile = add_profile_to_db(device_name)
+            device = add_device_to_db(device_name, profile.profile_id, management_ip)
             create_device_interfaces(device)
         except Exception:
             db.session.rollback()
@@ -393,11 +382,6 @@ class DeviceInformation(Resource):
         active_device_connections = active_device_profile.connections.copy()
 
         for connection in connections:
-            logical_interface1 = get_first_logical_interface(connection)
-            logical_interface2 = get_second_logical_interface(connection)
-
-            active_connection = get_active_connection(logical_interface1, logical_interface2, active_device_connections)
-
             connection_name = connection['connection_name']
             bandwidth_value = connection['bandwidth']
             delay_value = connection['delay']
@@ -411,17 +395,24 @@ class DeviceInformation(Resource):
             }
             parameters_to_apply = {}
             parameter_changed = False
+            interface1_name = connection['interface1']
+            interface2_name = connection['interface2']
 
-            physical_interface1_name = get_first_physical_interface(device, logical_interface1)
+            logical_interface1 = get_logical_interface(interface1_name)
+            logical_interface2 = get_logical_interface(interface2_name)
 
-            physical_interface2_name = get_second_physical_interface(device, logical_interface2)
+            physical_interface1_name = get_physical_interface(device, logical_interface1)
+
+            physical_interface2_name = get_physical_interface(device, logical_interface2)
 
             if(physical_interface1_name is None or physical_interface2_name is None):
                 raise Exception(f'Bad Physical Interface Mapping in {connection}!')
 
+            active_connection = get_active_connection(logical_interface1, logical_interface2, active_device_connections)
+
             try:
                 if active_connection is None:
-                    new_connection = add_connection(
+                    new_connection = add_connection_to_db(
                         connection_name,
                         logical_interface1,
                         logical_interface2,
@@ -435,7 +426,7 @@ class DeviceInformation(Resource):
                         physical_interface2_name
                     )
 
-                    parameter_changed = add_all_parameters(
+                    parameter_changed = add_all_parameters_to_db(
                         all_parameters,
                         new_connection,
                         parameters_to_apply,
@@ -464,7 +455,7 @@ class DeviceInformation(Resource):
                     db.session.commit()
                     active_device_connections.remove(active_connection)
                 if parameter_changed and parameters_to_apply != {}:
-                    interface_to_apply = get_first_physical_interface(device, logical_interface1)
+                    interface_to_apply = get_physical_interface(device, logical_interface1)
                     salt_api.set_parameters(
                         device.device_name,
                         interface_to_apply,
