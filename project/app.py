@@ -413,7 +413,6 @@ class DeviceInformation(Resource):
             parameter_changed = False
 
             physical_interface1_name = get_first_physical_interface(device, logical_interface1)
-
             physical_interface2_name = get_second_physical_interface(device, logical_interface2)
 
             if(physical_interface1_name is None or physical_interface2_name is None):
