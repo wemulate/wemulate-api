@@ -73,10 +73,10 @@ def set_parameters(interface_name, parameters):
 
     netem_command = add_delay(netem_command, parameters)
     netem_command = add_jitter(netem_command, parameters)
-    netem_command = add_packetloss(netem_command, parameters)
+    netem_command = add_packet_loss(netem_command, parameters)
     tbf_command = add_bandwidth(tbf_command, parameters)
 
-    if any(parameter in parameters for parameter in ("delay", "jitter", "packetloss")):
+    if any(parameter in parameters for parameter in ("delay", "jitter", "packet_loss")):
         __salt__['cmd.run'](netem_command)
         log.info(netem_command)
 
@@ -103,9 +103,9 @@ def add_jitter(command, parameters):
     return command
 
 
-def add_packetloss(command, parameters):
-    if "packetloss" in parameters:
-        return command + ' ' + f'loss {parameters["packetloss"]}%'
+def add_packet_loss(command, parameters):
+    if "packet_loss" in parameters:
+        return command + ' ' + f'loss {parameters["packet_loss"]}%'
     return command
 
 
