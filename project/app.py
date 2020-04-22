@@ -8,6 +8,13 @@ from core.models import ConnectionModel, ParameterModel
 # , OnOffTimerModel
 from core.logical_interface import create_logical_interfaces
 
+# Default Interface Parameters
+
+DEFAULT_BANDWITH = 1000
+DEFAULT_DELAY = 0
+DEFAULT_JITTER = 0
+DEFAULT_PACKET_LOSS = 0
+
 
 app, api, device_ns = create_app()
 salt_api = create_salt_api()
@@ -183,7 +190,7 @@ def add_connection_to_db(connection_name, logical_interface1, logical_interface2
     return connection_to_add
 
 
-def add_all_parameters_to_db(all_parameters, connection, parameters, parameter_changed):
+def add_all_parameters_to_db(all_parameters, connection, parameters_to_apply, parameter_changed):
     for key, value in all_parameters.items():
         if(key == 'bandwidth'):
             add_parameter_to_db(
@@ -191,8 +198,8 @@ def add_all_parameters_to_db(all_parameters, connection, parameters, parameter_c
                 value,
                 connection.connection_id
             )
-            if(value != 1000):
-                parameters['bandwidth'] = value
+            if(value != DEFAULT_BANDWITH):
+                parameters_to_apply['bandwidth'] = value
 
         if(key == 'delay'):
             add_parameter_to_db(
@@ -200,8 +207,8 @@ def add_all_parameters_to_db(all_parameters, connection, parameters, parameter_c
                 value,
                 connection.connection_id
             )
-            if(value != 0):
-                parameters['delay'] = value
+            if(value != DEFAULT_DELAY):
+                parameters_to_apply['delay'] = value
 
         if(key == 'packet_loss'):
             add_parameter_to_db(
@@ -209,8 +216,8 @@ def add_all_parameters_to_db(all_parameters, connection, parameters, parameter_c
                 value,
                 connection.connection_id
             )
-            if(value != 0):
-                parameters['packet_loss'] = value
+            if(value != DEFAULT_JITTER):
+                parameters_to_apply['packet_loss'] = value
 
         if(key == 'jitter'):
             add_parameter_to_db(
@@ -218,8 +225,8 @@ def add_all_parameters_to_db(all_parameters, connection, parameters, parameter_c
                 value,
                 connection.connection_id
             )
-            if(value != 0):
-                parameters['jitter'] = value
+            if(value != DEFAULT_PACKET_LOSS):
+                parameters_to_apply['jitter'] = value
     db.session.commit()
     parameter_changed = True
     return parameter_changed
@@ -379,7 +386,7 @@ class DeviceInformation(Resource):
         connections = parse_connection_arguments()
         device = get_device(device_id)
 
-        active_device_profile = get_active_profile(device,)
+        active_device_profile = get_active_profile(device)
         active_device_connections = active_device_profile.connections.copy()
 
         for connection in connections:
@@ -454,10 +461,17 @@ class DeviceInformation(Resource):
                     db.session.commit()
                     active_device_connections.remove(active_connection)
 
-                if parameter_changed and parameters_to_apply != {}:
-                    # We always define parameters on the first interface of the connection
-                    interface_to_apply = get_physical_interface(device, logical_interface1)
+                # We always define parameters on the first interface of the connection
+                interface_to_apply = get_physical_interface(device, logical_interface1)
 
+                if(bandwidth_value == DEFAULT_BANDWITH and delay_value == DEFAULT_DELAY
+                   and jitter_value == DEFAULT_JITTER and packet_loss_value == DEFAULT_PACKET_LOSS):
+                    salt_api.remove_parameters(
+                        device.device_name,
+                        interface_to_apply
+                    )
+
+                if parameter_changed and parameters_to_apply != {}:
                     salt_api.remove_parameters(
                         device.device_name,
                         interface_to_apply
