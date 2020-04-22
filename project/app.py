@@ -220,6 +220,7 @@ def add_all_parameters_to_db(all_parameters, connection, parameters, parameter_c
             )
             if(value != 0):
                 parameters['jitter'] = value
+    db.session.commit()
     parameter_changed = True
     return parameter_changed
 
@@ -433,8 +434,6 @@ class DeviceInformation(Resource):
                         parameter_changed
                     )
 
-                    db.session.commit()
-
                 else:
                     if(connection_name != active_connection.connection_name):
                         update_connection(
@@ -454,8 +453,16 @@ class DeviceInformation(Resource):
 
                     db.session.commit()
                     active_device_connections.remove(active_connection)
+
                 if parameter_changed and parameters_to_apply != {}:
+                    # We always define parameters on the first interface of the connection
                     interface_to_apply = get_physical_interface(device, logical_interface1)
+
+                    salt_api.remove_parameters(
+                        device.device_name,
+                        interface_to_apply
+                    )
+
                     salt_api.set_parameters(
                         device.device_name,
                         interface_to_apply,
