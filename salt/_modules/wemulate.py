@@ -108,8 +108,7 @@ def add_packet_loss(command, parameters):
 
 
 def add_bandwidth(interface_name, parameters):
-    command = (f'sudo /home/wemulate/wondershaper/wondershaper -a {interface_name}
-               -u {parameters["bandwidth"]*1000} -d {parameters["bandwidth"] *1000}')
+    command = (f'sudo /home/wemulate/wondershaper/wondershaper -a {interface_name} -u {parameters["bandwidth"]*1000} -d {parameters["bandwidth"] *1000}')
     __salt__['cmd.run'](command)
     return f'bandwidth {parameters["bandwidth"]} on {interface_name} set'
 
