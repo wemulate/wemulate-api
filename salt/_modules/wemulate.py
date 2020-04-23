@@ -80,7 +80,8 @@ def set_parameters(interface_name, parameters):
         log.info(netem_command)
 
     if "bandwidth" in parameters:
-        log.info(add_bandwidth(interface_name, parameters))
+        bw_result = add_bandwidth(interface_name, parameters)
+        log.info(bw_result)
 
     return "Successfully added parameters"
 
