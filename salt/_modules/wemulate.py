@@ -115,7 +115,7 @@ def add_bandwidth(interface_name, parameters):
     command = f'sudo tc filter add dev {interface_name} parent ffff: protocol ip u32 match u32 0 0 action mirred egress redirect dev ifb0'
     __salt__['cmd.run'](command)
     __salt__['cmd.run']('sudo tc qdisc add dev ifb0 root handle 2: htb')
-    comand = 'sudo tc class add dev ifb0 parent 2: classid 2:1 htb rate {parameters["bandwidth"]}kbit'
+    command = 'sudo tc class add dev ifb0 parent 2: classid 2:1 htb rate {parameters["bandwidth"]}kbit'
     __salt__['cmd.run'](command)
     __salt__['cmd.run']('sudo tc filter add dev ifb0 protocol ip parent 2: prio 1 u32 match ip src 0.0.0.0/0 flowid 2:')
     return f'bandwidth {parameters["bandwidth"]} on {interface_name} set'
