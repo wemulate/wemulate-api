@@ -75,7 +75,7 @@ def set_parameters(interface_name, parameters):
     netem_command = add_jitter(netem_command, parameters)
     netem_command = add_packetloss(netem_command, parameters)
 
-    if any(parameter in parameters for parameter in ("delay", "jitter", "packetloss")):
+    if any(parameter in parameters for parameter in ("delay", "jitter", "packet_loss")):
         __salt__['cmd.run'](netem_command)
         log.info(netem_command)
 
@@ -101,22 +101,23 @@ def add_jitter(command, parameters):
     return command
 
 
-def add_packetloss(command, parameters):
-    if "packetloss" in parameters:
-        return command + ' ' + f'loss {parameters["packetloss"]}%'
+def add_packet_loss(command, parameters):
+    if "packet_loss" in parameters:
+        return command + ' ' + f'loss {parameters["packet_loss"]}%'
     return command
 
 
 def add_bandwidth(interface_name, parameters):
     __salt__['cmd.run']('sudo modprobe ifb numifbs=1')
     __salt__['cmd.run']('sudo ip link set dev ifb0 up')
-    __salt__['cmd.run'](f'sudo tc qdisc add dev {interface_name} handle ffff: ingress')
-    __salt__['cmd.run'](f'sudo tc filter add dev {interface_name} parent ffff: protocol ip u32 match u32 0 0 
-                        action mirred egress redirect dev ifb0')
-    __salt__['cmd.run'](f'sudo tc qdisc add dev ifb0 root handle 2: htb')
-    __salt__['cmd.run'](f'sudo tc class add dev ifb0 parent 2: classid 2:1 htb rate {parameters["bandwidth"]}kbit')
-    __salt__['cmd.run'](f'sudo tc filter add dev ifb0 protocol ip parent 2:
-                        prio 1 u32 match ip src 0.0.0.0/0 flowid 2:')
+    command = f'sudo tc qdisc add dev {interface_name} handle ffff: ingress'
+    __salt__['cmd.run'](command)
+    command = f'sudo tc filter add dev {interface_name} parent ffff: protocol ip u32 match u32 0 0 action mirred egress redirect dev ifb0'
+    __salt__['cmd.run'](command)
+    __salt__['cmd.run']('sudo tc qdisc add dev ifb0 root handle 2: htb')
+    comand = 'sudo tc class add dev ifb0 parent 2: classid 2:1 htb rate {parameters["bandwidth"]}kbit'
+    __salt__['cmd.run'](command)
+    __salt__['cmd.run']('sudo tc filter add dev ifb0 protocol ip parent 2: prio 1 u32 match ip src 0.0.0.0/0 flowid 2:')
     return f'bandwidth {parameters["bandwidth"]} on {interface_name} set'
 
 

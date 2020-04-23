@@ -1,6 +1,7 @@
 import json
 from core import db
 
+
 class ProfileModel(db.Model):
     __tablename__ = 'profile'
     profile_id = db.Column(
@@ -11,7 +12,7 @@ class ProfileModel(db.Model):
     profile_name = db.Column(db.String(50))
     connections = db.relationship(
         'ConnectionModel',
-        backref='profile',
+        backref='belongs_to_profile',
         lazy=False,
         cascade='delete',
         order_by='asc(ConnectionModel.connection_name)'
@@ -26,6 +27,7 @@ class ProfileModel(db.Model):
             'profile_name': self.profile_name
         }
         )
+
 
 class DeviceModel(db.Model):
     __tablename__ = 'device'
@@ -159,10 +161,16 @@ class ConnectionModel(db.Model):
         db.ForeignKey('logical_interface.logical_interface_id'),
         nullable=False
     )
+    first_logical_interface = db.relationship(
+        LogicalInterfaceModel, foreign_keys=[first_logical_interface_id], uselist=False
+    )
     second_logical_interface_id = db.Column(
         db.Integer,
         db.ForeignKey('logical_interface.logical_interface_id'),
         nullable=False
+    )
+    second_logical_interface = db.relationship(
+        LogicalInterfaceModel, foreign_keys=[second_logical_interface_id], uselist=False
     )
     belongs_to_profile_id = db.Column(
         db.Integer,
@@ -171,7 +179,7 @@ class ConnectionModel(db.Model):
     )
     parameters = db.relationship(
         'ParameterModel',
-        backref='connection',
+        backref='belongs_to_connection',
         lazy=False,
         cascade='delete',
         order_by='asc(ParameterModel.parameter_name)'
@@ -191,9 +199,36 @@ class ConnectionModel(db.Model):
             'connection_name': self.connection_name,
             'bidirectional': self.bidirectional,
             'first_logical_interface_id': self.first_logical_interface_id,
+            'first_logical_interface_name': self.first_logical_interface.logical_name,
             'second_logical_interface_id': self.second_logical_interface_id,
+            'second_logical_interface_name': self.second_logical_interface.logical_name,
             'belongs_to_profile_id': self.belongs_to_profile_id
         })
+
+    def serialize(self):
+        delay = 0
+        packet_loss = 0
+        bandwidth = 1000
+        jitter = 0
+
+        for parameter in self.parameters:
+            if parameter.parameter_name == 'delay':
+                delay = parameter.value
+            if parameter.parameter_name == 'packet_loss':
+                packet_loss = parameter.value
+            if parameter.parameter_name == 'bandwidth':
+                bandwidth = parameter.value
+            if parameter.parameter_name == 'jitter':
+                jitter = parameter.value
+        return {
+            'connection_name': self.connection_name,
+            'interface1': self.first_logical_interface.logical_name,
+            'interface2': self.second_logical_interface.logical_name,
+            'delay': delay,
+            'packet_loss': packet_loss,
+            'bandwidth': bandwidth,
+            'jitter': jitter,
+        }
 
 
 class ParameterModel(db.Model):
@@ -204,7 +239,7 @@ class ParameterModel(db.Model):
         autoincrement=True
     )
     parameter_name = db.Column(
-        db.Enum('bandwith', 'delay', 'packer_loss', 'jitter', name='parameter_name_enum'), nullable=False
+        db.Enum('bandwidth', 'delay', 'packet_loss', 'jitter', name='parameter_name_enum'), nullable=False
     )
     value = db.Column(db.Integer, nullable=False)
     belongs_to_connection_id = db.Column(
