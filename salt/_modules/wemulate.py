@@ -74,15 +74,13 @@ def set_parameters(interface_name, parameters):
     netem_command = add_delay(netem_command, parameters)
     netem_command = add_jitter(netem_command, parameters)
     netem_command = add_packetloss(netem_command, parameters)
-    tbf_command = add_bandwidth(tbf_command, parameters)
 
     if any(parameter in parameters for parameter in ("delay", "jitter", "packetloss")):
         __salt__['cmd.run'](netem_command)
         log.info(netem_command)
 
     if "bandwidth" in parameters:
-        __salt__['cmd.run'](tbf_command)
-        log.info(tbf_command)
+        log.info(add_bandwidth(interface_name, parameters))
 
     return "Successfully added parameters"
 
@@ -109,13 +107,22 @@ def add_packetloss(command, parameters):
     return command
 
 
-def add_bandwidth(command, parameters):
-    if "bandwidth" in parameters:
-        return command + ' ' + f'rate {parameters["bandwidth"]}mbit burst 32kb latency 100ms'
+def add_bandwidth(interface_name, parameters):
+    __salt__['cmd.run']('sudo modprobe ifb numifbs=1')
+    __salt__['cmd.run']('sudo ip link set dev ifb0 up')
+    __salt__['cmd.run'](f'sudo tc qdisc add dev {interface_name} handle ffff: ingress')
+    __salt__['cmd.run'](f'sudo tc filter add dev {interface_name} parent ffff: protocol ip u32 match u32 0 0 
+                        action mirred egress redirect dev ifb0')
+    __salt__['cmd.run'](f'sudo tc qdisc add dev ifb0 root handle 2: htb')
+    __salt__['cmd.run'](f'sudo tc class add dev ifb0 parent 2: classid 2:1 htb rate {parameters["bandwidth"]}kbit')
+    __salt__['cmd.run'](f'sudo tc filter add dev ifb0 protocol ip parent 2:
+                        prio 1 u32 match ip src 0.0.0.0/0 flowid 2:')
+    return f'bandwidth {parameters["bandwidth"]} on {interface_name} set'
 
 
 def remove_parameters(interface_name):
     command = f'sudo tc qdisc del dev {interface_name} root'
     __salt__['cmd.run'](command)
+    command = f'tc qdisc del dev {interface_name} ingress'
+    __salt__['cmd.run'](command)
     return f"Successfully removed parameters"
-
