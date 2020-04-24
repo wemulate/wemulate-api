@@ -109,13 +109,13 @@ def add_packet_loss(command, parameters):
 
 def add_bandwidth(interface_name, parameters):
     bandwidth_in_kbit = parameters["bandwidth"] * 1000
-    command = f'sudo /home/wemulate/wondershape/wondershaper -a {interface_name} -u {bandwidth_in_kbit} -d {bandwidth_in_kbit}'
+    command = f'sudo /home/wemulate/wondershaper/wondershaper -a {interface_name} -u {bandwidth_in_kbit} -d {bandwidth_in_kbit}'
     __salt__['cmd.run'](command)
     return f'bandwidth {parameters["bandwidth"]} on {interface_name} set'
 
 def remove_parameters(interface_name):
     command = f'sudo tc qdisc del dev {interface_name} root'
     __salt__['cmd.run'](command)
-    command = f'sudo /home/wemulate/wondershape/wondershaper -c -a {interface_name}'
+    command = f'sudo /home/wemulate/wondershaper/wondershaper -c -a {interface_name}'
     __salt__['cmd.run'](command)
     return f"Successfully removed parameters"
