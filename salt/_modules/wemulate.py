@@ -37,8 +37,8 @@ def get_interfaces():
 
 def interface_matches_criteria(interface_name):
     with open('/etc/wemulate/config.yaml') as file:
-        managment_interfaces = yaml.full_load(file)
-    if interface_name.startswith(("eth", "en")) and interface_name not in managment_interfaces['management_interfaces']:
+        config = yaml.full_load(file)
+    if interface_name.startswith(("eth", "en")) and interface_name not in config['management_interfaces']:
         return True
     return False
 
