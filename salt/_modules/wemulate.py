@@ -73,8 +73,10 @@ def set_parameters(interface_name, parameters):
     netem_command = add_delay(netem_command, parameters)
     netem_command = add_jitter(netem_command, parameters)
     netem_command = add_packet_loss(netem_command, parameters)
+    netem_command = add_duplication(netem_command, parameters)
+    netem_command = add_corruption(netem_command, parameters)
 
-    if any(parameter in parameters for parameter in ("delay", "jitter", "packet_loss")):
+    if any(parameter in parameters for parameter in ("delay", "jitter", "packet_loss", "duplication", "corruption")):
         __salt__['cmd.run'](netem_command)
         log.info(netem_command)
 
@@ -112,6 +114,16 @@ def add_bandwidth(interface_name, parameters):
     command = f'sudo /home/wemulate/wondershaper/wondershaper -a {interface_name} -u {bandwidth_in_kbit} -d {bandwidth_in_kbit}'
     __salt__['cmd.run'](command)
     return f'bandwidth {parameters["bandwidth"]} on {interface_name} set'
+
+def add_duplication(command, parameters):
+    if "duplication" in parameters:
+        return command + ' ' + f'duplicate {parameters["duplication"]}%'
+    return command
+
+def add_corruption(command, parameters):
+    if "corruption" in parameters:
+        return command + ' ' + f'corrupt {parameters["corruption"]}%'
+    return command
 
 def remove_parameters(interface_name):
     command = f'sudo tc qdisc del dev {interface_name} root'
