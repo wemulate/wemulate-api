@@ -15,6 +15,7 @@ import os
 import netifaces
 from pyroute2 import IPRoute
 import logging
+import yaml
 
 __virtualname__ = 'wemulate'
 log = logging.getLogger(__name__)
@@ -30,10 +31,16 @@ def __virtual__():
 def get_interfaces():
     interfaces_list = []
     for name in netifaces.interfaces():
-        if name.startswith(("eth","en")):
+        if interface_matches_criteria(name):
             interfaces_list.append(name)
     return interfaces_list
 
+def interface_matches_criteria(interface_name):
+    with open('/etc/wemulate/config.yaml') as file:
+        config = yaml.full_load(file)
+    if interface_name.startswith(("eth", "en")) and interface_name not in config['management_interfaces']:
+        return True
+    return False
 
 def add_connection(connection_name, interface1_name, interface2_name):
     include_str = 'source /etc/network/interfaces.d/*'
