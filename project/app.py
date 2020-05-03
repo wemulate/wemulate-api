@@ -2,9 +2,9 @@ from flask_restplus import Resource, fields
 from flask import jsonify
 from core import db, create_app
 from apis import create_salt_api
-from core.models import ProfileModel, DeviceModel
-from core.models import InterfaceModel, LogicalInterfaceModel
-from core.models import ConnectionModel, ParameterModel
+from core.parser.connection import ConnectionParser
+from core.parser.device import DeviceParser
+from core.models import ProfileModel, DeviceModel, InterfaceModel, LogicalInterfaceModel, ConnectionModel, ParameterModel
 # , OnOffTimerModel
 from core.logical_interface import create_logical_interfaces
 
@@ -19,28 +19,8 @@ DEFAULT_PACKET_LOSS = 0
 app, api, device_ns = create_app()
 salt_api = create_salt_api()
 create_logical_interfaces()
-
-# Parser
-
-device_parser = api.parser()
-device_parser.add_argument(
-    'device_name',
-    type=str,
-    help='hostname of the device/minion'
-)
-
-device_parser.add_argument(
-    'management_ip',
-    type=str,
-    help='define the management ip address (if not 127.0.0.1) of the device '
-)
-
-connection_config_parser = api.parser()
-connection_config_parser.add_argument(
-    'connections',
-    type=list,
-    location='json'
-)
+device_parser = DeviceParser(api)
+connection_parser = ConnectionParser(api)
 
 # Models
 
@@ -99,12 +79,6 @@ device_information_model = api.model('device_information_model', {
 # Helper Functions
 
 
-def parse_device_arguments():
-    args = device_parser.parse_args()
-    device_name = args['device_name']
-    management_ip = args['management_ip']
-    return device_name, management_ip
-
 
 def device_exists(device_name):
     device_exists = DeviceModel.query.filter_by(device_name=device_name).first()
@@ -148,11 +122,6 @@ def get_device(device_id):
 
 def get_active_profile(device):
     return ProfileModel.query.filter_by(belongs_to_device=device).first_or_404(description='Profile not found!')
-
-
-def parse_connection_arguments():
-    args = connection_config_parser.parse_args()
-    return args['connections']
 
 
 def get_all_interfaces(device):
@@ -344,7 +313,7 @@ class Device(Resource):
     @device_ns.response(400, '{"message": Device <device_name> is already in use!"}')
     def post(self):
         '''Create a new Device'''
-        device_name, management_ip = parse_device_arguments()
+        device_name, management_ip = device_parser.parse_arguments()
         if(device_exists(device_name)):
             api.abort(400, f"Device {device_name} is already used!")
         try:
@@ -383,7 +352,7 @@ class DeviceInformation(Resource):
     @device_ns.response(400, '{"message": Bad Physical Interface Mapping in {<connection>}!"}')
     def put(self, device_id):
         '''Update Device Connection Configuration'''
-        connections = parse_connection_arguments()
+        connections = connection_parser.parse_arguments()
         device = get_device(device_id)
 
         active_device_profile = get_active_profile(device)
