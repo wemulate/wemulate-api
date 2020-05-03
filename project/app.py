@@ -14,6 +14,8 @@ DEFAULT_BANDWITH = 1000
 DEFAULT_DELAY = 0
 DEFAULT_JITTER = 0
 DEFAULT_PACKET_LOSS = 0
+DEFAULT_CORRUPTION = 0
+DEFAULT_DUPLICATION = 0
 
 
 app, api, device_ns = create_app()
@@ -196,6 +198,25 @@ def add_all_parameters_to_db(all_parameters, connection, parameters_to_apply, pa
             )
             if(value != DEFAULT_PACKET_LOSS):
                 parameters_to_apply['jitter'] = value
+
+        if(key == 'corruption'):
+            add_parameter_to_db(
+                'corruption',
+                value,
+                connection.connection_id
+            )
+            if(value != DEFAULT_CORRUPTION):
+                parameters_to_apply['corruption'] = value
+
+        if(key == 'duplication'):
+            add_parameter_to_db(
+                'duplication',
+                value,
+                connection.connection_id
+            )
+            if(value != DEFAULT_DUPLICATION):
+                parameters_to_apply['duplication'] = value
+
     db.session.commit()
     parameter_changed = True
     return parameter_changed
@@ -248,6 +269,16 @@ def update_parameters(all_parameters, active_connection, parameters_to_apply, pa
         if parameter.parameter_name == 'packet_loss'
     )
 
+    actual_corruption = next(
+        parameter for parameter in active_connection.parameters
+        if parameter.parameter_name == 'corruption'
+    )
+
+    actual_duplication = next(
+        parameter for parameter in active_connection.parameters
+        if parameter.parameter_name == 'duplication'
+    )
+
     for key, value in all_parameters.items():
         if(key == 'bandwidth'):
             if(value != actual_bandwidth.value):
@@ -256,6 +287,7 @@ def update_parameters(all_parameters, active_connection, parameters_to_apply, pa
                 db.session.add(actual_bandwidth)
             if(value != 1000):
                 parameters_to_apply['bandwidth'] = value
+
         if(key == 'delay'):
             if(value != actual_delay.value):
                 actual_delay.value = value
@@ -263,6 +295,7 @@ def update_parameters(all_parameters, active_connection, parameters_to_apply, pa
                 db.session.add(actual_delay)
             if(value != 0):
                 parameters_to_apply['delay'] = value
+
         if(key == 'jitter'):
             if(value != actual_jitter.value):
                 actual_jitter.value = value
@@ -270,6 +303,7 @@ def update_parameters(all_parameters, active_connection, parameters_to_apply, pa
                 db.session.add(actual_jitter)
             if(value != 0):
                 parameters_to_apply['jitter'] = value
+
         if(key == 'packet_loss'):
             if(value != actual_packet_loss.value):
                 actual_packet_loss.value = value
@@ -277,6 +311,22 @@ def update_parameters(all_parameters, active_connection, parameters_to_apply, pa
                 db.session.add(actual_packet_loss)
             if(value != 0):
                 parameters_to_apply['packet_loss'] = value
+
+        if(key == 'corruption'):
+            if(value != actual_corruption.value):
+                actual_corruption.value = value
+                parameter_changed = True
+                db.session.add(actual_corruption)
+            if(value != 0):
+                parameters_to_apply['corruption'] = value
+
+        if(key == 'duplication'):
+            if(value != actual_duplication.value):
+                actual_duplication.value = value
+                parameter_changed = True
+                db.session.add(actual_duplication)
+            if(value != 0):
+                parameters_to_apply['duplication'] = value
     return parameter_changed
 
 
@@ -364,11 +414,16 @@ class DeviceInformation(Resource):
             delay_value = connection['delay']
             packet_loss_value = connection['packet_loss']
             jitter_value = connection['jitter']
+            corruption_value = connection['corruption']
+            duplication_value = connection['duplication']
+
             all_parameters = {
                 'bandwidth': bandwidth_value,
                 'delay': delay_value,
                 'packet_loss': packet_loss_value,
-                'jitter': jitter_value
+                'jitter': jitter_value,
+                'corruption': corruption_value,
+                'duplication': duplication_value
             }
             parameters_to_apply = {}
             parameter_changed = False
@@ -434,7 +489,8 @@ class DeviceInformation(Resource):
                 interface_to_apply = get_physical_interface(device, logical_interface1)
 
                 if(bandwidth_value == DEFAULT_BANDWITH and delay_value == DEFAULT_DELAY
-                   and jitter_value == DEFAULT_JITTER and packet_loss_value == DEFAULT_PACKET_LOSS):
+                   and jitter_value == DEFAULT_JITTER and packet_loss_value == DEFAULT_PACKET_LOSS
+                   and corruption_value == DEFAULT_CORRUPTION and duplication_value == DEFAULT_DUPLICATION):
                     salt_api.remove_parameters(
                         device.device_name,
                         interface_to_apply
