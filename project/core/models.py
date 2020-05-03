@@ -239,7 +239,8 @@ class ParameterModel(db.Model):
         autoincrement=True
     )
     parameter_name = db.Column(
-        db.Enum('bandwidth', 'delay', 'packet_loss', 'jitter', name='parameter_name_enum'), nullable=False
+        db.Enum('bandwidth', 'delay', 'packet_loss', 'jitter', 'corruption', 'duplication',
+                name='parameter_name_enum'), nullable=False
     )
     value = db.Column(db.Integer, nullable=False)
     belongs_to_connection_id = db.Column(
