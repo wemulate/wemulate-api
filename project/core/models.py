@@ -210,21 +210,34 @@ class ConnectionModel(db.Model):
         packet_loss = 0
         bandwidth = 1000
         jitter = 0
+        corruption = 0
+        duplication = 0
 
         for parameter in self.parameters:
             if parameter.parameter_name == 'delay':
                 delay = parameter.value
+
             if parameter.parameter_name == 'packet_loss':
                 packet_loss = parameter.value
+
             if parameter.parameter_name == 'bandwidth':
                 bandwidth = parameter.value
+
             if parameter.parameter_name == 'jitter':
                 jitter = parameter.value
+
+            if parameter.parameter_name == 'corruption':
+                corruption = parameter.value
+
+            if parameter.parameter_name == 'duplication':
+                duplication = parameter.value
         return {
             'connection_name': self.connection_name,
             'interface1': self.first_logical_interface.logical_name,
             'interface2': self.second_logical_interface.logical_name,
+            'corruption': corruption,
             'delay': delay,
+            'duplication': duplication,
             'packet_loss': packet_loss,
             'bandwidth': bandwidth,
             'jitter': jitter,
