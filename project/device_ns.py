@@ -17,7 +17,7 @@ try:
 except Exception as e:
     print('Error when creating salt api: ' + str(e.args))
     print('Using Mockup')
-    salt_api = create_salt_mockup
+    salt_api = create_salt_mockup()
 wemulate_service = WemulateService(db, salt_api)
 
 

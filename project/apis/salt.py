@@ -54,4 +54,4 @@ class SaltApi(object):
             if value != DEFAULT_PARAMETERS[name]:
                 parameters_to_apply[name] = value
         if parameters_to_apply != {}:
-            self.set_parameters(device_name, interface_name, parameters)
+            self.set_parameters(device_name, interface_name, parameters_to_apply)
