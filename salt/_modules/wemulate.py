@@ -138,3 +138,21 @@ def remove_parameters(interface_name):
     command = f'sudo /home/wemulate/wondershaper/wondershaper -c -a {interface_name}'
     __salt__['cmd.run'](command)
     return f"Successfully removed parameters"
+
+
+def get_management_ip():
+    with open('/etc/wemulate/config.yaml') as file:
+        config = yaml.full_load(file)
+    if config['management_interfaces']:
+        interface_name = config['management_interfaces'][0]
+    else:
+        return '0.0.0.0'
+
+    ip = IPRoute()
+    index_list = ip.link_lookup(ifname=interface_name)
+    if index_list:
+        interface = ip.get_addr(index=index_list[0])
+        interface_ip = interface[0]['attrs'][0][1]
+    else:
+        interface_ip = '10.0.0.10'
+    return interface_ip
