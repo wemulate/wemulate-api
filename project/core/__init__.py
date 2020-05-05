@@ -2,20 +2,21 @@ from flask import Flask
 from flask_restplus import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from apis import create_salt_api, create_salt_mockup
-from core.service import WemulateService
-
+from apis import create_salt_api
+from config import configure_app
+from mockup.salt_mockup import SaltMockup
 
 db = SQLAlchemy()
-salt_api = create_salt_api()
-wemulate_service = WemulateService(db, salt_api)
+try:
+    salt_api = create_salt_api()
+except Exception as e:
+    print('Error setting up salt api: ' + str(e.args))
 
 def create_app():
-    global db, wemulate_service
+    global salt_api
     app = Flask(__name__)
 
-    db_settings = 'config.Config'
-    app.config.from_object(db_settings)
+    configure_app(app)
     db.init_app(app)
     app.app_context().push()
     db.drop_all()  # Used for Test Purposes
@@ -30,29 +31,7 @@ def create_app():
         doc='/api/v1/'
     )
 
-    return app, api
+    if app.config['SALT_MOCKUP']:
+        salt_api = SaltMockup('url', 'salt', 'password')
 
-def create_app_test():
-    global db, wemulate_service
-    app = Flask(__name__)
-
-    db = SQLAlchemy()
-    db_settings = 'config.TestConfig'
-    app.config.from_object(db_settings)
-    db.init_app(app)
-    app.app_context().push()
-    db.drop_all()  # Used for Test Purposes
-    db.create_all()
-    CORS(app)
-
-    api = Api(
-        app,
-        version='1.0',
-        title='WEmulate API',
-        description='REST API for WEmulate ',
-        doc='/api/v1/'
-    )
-
-    salt_api = create_salt_mockup()  # mockup
-    wemulate_service = WemulateService(db, salt_api)
     return app, api

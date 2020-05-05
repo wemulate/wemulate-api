@@ -1,9 +1,8 @@
 from flask_restplus import Resource, Namespace
 from flask import jsonify
-from core import wemulate_service
+import core.service as wemulate_service
 from api_parsers import ConnectionParser, DeviceParser
-from api_models import connection_list_model, connection_model, device_information_model, \
-    device_list_model, device_model, device_post_model, interface_list_model, interface_model
+import api_models as models
 
 
 device_ns = Namespace('Device Operations', __name__, path='/v1/devices', doc='/api/v1/')
@@ -13,22 +12,23 @@ connection_parser = ConnectionParser(device_ns)
 
 # Registering models in Namespace
 
-device_ns.models[connection_list_model.name] = connection_list_model
-device_ns.models[connection_model.name] = connection_model
-device_ns.models[device_information_model.name] = device_information_model
-device_ns.models[device_list_model.name] = device_list_model
-device_ns.models[device_model.name] = device_model
-device_ns.models[device_post_model.name] = device_post_model
-device_ns.models[interface_list_model.name] = interface_list_model
-device_ns.models[interface_model.name] = interface_model
+device_ns.models[models.connection_list_model.name] = models.connection_list_model
+device_ns.models[models.connection_model.name] = models.connection_model
+device_ns.models[models.device_information_model.name] = models.device_information_model
+device_ns.models[models.device_list_model.name] = models.device_list_model
+device_ns.models[models.device_model.name] = models.device_model
+device_ns.models[models.device_post_model.name] = models.device_post_model
+device_ns.models[models.interface_list_model.name] = models.interface_list_model
+device_ns.models[models.interface_model.name] = models.interface_model
 
 
 # Routes
 
 @device_ns.route('/')
 class Device(Resource):
+
     @device_ns.doc('fetch_devices')
-    @device_ns.doc(model=device_list_model)
+    @device_ns.doc(model=models.device_list_model)
     def get(self):
         '''Fetch a List of Devices with related Information'''
         try:
@@ -38,8 +38,8 @@ class Device(Resource):
         return jsonify(devices=devices)
 
     @device_ns.doc('create_device')
-    @device_ns.expect(device_post_model, validate=True)
-    @device_ns.marshal_with(device_model, code=201)
+    @device_ns.expect(models.device_post_model, validate=True)
+    @device_ns.marshal_with(models.device_model, code=201)
     @device_ns.response(400, '{"message": Device <device_name> is already in use!"}')
     def post(self):
         '''Create a new Device'''
@@ -55,7 +55,7 @@ class Device(Resource):
 @device_ns.param('device_id', 'The device identifier')
 class DeviceInformation(Resource):
     @device_ns.doc('fetch_device_information')
-    @device_ns.doc(model=device_information_model)
+    @device_ns.doc(model=models.device_information_model)
     @device_ns.response(404, '{"message": Device or allocated Profile not found!"}')
     def get(self, device_id):
         '''Fetch a Device Information and Configuration'''
@@ -66,8 +66,8 @@ class DeviceInformation(Resource):
         return jsonify(device)
 
     @device_ns.doc('update_connection_config')
-    @device_ns.expect(connection_list_model, validate=True)
-    @device_ns.doc(model=connection_list_model)
+    @device_ns.expect(models.connection_list_model, validate=True)
+    @device_ns.doc(model=models.connection_list_model)
     @device_ns.response(404, '{"message": Device or allocated Profile not found!"}')
     @device_ns.response(400, '{"message": Bad Physical Interface Mapping in {<connection>}!"}')
     def put(self, device_id):
@@ -85,7 +85,7 @@ class DeviceInformation(Resource):
 @device_ns.param('device_id', 'The device identifier')
 class InterfaceList(Resource):
     @device_ns.doc('fetch_interfaces')
-    @device_ns.doc(model=interface_list_model)
+    @device_ns.doc(model=models.interface_list_model)
     def get(self, device_id):
         '''Fetch all Interfaces of a specific Device'''
         try:
@@ -101,7 +101,7 @@ class InterfaceList(Resource):
 @device_ns.param('device_id', 'The device identifier')
 class ConnectionList(Resource):
     @device_ns.doc('fetch_connections')
-    @device_ns.doc(model=connection_list_model)
+    @device_ns.doc(model=models.connection_list_model)
     def get(self, device_id):
         '''Fetch all Connections of a specific Device'''
         try:
