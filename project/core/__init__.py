@@ -3,7 +3,6 @@ from flask_restplus import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from apis import create_salt_api, create_salt_mockup
-from core.database.utils import DBUtils
 from core.service import WemulateService
 
 
