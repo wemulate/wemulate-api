@@ -65,7 +65,11 @@ class DeviceInformation(Resource):
     @device_ns.response(404, '{"message": Device or allocated Profile not found!"}')
     def get(self, device_id):
         '''Fetch a Device Information and Configuration'''
-        return jsonify(wemulate_service.get_device(device_id))
+        try:
+            device = wemulate_service.get_device(device_id)
+        except Exception as e:
+            device_ns.abort(*(e.args))
+        return jsonify(device)
 
     @device_ns.doc('update_connection_config')
     @device_ns.expect(connection_list_model, validate=True)
@@ -76,8 +80,8 @@ class DeviceInformation(Resource):
         '''Update Device Connection Configuration'''
         connections = connection_parser.parse_arguments()
         try:
-            connections = wemulate_service.update_connection(device_id, connections)
-            return jsonify(connections=connections)
+            connection_list = wemulate_service.update_connection(device_id, connections)
+            return jsonify(connections=connection_list)
         except Exception as e:
             device_ns.abort(*(e.args))
 
@@ -90,8 +94,11 @@ class InterfaceList(Resource):
     @device_ns.doc(model=interface_list_model)
     def get(self, device_id):
         '''Fetch all Interfaces of a specific Device'''
-        device = wemulate_service.get_device(device_id)
-        interfaces = wemulate_service.get_interface_list(device)
+        try:
+            device = wemulate_service.get_device(device_id)
+            interfaces = wemulate_service.get_interface_list(device)
+        except Exception as e:
+            device_ns.abort(*(e.args))
         return jsonify(interfaces=interfaces)
 
 
@@ -103,7 +110,9 @@ class ConnectionList(Resource):
     @device_ns.doc(model=connection_list_model)
     def get(self, device_id):
         '''Fetch all Connections of a specific Device'''
-        device = wemulate_service.get_device(device_id)
-        connections = wemulate_service.get_connection_list(device)
-
+        try:
+            device = wemulate_service.get_device(device_id)
+            connections = wemulate_service.get_connection_list(device)
+        except Exception as e:
+            device_ns.abort(*(e.args))
         return jsonify(connections=connections)

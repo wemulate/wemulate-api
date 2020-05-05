@@ -1,15 +1,5 @@
 from core.database.utils import DBUtils
 
-# Default Interface Parameters
-DEFAULT_PARAMETERS = {
-    'bandwidth': 1000,
-    'delay': 0,
-    'jitter': 0,
-    'packet_loss': 0,
-    'corruption': 0,
-    'duplication': 0
-}
-
 class WemulateService:
 
     def __init__(self, db, salt_api):
@@ -95,7 +85,6 @@ class WemulateService:
                 'corruption': connection['corruption'],
                 'duplication': connection['duplication']
             }
-            parameters_to_apply = {}
             parameter_changed = False
             interface1_name = connection['interface1']
             interface2_name = connection['interface2']
@@ -112,51 +101,25 @@ class WemulateService:
 
             try:
                 if active_connection is None:
-                    self.dbutils.create_connection(
-                        connection_name,
-                        logical_interface1,
-                        logical_interface2,
-                        active_device_profile
-                    )
-
-                    self.salt.add_connection(
-                        device.device_name,
-                        connection_name,
-                        physical_interface1_name,
-                        physical_interface2_name
-                    )
+                    self.dbutils.create_connection(connection_name, logical_interface1, logical_interface2,
+                                                   active_device_profile)
+                    self.salt.add_connection(device.device_name, connection_name, physical_interface1_name,
+                                             physical_interface2_name)
 
                     for key, value in parameters.items():
-                        self.dbutils.create_parameter(
-                            key,
-                            value,
-                            connection.connection_id
-                        )
-                        if(value != DEFAULT_PARAMETERS[key]):
-                            parameters_to_apply[key] = value
+                        self.dbutils.create_parameter(key, value, connection.connection_id)
 
                     parameter_changed = True
 
                 else:
                     if(connection_name != active_connection.connection_name):
                         self.dbutils.update_connection(active_connection, connection_name)
-
-                        self.salt.remove_connection(
-                            device.device_name,
-                            active_connection.connection_name
-                        )
-                        self.salt.add_connection(
-                            device.device_name,
-                            connection_name,
-                            physical_interface1_name,
-                            physical_interface2_name
-                        )
+                        self.salt.update_connection(device.device_name, connection_name, physical_interface1_name,
+                                                    physical_interface2_name)
 
                     for parameter in active_connection.parameters:
                         if self.dbutils.update_parameter(parameter, parameters[parameter.parameter_name]):
                             parameter_changed = True
-                        if parameters[parameter.parameter_name] != DEFAULT_PARAMETERS[parameter.parameter_name]:
-                            parameters_to_apply[parameter.parameter_name] = parameters[parameter.parameter_name]
 
                     old_connections.remove(active_connection)
 
@@ -164,17 +127,7 @@ class WemulateService:
                 interface_to_apply = self.__get_physical_interface(device, logical_interface1)
 
                 if parameter_changed:
-                    self.salt.remove_parameters(
-                        device.device_name,
-                        interface_to_apply
-                    )
-
-                    if parameters_to_apply != {}:
-                        self.salt.set_parameters(
-                            device.device_name,
-                            interface_to_apply,
-                            parameters_to_apply
-                        )
+                    self.salt.update_parameters(device.device_name, interface_to_apply, parameters)
 
                 for connection in old_connections:
                     self.__delete_connection(device, connection)
