@@ -13,7 +13,6 @@ def create_app():
     app.config.from_object(db_settings)
     db.init_app(app)
     app.app_context().push()
-    db.drop_all()  # Used for Test Purposes
     db.create_all()
     CORS(app)
     api = Api(
