@@ -6,7 +6,7 @@ import string
 def get_device(device_id):
     return DeviceModel.query.filter_by(device_id=device_id).first_or_404(description="Device not found!")
 
-def get_device_list(self):
+def get_device_list():
     return DeviceModel.query.all()
 
 def get_active_profile(device):

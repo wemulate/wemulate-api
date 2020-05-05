@@ -25,7 +25,7 @@ def create_device(device_name, management_ip):
 
     return device
 
-def get_device_list(self):
+def get_device_list():
     try:
         devices = dbutils.get_device_list()
     except Exception as e:
@@ -95,9 +95,9 @@ def update_connection(device_id, connections):
         try:
             if active_connection is None:
                 dbutils.create_connection(connection_name, logical_interface1, logical_interface2,
-                                                active_device_profile)
+                                          active_device_profile)
                 salt_api.add_connection(device.device_name, connection_name, physical_interface1_name,
-                                            physical_interface2_name)
+                                        physical_interface2_name)
 
                 for key, value in parameters.items():
                     dbutils.create_parameter(key, value, connection.connection_id)
@@ -108,7 +108,7 @@ def update_connection(device_id, connections):
                 if(connection_name != active_connection.connection_name):
                     dbutils.update_connection(active_connection, connection_name)
                     salt_api.update_connection(device.device_name, connection_name, physical_interface1_name,
-                                                physical_interface2_name)
+                                               physical_interface2_name)
 
                 for parameter in active_connection.parameters:
                     if dbutils.update_parameter(parameter, parameters[parameter.parameter_name]):
