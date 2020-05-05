@@ -1,6 +1,6 @@
 from flask_restplus import Resource, Namespace
 from flask import jsonify
-from apis import create_salt_api
+from apis import create_salt_api, create_salt_mockup
 from core import db
 from core.service import WemulateService
 from api_parsers import ConnectionParser, DeviceParser
@@ -12,8 +12,12 @@ device_ns = Namespace('Device Operations', __name__, path='/v1/devices', doc='/a
 
 device_parser = DeviceParser(device_ns)
 connection_parser = ConnectionParser(device_ns)
-
-salt_api = create_salt_api()
+try:
+    salt_api = create_salt_api()
+except Exception as e:
+    print('Error when creating salt api: ' + str(e.args))
+    print('Using Mockup')
+    salt_api = create_salt_mockup
 wemulate_service = WemulateService(db, salt_api)
 
 
@@ -54,7 +58,7 @@ class Device(Resource):
             device = wemulate_service.create_device(device_name, management_ip)
         except Exception as e:
             device_ns.abort(*(e.args))
-        return device, 201  # TODO why is this different from the other routes?
+        return device, 201
 
 
 @device_ns.route('/<int:device_id>/')
@@ -81,9 +85,9 @@ class DeviceInformation(Resource):
         connections = connection_parser.parse_arguments()
         try:
             connection_list = wemulate_service.update_connection(device_id, connections)
-            return jsonify(connections=connection_list)
         except Exception as e:
             device_ns.abort(*(e.args))
+        return jsonify(connections=connection_list)
 
 
 @device_ns.route('/<int:device_id>/interfaces/')

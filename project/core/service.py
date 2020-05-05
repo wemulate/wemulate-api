@@ -6,7 +6,6 @@ class WemulateService:
         self.db = db
         self.dbutils = DBUtils(db)
         self.salt = salt_api
-        self.db.session.commit()
 
     def create_device(self, device_name, management_ip):
         if(self.dbutils.device_exists(device_name)):
