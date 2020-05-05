@@ -1,4 +1,3 @@
-from flask_restplus import Resource, fields
 from core import create_app
 from device_ns import device_ns
 

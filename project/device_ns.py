@@ -4,11 +4,11 @@ from apis import create_salt_api
 from core import db
 from core.service import WemulateService
 from api_parsers import ConnectionParser, DeviceParser
-from api_models import connection_list_model, connection_model, device_information_model, device_list_model, device_model, device_post_model, interface_list_model, interface_model
+from api_models import connection_list_model, connection_model, device_information_model, \
+    device_list_model, device_model, device_post_model, interface_list_model, interface_model
 
 
-device_ns = Namespace('Device Operations', __name__, url_prefix='/v1/devices', 
-        doc='/api/v1/')
+device_ns = Namespace('Device Operations', __name__, url_prefix='/v1/devices', doc='/api/v1/')
 
 device_parser = DeviceParser(device_ns)
 connection_parser = ConnectionParser(device_ns)
@@ -54,7 +54,7 @@ class Device(Resource):
             device = wemulate_service.create_device(device_name, management_ip)
         except Exception as e:
             device_ns.abort(*(e.args))
-        return device, 201 # TODO why is this different from the other routes?
+        return device, 201  # TODO why is this different from the other routes?
 
 
 @device_ns.route('/<int:device_id>/')
@@ -65,7 +65,7 @@ class DeviceInformation(Resource):
     @device_ns.response(404, '{"message": Device or allocated Profile not found!"}')
     def get(self, device_id):
         '''Fetch a Device Information and Configuration'''
-        return  jsonify(wemulate_service.get_device(device_id))
+        return jsonify(wemulate_service.get_device(device_id))
 
     @device_ns.doc('update_connection_config')
     @device_ns.expect(connection_list_model, validate=True)

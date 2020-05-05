@@ -1,4 +1,5 @@
-from core.database.models import ProfileModel, DeviceModel, InterfaceModel, LogicalInterfaceModel, ConnectionModel, ParameterModel
+from core.database.models import ProfileModel, DeviceModel, InterfaceModel, \
+    LogicalInterfaceModel, ConnectionModel, ParameterModel
 import string
 
 class DBUtils:
@@ -6,7 +7,7 @@ class DBUtils:
     def __init__(self, db):
         self.db = db
         self.__create_logical_interfaces()
-            
+
     def get_device(self, device_id):
         return DeviceModel.query.filter_by(device_id=device_id).first_or_404(description="Device not found!")
 
@@ -83,7 +84,6 @@ class DBUtils:
     def delete_connection(self, connection):
         self.db.session.remove(connection)
 
-    
     def __create_logical_interfaces(self):
         for character in list(string.ascii_uppercase):
             logical_interface = LogicalInterfaceModel("LAN-" + character)

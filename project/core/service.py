@@ -12,7 +12,7 @@ DEFAULT_PARAMETERS = {
 
 class WemulateService:
 
-    def __init__ (self, db, salt_api):
+    def __init__(self, db, salt_api):
         self.db = db
         self.dbutils = DBUtils(db)
         self.salt = salt_api
@@ -34,7 +34,7 @@ class WemulateService:
                 logical_interface = self.dbutils.get_logical_interface(interface_id)
                 self.dbutils.create_interface(physical_name, device.device_id, logical_interface.logical_interface_id)
                 interface_id += 1
-            
+
             self.db.session.commit()
         except Exception as e:
             self.db.session.rollback()
@@ -151,7 +151,7 @@ class WemulateService:
                             physical_interface1_name,
                             physical_interface2_name
                         )
-                    
+
                     for parameter in active_connection.parameters:
                         if self.dbutils.update_parameter(parameter, parameters[parameter.parameter_name]):
                             parameter_changed = True
@@ -175,7 +175,7 @@ class WemulateService:
                             interface_to_apply,
                             parameters_to_apply
                         )
-                
+
                 for connection in old_connections:
                     self.__delete_connection(device, connection)
 
@@ -186,21 +186,19 @@ class WemulateService:
 
         return [connection.serialize() for connection in active_device_profile.connections]
 
-
     # Helper Functions
 
     def __get_active_connection(self, logical_interface1, logical_interface2, active_device_connections):
         return next(
-                (connection for connection in active_device_connections
-                    if connection.first_logical_interface is logical_interface1
-                    and connection.second_logical_interface is logical_interface2), None
+            (connection for connection in active_device_connections
+                if connection.first_logical_interface is logical_interface1 and
+                connection.second_logical_interface is logical_interface2), None
         )
-
 
     def __get_physical_interface(self, device, logical_interface):
         return next(
-                (interface.physical_name for interface in device.interfaces
-                    if interface.has_logical_interface is logical_interface), None
+            (interface.physical_name for interface in device.interfaces
+                if interface.has_logical_interface is logical_interface), None
         )
 
     def __delete_connection(self, device, connection):
@@ -216,7 +214,3 @@ class WemulateService:
             device.device_name,
             connection.connection_name
         )
-
-
-
-
