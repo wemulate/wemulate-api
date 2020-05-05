@@ -1,5 +1,6 @@
 import os
 
+
 def configure_app(app):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
