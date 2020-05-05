@@ -8,7 +8,7 @@ from api_models import connection_list_model, connection_model, device_informati
     device_list_model, device_model, device_post_model, interface_list_model, interface_model
 
 
-device_ns = Namespace('Device Operations', __name__, url_prefix='/v1/devices', doc='/api/v1/')
+device_ns = Namespace('Device Operations', __name__, path='/v1/devices', doc='/api/v1/')
 
 device_parser = DeviceParser(device_ns)
 connection_parser = ConnectionParser(device_ns)
