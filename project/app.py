@@ -31,12 +31,6 @@ device_parser.add_argument(
     help='hostname of the device/minion'
 )
 
-device_parser.add_argument(
-    'management_ip',
-    type=str,
-    help='define the management ip address (if not 127.0.0.1) of the device '
-)
-
 connection_config_parser = api.parser()
 connection_config_parser.add_argument(
     'connections',
@@ -101,11 +95,9 @@ device_information_model = api.model('device_information_model', {
 # Helper Functions
 
 
-def parse_device_arguments():
+def parse_device_name():
     args = device_parser.parse_args()
-    device_name = args['device_name']
-    management_ip = args['management_ip']
-    return device_name, management_ip
+    return args['device_name']
 
 
 def device_exists(device_name):
@@ -394,9 +386,14 @@ class Device(Resource):
     @device_ns.response(400, '{"message": Device <device_name> is already in use!"}')
     def post(self):
         '''Create a new Device'''
-        device_name, management_ip = parse_device_arguments()
+        device_name = parse_device_name()
         if(device_exists(device_name)):
             api.abort(400, f"Device {device_name} is already used!")
+
+        # Return Format: {'return': [{'wemulate_host1': "10.0.0.10"}]}
+        salt_return = salt_api.get_management_ip(device_name)
+        management_ip = salt_return['return'][0][device_name]
+
         try:
             profile = add_profile_to_db(device_name)
             device = add_device_to_db(device_name, profile.profile_id, management_ip)
