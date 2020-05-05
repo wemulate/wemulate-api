@@ -7,14 +7,14 @@ from core.database.utils import DBUtils
 from core.service import WemulateService
 
 
-db = None
-wemulate_service = None
+db = SQLAlchemy()
+salt_api = create_salt_api()
+wemulate_service = WemulateService(db, salt_api)
 
 def create_app():
     global db, wemulate_service
     app = Flask(__name__)
 
-    db = SQLAlchemy()
     db_settings = 'config.Config'
     app.config.from_object(db_settings)
     db.init_app(app)
@@ -31,8 +31,6 @@ def create_app():
         doc='/api/v1/'
     )
 
-    salt_api = create_salt_api()
-    wemulate_service = WemulateService(db, salt_api)
     return app, api
 
 def create_app_test():
@@ -40,7 +38,7 @@ def create_app_test():
     app = Flask(__name__)
 
     db = SQLAlchemy()
-    db_settings = 'config.Config'
+    db_settings = 'config.TestConfig'
     app.config.from_object(db_settings)
     db.init_app(app)
     app.app_context().push()

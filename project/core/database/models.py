@@ -1,7 +1,6 @@
 import json
 from core import db
 
-
 class ProfileModel(db.Model):
     __tablename__ = 'profile'
     profile_id = db.Column(
