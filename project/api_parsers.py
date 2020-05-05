@@ -12,6 +12,7 @@ class ConnectionParser:
         args = self.parser.parse_args()
         return args['connections']
 
+
 class DeviceParser:
 
     def __init__(self, flaskApi):
