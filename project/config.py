@@ -12,6 +12,7 @@ class Config:
         db=os.environ.get('POSTGRES_DB')
     )
 
+
 class TestConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'

@@ -1,6 +1,6 @@
 from flask_restplus import Resource, Namespace
 from flask import jsonify
-from core import db, wemulate_service
+from core import wemulate_service
 from api_parsers import ConnectionParser, DeviceParser
 from api_models import connection_list_model, connection_model, device_information_model, \
     device_list_model, device_model, device_post_model, interface_list_model, interface_model
