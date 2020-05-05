@@ -6,6 +6,7 @@ class DBUtils:
 
     def __init__(self, db):
         self.db = db
+        self.init = True
 
     def get_device(self, device_id):
         return DeviceModel.query.filter_by(device_id=device_id).first_or_404(description="Device not found!")
@@ -20,18 +21,14 @@ class DBUtils:
         return InterfaceModel.query.filter_by(belongs_to_device_id=device.device_id).all()
 
     def get_logical_interface(self, logical_interface_id):
-        interface = LogicalInterfaceModel.query.filter_by(logical_interface_id=logical_interface_id).first()
-        if interface is None:
+        if self.init:
             self.__create_logical_interfaces()
-            interface = LogicalInterfaceModel.query.filter_by(logical_interface_id=logical_interface_id).first()
-        return interface
+        return LogicalInterfaceModel.query.filter_by(logical_interface_id=logical_interface_id).first()
 
     def get_logical_interface_by_name(self, logical_interface_name):
-        interface = LogicalInterfaceModel.query.filter_by(logical_name=logical_interface_name).first()
-        if interface is None:
+        if self.init:
             self.__create_logical_interfaces()
-            interface = LogicalInterfaceModel.query.filter_by(logical_name=logical_interface_name).first()
-        return interface
+        return LogicalInterfaceModel.query.filter_by(logical_name=logical_interface_name).first()
 
     def device_exists(self, device_name):
         device_exists = DeviceModel.query.filter_by(device_name=device_name).first()
