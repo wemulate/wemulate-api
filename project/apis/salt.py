@@ -34,7 +34,7 @@ class SaltApi(object):
                     raise Exception(500, f'SaltApi: Error during login to salt: {str(e.args)}')
 
     def __check_ready(self):
-        if self.loginTask.done():
+        if self.ready():
             return
         else:
             raise Exception(500, f'SaltApi: Not ready')
