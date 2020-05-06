@@ -10,7 +10,7 @@ DEFAULT_PARAMETERS = {
     'corruption': 0,
     'duplication': 0
 }
-MAX_RETRIES = 5
+MAX_RETRIES = 6
 
 class SaltApi(object):
     def __init__(self, url, user, sharedsecret):
