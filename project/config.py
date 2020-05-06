@@ -17,5 +17,5 @@ def configure_app(app):
             url='{}:{}'.format(
                 os.environ.get('POSTGRES_HOST'),
                 os.environ.get('POSTGRES_PORT')),
-            db=os.environ.get('POSTGRES_DB')      
+            db=os.environ.get('POSTGRES_DB')
         )
