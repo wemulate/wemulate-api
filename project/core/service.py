@@ -1,4 +1,4 @@
-from core import salt_api
+from apis import salt_api
 from core.database import db
 import core.database.utils as dbutils
 
@@ -9,7 +9,7 @@ def create_device(device_name):
         # Return Format: {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}
         salt_return = salt_api.get_interfaces(device_name)
         physical_interface_names = salt_return['return'][0][device_name]
-        
+
         # Return Format: {'return': [{'wemulate_host1': "10.0.0.10"}]}
         salt_return = salt_api.get_management_ip(device_name)
         management_ip = salt_return['return'][0][device_name]
@@ -99,13 +99,13 @@ def update_connection(device_id, connections):
 
         try:
             if active_connection is None:
-                dbutils.create_connection(connection_name, logical_interface1, logical_interface2,
-                                          active_device_profile)
+                conn = dbutils.create_connection(connection_name, logical_interface1, logical_interface2,
+                                                 active_device_profile)
                 salt_api.add_connection(device.device_name, connection_name, physical_interface1_name,
                                         physical_interface2_name)
 
                 for key, value in parameters.items():
-                    dbutils.create_parameter(key, value, connection.connection_id)
+                    dbutils.create_parameter(key, value, conn.connection_id)
 
                 parameter_changed = True
 

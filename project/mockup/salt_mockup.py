@@ -21,6 +21,7 @@ DEVICES = {
 class SaltMockup:
 
     def __init__(self, url, user, sharedsecret):
+        print('SaltMockup: Using SaltMockup')
         if len(dbutils.get_device_list()) == 0:
             for device_name, device in DEVICES.items():
                 try:
