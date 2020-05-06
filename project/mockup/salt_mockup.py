@@ -13,7 +13,7 @@ DEFAULT_PARAMETERS = {
 
 DEVICES = {
     'wemulate_host1': {
-        'interfaces': ['enp0s31f6', 'eth0', 'eth1'],
+        'interfaces': ['enp0s31f6', 'eth0', 'eth1', 'eth2', 'eth3', 'eth4'],
         'management_ip': '127.0.0.1'
     }
 }
@@ -21,6 +21,7 @@ DEVICES = {
 class SaltMockup:
 
     def __init__(self, url, user, sharedsecret):
+        print('SaltMockup: Using SaltMockup')
         if len(dbutils.get_device_list()) == 0:
             for device_name, device in DEVICES.items():
                 try:

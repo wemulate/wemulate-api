@@ -7,14 +7,7 @@ import core.database.utils as dbutils
 from config import configure_app
 from mockup.salt_mockup import SaltMockup
 
-try:
-    salt_api = create_salt_api()
-except Exception as e:
-    salt_api = None
-    print('Error setting up salt api: ' + str(e.args))
-
 def create_app():
-    global salt_api
     app = Flask(__name__)
 
     configure_app(app)
@@ -37,7 +30,7 @@ def create_app():
         doc='/api/v1/'
     )
 
-    if app.config['SALT_MOCKUP']:
-        salt_api = SaltMockup('url', 'salt', 'password')
+    # Salt
+    create_salt_api(app)
 
     return app, api

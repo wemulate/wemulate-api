@@ -110,7 +110,7 @@ def update_connection(connection, connection_name):
     return True
 
 def delete_connection(connection):
-    db.session.remove(connection)
+    db.session.delete(connection)
     db.session.flush()
 
 def create_logical_interfaces():

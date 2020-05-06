@@ -1,4 +1,4 @@
-from core import salt_api
+from apis import salt_api
 from core.database import db
 import core.database.utils as dbutils
 
@@ -9,7 +9,7 @@ def create_device(device_name):
         # Return Format: {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}
         salt_return = salt_api.get_interfaces(device_name)
         physical_interface_names = salt_return['return'][0][device_name]
-        
+
         # Return Format: {'return': [{'wemulate_host1': "10.0.0.10"}]}
         salt_return = salt_api.get_management_ip(device_name)
         management_ip = salt_return['return'][0][device_name]
@@ -72,40 +72,39 @@ def update_connection(device_id, connections):
 
     active_device_profile = dbutils.get_active_profile(device)
     old_connections = active_device_profile.connections.copy()
+    try:
+        for connection in connections:
+            connection_name = connection['connection_name']
+            parameters = {
+                'bandwidth': connection['bandwidth'],
+                'delay': connection['delay'],
+                'packet_loss': connection['packet_loss'],
+                'jitter': connection['jitter'],
+                'corruption': connection['corruption'],
+                'duplication': connection['duplication']
+            }
+            parameter_changed = False
+            interface1_name = connection['interface1']
+            interface2_name = connection['interface2']
 
-    for connection in connections:
-        connection_name = connection['connection_name']
-        parameters = {
-            'bandwidth': connection['bandwidth'],
-            'delay': connection['delay'],
-            'packet_loss': connection['packet_loss'],
-            'jitter': connection['jitter'],
-            'corruption': connection['corruption'],
-            'duplication': connection['duplication']
-        }
-        parameter_changed = False
-        interface1_name = connection['interface1']
-        interface2_name = connection['interface2']
+            logical_interface1 = dbutils.get_logical_interface_by_name(interface1_name)
+            logical_interface2 = dbutils.get_logical_interface_by_name(interface2_name)
 
-        logical_interface1 = dbutils.get_logical_interface_by_name(interface1_name)
-        logical_interface2 = dbutils.get_logical_interface_by_name(interface2_name)
+            physical_interface1_name = __get_physical_interface(device, logical_interface1)
+            physical_interface2_name = __get_physical_interface(device, logical_interface2)
+            if(physical_interface1_name is None or physical_interface2_name is None):
+                raise Exception(500, f'Bad Physical Interface Mapping in {connection}!')
 
-        physical_interface1_name = __get_physical_interface(device, logical_interface1)
-        physical_interface2_name = __get_physical_interface(device, logical_interface2)
-        if(physical_interface1_name is None or physical_interface2_name is None):
-            raise Exception(500, f'Bad Physical Interface Mapping in {connection}!')
+            active_connection = __get_active_connection(logical_interface1, logical_interface2, old_connections)
 
-        active_connection = __get_active_connection(logical_interface1, logical_interface2, old_connections)
-
-        try:
             if active_connection is None:
-                dbutils.create_connection(connection_name, logical_interface1, logical_interface2,
-                                          active_device_profile)
+                conn = dbutils.create_connection(connection_name, logical_interface1, logical_interface2,
+                                                 active_device_profile)
                 salt_api.add_connection(device.device_name, connection_name, physical_interface1_name,
                                         physical_interface2_name)
 
                 for key, value in parameters.items():
-                    dbutils.create_parameter(key, value, connection.connection_id)
+                    dbutils.create_parameter(key, value, conn.connection_id)
 
                 parameter_changed = True
 
@@ -127,13 +126,13 @@ def update_connection(device_id, connections):
             if parameter_changed:
                 salt_api.update_parameters(device.device_name, interface_to_apply, parameters)
 
-            for connection in old_connections:
-                __delete_connection(device, connection)
-
-            db.session.commit()
-        except Exception:
-            db.session.rollback()
-            raise Exception(500, 'Error when updating connection')
+        for connection in old_connections:
+            __delete_connection(device, connection)
+    
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        raise Exception(500, 'Error when updating connection')
 
     return [connection.serialize() for connection in active_device_profile.connections]
 
