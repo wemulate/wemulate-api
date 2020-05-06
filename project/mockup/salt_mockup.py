@@ -25,9 +25,7 @@ class SaltMockup:
             for device in DEVICES:
                 try:
                     profile = dbutils.create_profile(device['name'])
-                    db.session.flush()
                     db_device = dbutils.create_device(device['name'], profile.profile_id, None)
-                    db.session.flush()
                     interface_id = 1
                     for physical_name in device['interfaces']:
                         logical_interface = dbutils.get_logical_interface(interface_id)

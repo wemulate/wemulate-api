@@ -48,6 +48,7 @@ def get_logical_interface_list():
 def create_profile(device_name):
     profile = ProfileModel("default_" + device_name)
     db.session.add(profile)
+    db.session.flush()
     return profile
 
 def create_device(device_name, profile_id, management_ip):
@@ -56,6 +57,7 @@ def create_device(device_name, profile_id, management_ip):
     else:
         device = DeviceModel(device_name, profile_id, management_ip)
     db.session.add(device)
+    db.session.flush()
     return device
 
 def create_connection(connection_name, logical_interface1, logical_interface2, active_device_profile):
@@ -66,6 +68,7 @@ def create_connection(connection_name, logical_interface1, logical_interface2, a
         active_device_profile.profile_id
     )
     db.session.add(connection)
+    db.session.flush()
     return connection
 
 def create_parameter(parameter_name, value, connection_id):
@@ -75,11 +78,13 @@ def create_parameter(parameter_name, value, connection_id):
         connection_id
     )
     db.session.add(parameter)
+    db.session.flush()
     return parameter
 
 def create_interface(physical_name, device_id, logical_interface_id):
     interface = InterfaceModel(physical_name, device_id, logical_interface_id)
     db.session.add(interface)
+    db.session.flush()
     return interface
 
 def update_parameter(parameter, value):
@@ -87,6 +92,7 @@ def update_parameter(parameter, value):
         return False
     parameter.value = value
     db.session.add(parameter)
+    db.session.flush()
     return True
 
 def update_connection(connection, connection_name):
@@ -94,12 +100,15 @@ def update_connection(connection, connection_name):
         return False
     connection.connection_name = connection_name
     db.session.add(connection)
+    db.session.flush()
     return True
 
 def delete_connection(connection):
     db.session.remove(connection)
+    db.session.flush()
 
 def create_logical_interfaces():
     for character in list(string.ascii_uppercase):
         logical_interface = LogicalInterfaceModel("LAN-" + character)
         db.session.add(logical_interface)
+    db.session.flush()
