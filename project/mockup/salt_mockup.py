@@ -1,4 +1,5 @@
-import core.service as wemulate_service
+from core.database import db
+import core.database.utils as dbutils
 
 # Default Interface Parameters
 DEFAULT_PARAMETERS = {
@@ -20,14 +21,22 @@ DEVICES = [
 class SaltMockup:
 
     def __init__(self, url, user, sharedsecret):
-        for device in DEVICES:
-            try:
-                wemulate_service.create_device(device['name'])
-            except Exception as e:
-                if e.args[0] == 400:
-                    print(f'SaltMockup: Device {device['name']} already exists')
-                else:
-                    raise Exception(f'SaltMockup: Error when creating device {device['name']}: {str(e.args)}')
+        if len(dbutils.get_device_list()) == 0:
+            for device in DEVICES:
+                try:
+                    profile = dbutils.create_profile(device['name'])
+                    db.session.flush()
+                    db_device = dbutils.create_device(device['name'], profile.profile_id, None)
+                    db.session.flush()
+                    interface_id = 1
+                    for physical_name in device['interfaces']:
+                        logical_interface = dbutils.get_logical_interface(interface_id)
+                        dbutils.create_interface(physical_name, db_device.device_id,
+                                                 logical_interface.logical_interface_id)
+                        interface_id += 1
+                except Exception as e:
+                    raise Exception(f'SaltMockup: Error when creating device {device["name"]}: {str(e.args)}')
+            db.session.commit()
 
     def get_interfaces(self, device_name):
         return {'return': [{device['name']: device['interfaces']} for device in DEVICES]}
