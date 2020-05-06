@@ -43,9 +43,9 @@ class Device(Resource):
     @device_ns.response(400, '{"message": Device <device_name> is already in use!"}')
     def post(self):
         '''Create a new Device'''
-        device_name, management_ip = device_parser.parse_arguments()
+        device_name = device_parser.parse_arguments()
         try:
-            device = wemulate_service.create_device(device_name, management_ip)
+            device = wemulate_service.create_device(device_name)
         except Exception as e:
             device_ns.abort(*(e.args))
         return device, 201

@@ -30,6 +30,4 @@ class DeviceParser:
 
     def parse_arguments(self):
         args = self.parser.parse_args()
-        device_name = args['device_name']
-        management_ip = args['management_ip']
-        return device_name, management_ip
+        return args['device_name']

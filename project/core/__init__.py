@@ -20,7 +20,6 @@ def create_app():
     configure_app(app)
     db.init_app(app)
     app.app_context().push()
-    db.drop_all()  # Used for Test Purposes
     db.create_all()
 
     # Create logical interfaces if not exist

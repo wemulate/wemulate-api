@@ -18,6 +18,9 @@ class SaltApi(object):
     def get_interfaces(self, device_name):
         return self.api.low([{'client': 'local', 'tgt': device_name, 'fun': 'wemulate.get_interfaces'}])
 
+    def get_management_ip(self, device_name):
+        return self.api.low([{'client': 'local', 'tgt': device_name, 'fun': 'wemulate.get_management_ip'}])
+
     def add_connection(self, device_name, connection_name, interface1_name, interface2_name):
         return self.api.low(
             [{'client': 'local', 'tgt': device_name, 'fun': 'wemulate.add_connection', 'arg': [
