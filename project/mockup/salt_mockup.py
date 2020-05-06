@@ -13,7 +13,7 @@ DEFAULT_PARAMETERS = {
 
 DEVICES = {
     'wemulate_host1': {
-        'interfaces': ['enp0s31f6', 'eth0', 'eth1'],
+        'interfaces': ['enp0s31f6', 'eth0', 'eth1', 'eth2', 'eth3', 'eth4'],
         'management_ip': '127.0.0.1'
     }
 }
