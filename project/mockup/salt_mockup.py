@@ -1,3 +1,4 @@
+import core.service as wemulate_service
 
 # Default Interface Parameters
 DEFAULT_PARAMETERS = {
@@ -9,13 +10,27 @@ DEFAULT_PARAMETERS = {
     'duplication': 0
 }
 
+DEVICES = [
+    {
+        'name': 'wemulate_host1',
+        'interfaces': ['enp0s31f6', 'eth0', 'eth1']
+    }
+]
+
 class SaltMockup:
 
     def __init__(self, url, user, sharedsecret):
-        pass
+        for device in DEVICES:
+            try:
+                wemulate_service.create_device(device['name'])
+            except Exception as e:
+                if e.args[0] == 400:
+                    print(f'SaltMockup: Device {device['name']} already exists')
+                else:
+                    raise Exception(f'SaltMockup: Error when creating device {device['name']}: {str(e.args)}')
 
     def get_interfaces(self, device_name):
-        return {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}
+        return {'return': [{device['name']: device['interfaces']} for device in DEVICES]}
 
     def add_connection(self, device_name, connection_name, interface1_name, interface2_name):
         pass
