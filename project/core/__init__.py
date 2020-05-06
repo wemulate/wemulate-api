@@ -10,6 +10,7 @@ db = SQLAlchemy()
 try:
     salt_api = create_salt_api()
 except Exception as e:
+    salt_api = None
     print('Error setting up salt api: ' + str(e.args))
 
 def create_app():

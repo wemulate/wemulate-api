@@ -4,7 +4,9 @@ import os
 def configure_app(app):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    if app.config['TESTING']:
+    if os.environ.get('WEMULATE_TESTING') == 'True':
+        print('Wemulate Testing Configuration')
+        app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
         app.config['SALT_MOCKUP'] = True
     else:
