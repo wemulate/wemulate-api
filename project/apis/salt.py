@@ -1,4 +1,5 @@
 from pepper import Pepper
+import time
 
 # Default Interface Parameters
 DEFAULT_PARAMETERS = {
@@ -9,11 +10,22 @@ DEFAULT_PARAMETERS = {
     'corruption': 0,
     'duplication': 0
 }
+MAX_RETRIES = 5
 
 class SaltApi(object):
     def __init__(self, url, user, sharedsecret):
         self.api = Pepper(url)
-        self.api.login(user, sharedsecret, 'sharedsecret')
+        retry_counter = 0
+        while(retry_counter < MAX_RETRIES or SaltApi is None):
+            retry_counter += 1
+            try:
+                self.api.login(user, sharedsecret, 'sharedsecret')
+            except Exception as e:
+                print(f"retry_counter {retry_counter}")
+                if retry_counter < MAX_RETRIES:
+                    time.sleep(10)
+                else:
+                    raise e
 
     def get_interfaces(self, device_name):
         return self.api.low([{'client': 'local', 'tgt': device_name, 'fun': 'wemulate.get_interfaces'}])
