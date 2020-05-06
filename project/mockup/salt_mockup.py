@@ -11,21 +11,21 @@ DEFAULT_PARAMETERS = {
     'duplication': 0
 }
 
-DEVICES = [
-    {
-        'name': 'wemulate_host1',
-        'interfaces': ['enp0s31f6', 'eth0', 'eth1']
+DEVICES = {
+    'wemulate_host1': {
+        'interfaces': ['enp0s31f6', 'eth0', 'eth1'],
+        'management_ip': '127.0.0.1'
     }
-]
+}
 
 class SaltMockup:
 
     def __init__(self, url, user, sharedsecret):
         if len(dbutils.get_device_list()) == 0:
-            for device in DEVICES:
+            for device_name, device in DEVICES.items():
                 try:
-                    profile = dbutils.create_profile(device['name'])
-                    db_device = dbutils.create_device(device['name'], profile.profile_id, None)
+                    profile = dbutils.create_profile(device_name)
+                    db_device = dbutils.create_device(device_name, profile.profile_id, device['management_ip'])
                     interface_id = 1
                     for physical_name in device['interfaces']:
                         logical_interface = dbutils.get_logical_interface(interface_id)
@@ -33,11 +33,16 @@ class SaltMockup:
                                                  logical_interface.logical_interface_id)
                         interface_id += 1
                 except Exception as e:
-                    raise Exception(f'SaltMockup: Error when creating device {device["name"]}: {str(e.args)}')
+                    raise Exception(f'SaltMockup: Error when creating device {device_name}: {str(e.args)}')
             db.session.commit()
 
     def get_interfaces(self, device_name):
-        return {'return': [{device['name']: device['interfaces']} for device in DEVICES]}
+        device = DEVICES[device_name]
+        return {'return': [{device_name: device['interfaces']}]}
+
+    def get_management_ip(self, device_name):
+        device = DEVICES[device_name]
+        return {'return': [{device_name: device['management_ip']}]}
 
     def add_connection(self, device_name, connection_name, interface1_name, interface2_name):
         pass
