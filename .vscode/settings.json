@@ -1,4 +1,7 @@
 {
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
     "python.pythonPath": "venv/bin/python3.7",
     "python.linting.flake8Args": [
         "--max-line-length=120",

@@ -1,20 +1,27 @@
 from flask import Flask
 from flask_restplus import Api
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-
-
-db = SQLAlchemy()
-
+from apis import create_salt_api
+from core.database import db
+import core.database.utils as dbutils
+from config import configure_app
+from mockup.salt_mockup import SaltMockup
 
 def create_app():
     app = Flask(__name__)
-    db_settings = 'config.Config'
-    app.config.from_object(db_settings)
+
+    configure_app(app)
     db.init_app(app)
     app.app_context().push()
     db.create_all()
+
+    # Create logical interfaces if not exist
+    if not len(dbutils.get_logical_interface_list()):
+        dbutils.create_logical_interfaces()
+        db.session.commit()
+
     CORS(app)
+
     api = Api(
         app,
         version='1.0',
@@ -23,16 +30,7 @@ def create_app():
         doc='/api/v1/'
     )
 
-    device_ns = api.namespace(
-        'Device Operations',
-        description='Execute all operations belonging to a wemulate device',
-        path='/api/v1/devices/'
-    )
-    # Not used yet
-    # profile_ns = api.namespace(
-    # 'Profile Operations',
-    #  description='Profile Operations',
-    #  path='/api/v1/profiles'
-    # )
+    # Salt
+    create_salt_api(app)
 
-    return app, api, device_ns
+    return app, api

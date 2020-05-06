@@ -16,6 +16,7 @@ eggs/
 .eggs/
 lib/
 lib64/
+lib64
 parts/
 sdist/
 var/
@@ -80,6 +81,7 @@ ipython_config.py
 
 # pyenv
 .python-version
+bin/
 
 # celery beat schedule file
 celerybeat-schedule

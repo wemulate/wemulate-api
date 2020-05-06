@@ -1,5 +1,14 @@
 from pepper import Pepper
 
+# Default Interface Parameters
+DEFAULT_PARAMETERS = {
+    'bandwidth': 1000,
+    'delay': 0,
+    'jitter': 0,
+    'packet_loss': 0,
+    'corruption': 0,
+    'duplication': 0
+}
 
 class SaltApi(object):
     def __init__(self, url, user, sharedsecret):
@@ -36,3 +45,16 @@ class SaltApi(object):
               'fun': 'wemulate.remove_parameters',
               'arg': [interface_name]}]
         )
+
+    def update_connection(self, device_name, connection_name, interface1_name, interface2_name):
+        self.remove_connection(device_name, connection_name)
+        self.add_connection(device_name, connection_name, interface1_name, interface2_name)
+
+    def update_parameters(self, device_name, interface_name, parameters):
+        parameters_to_apply = {}
+        self.remove_parameters(device_name, interface_name)
+        for name, value in parameters.items():
+            if value != DEFAULT_PARAMETERS[name]:
+                parameters_to_apply[name] = value
+        if parameters_to_apply != {}:
+            self.set_parameters(device_name, interface_name, parameters_to_apply)
