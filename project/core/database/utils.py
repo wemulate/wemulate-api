@@ -4,26 +4,44 @@ from core.database.models import ProfileModel, DeviceModel, InterfaceModel, \
 import string
 
 def get_device(device_id):
-    return DeviceModel.query.filter_by(device_id=device_id).first_or_404(description="Device not found!")
+    device = DeviceModel.query.filter_by(device_id=device_id)
+    if device is None:
+        raise Exception(404, f'Device with id {device_id} not found' )
+    return device
+
+def get_device_by_name(device_name):
+    device = DeviceModel.query.filter_by(device_name=device_name).first()
+    if device is None:
+        raise Exception(404, f'Device with name {device_name} not found' )
+    return device
 
 def get_device_list():
     return DeviceModel.query.all()
 
 def get_active_profile(device):
-    return ProfileModel.query.filter_by(belongs_to_device=device).first_or_404(description='Profile not found!')
+    profile = ProfileModel.query.filter_by(belongs_to_device=device)
+    if profile is None:
+        raise Exception(404, f'Profile for device with id {device.device_id} not found!')
+    return profile
 
 def get_all_interfaces(device):
-    return InterfaceModel.query.filter_by(belongs_to_device_id=device.device_id).all()
+    interfaces = InterfaceModel.query.filter_by(belongs_to_device_id=device.device_id).all()
+    if not len(interfaces):
+        raise Exception(404, f'No interfaces for device with id {device.device_id} found!')
+    return interfaces
 
 def get_logical_interface(logical_interface_id):
-    return LogicalInterfaceModel.query.filter_by(logical_interface_id=logical_interface_id).first()
+    l_interface = LogicalInterfaceModel.query.filter_by(logical_interface_id=logical_interface_id).first()
+    if l_interface is None:
+        raise Exception(404, f'Logical interface with id {logical_interface_id} not found')
+    return l_interface
 
 def get_logical_interface_by_name(logical_interface_name):
-    return LogicalInterfaceModel.query.filter_by(logical_name=logical_interface_name).first()
+    l_interface = LogicalInterfaceModel.query.filter_by(logical_name=logical_interface_name).first()
+    if l_interface is None:
+        raise Exception(404, f'Logical interface with name {logical_interface_name} not found')
+    return l_interface
 
-def device_exists(device_name):
-    device_exists = DeviceModel.query.filter_by(device_name=device_name).first()
-    return device_exists
 
 def create_profile(device_name):
     profile = ProfileModel("default_" + device_name)

@@ -2,8 +2,8 @@ from core import db, salt_api
 import core.database.utils as dbutils
 
 def create_device(device_name, management_ip):
-    if(dbutils.device_exists(device_name)):
-        raise Exception(400, f"Device {device_name} is already used!")
+    if(dbutils.get_device_by_name(device_name)):
+        raise Exception(400, f"Device {device_name} is already registered!")
     try:
         # Return Format: {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}
         salt_return = salt_api.get_interfaces(device_name)

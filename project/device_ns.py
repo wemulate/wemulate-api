@@ -5,7 +5,7 @@ from api_parsers import ConnectionParser, DeviceParser
 import api_models as models
 
 
-device_ns = Namespace('Device Operations', __name__, path='/v1/devices', doc='/api/v1/')
+device_ns = Namespace('Device Operations', __name__, path='/api/v1/devices', doc='/api/v1/')
 
 device_parser = DeviceParser(device_ns)
 connection_parser = ConnectionParser(device_ns)
