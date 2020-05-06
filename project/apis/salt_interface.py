@@ -1,5 +1,6 @@
 from mockup.salt_mockup import SaltMockup
 from apis.salt import SaltApi
+import asyncio
 
 
 class SaltInterface:
@@ -16,6 +17,14 @@ class SaltInterface:
     def __check_init(self):
         if self.salt_api is None:
             raise Exception(500, 'SaltInterface not initialized')
+
+    def ready(self):
+        self.__check_init()
+        return self.salt_api.ready()
+
+    async def await_ready(self):
+        self.__check_init()
+        await self.salt_api.await_ready()
 
     def get_interfaces(self, device_name):
         self.__check_init()

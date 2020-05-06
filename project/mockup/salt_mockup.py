@@ -37,6 +37,12 @@ class SaltMockup:
                     raise Exception(f'SaltMockup: Error when creating device {device_name}: {str(e.args)}')
             db.session.commit()
 
+    def read(self):
+        return True
+
+    def await_ready(self):
+        pass
+
     def get_interfaces(self, device_name):
         device = DEVICES[device_name]
         return {'return': [{device_name: device['interfaces']}]}
