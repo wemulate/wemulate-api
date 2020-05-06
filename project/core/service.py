@@ -72,32 +72,31 @@ def update_connection(device_id, connections):
 
     active_device_profile = dbutils.get_active_profile(device)
     old_connections = active_device_profile.connections.copy()
+    try:
+        for connection in connections:
+            connection_name = connection['connection_name']
+            parameters = {
+                'bandwidth': connection['bandwidth'],
+                'delay': connection['delay'],
+                'packet_loss': connection['packet_loss'],
+                'jitter': connection['jitter'],
+                'corruption': connection['corruption'],
+                'duplication': connection['duplication']
+            }
+            parameter_changed = False
+            interface1_name = connection['interface1']
+            interface2_name = connection['interface2']
 
-    for connection in connections:
-        connection_name = connection['connection_name']
-        parameters = {
-            'bandwidth': connection['bandwidth'],
-            'delay': connection['delay'],
-            'packet_loss': connection['packet_loss'],
-            'jitter': connection['jitter'],
-            'corruption': connection['corruption'],
-            'duplication': connection['duplication']
-        }
-        parameter_changed = False
-        interface1_name = connection['interface1']
-        interface2_name = connection['interface2']
+            logical_interface1 = dbutils.get_logical_interface_by_name(interface1_name)
+            logical_interface2 = dbutils.get_logical_interface_by_name(interface2_name)
 
-        logical_interface1 = dbutils.get_logical_interface_by_name(interface1_name)
-        logical_interface2 = dbutils.get_logical_interface_by_name(interface2_name)
+            physical_interface1_name = __get_physical_interface(device, logical_interface1)
+            physical_interface2_name = __get_physical_interface(device, logical_interface2)
+            if(physical_interface1_name is None or physical_interface2_name is None):
+                raise Exception(500, f'Bad Physical Interface Mapping in {connection}!')
 
-        physical_interface1_name = __get_physical_interface(device, logical_interface1)
-        physical_interface2_name = __get_physical_interface(device, logical_interface2)
-        if(physical_interface1_name is None or physical_interface2_name is None):
-            raise Exception(500, f'Bad Physical Interface Mapping in {connection}!')
+            active_connection = __get_active_connection(logical_interface1, logical_interface2, old_connections)
 
-        active_connection = __get_active_connection(logical_interface1, logical_interface2, old_connections)
-
-        try:
             if active_connection is None:
                 conn = dbutils.create_connection(connection_name, logical_interface1, logical_interface2,
                                                  active_device_profile)
@@ -127,13 +126,13 @@ def update_connection(device_id, connections):
             if parameter_changed:
                 salt_api.update_parameters(device.device_name, interface_to_apply, parameters)
 
-            for connection in old_connections:
-                __delete_connection(device, connection)
-
-            db.session.commit()
-        except Exception:
-            db.session.rollback()
-            raise Exception(500, 'Error when updating connection')
+        for connection in old_connections:
+            __delete_connection(device, connection)
+    
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        raise Exception(500, 'Error when updating connection')
 
     return [connection.serialize() for connection in active_device_profile.connections]
 
