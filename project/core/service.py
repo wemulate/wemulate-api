@@ -3,7 +3,7 @@ from core.database import db
 import core.database.utils as dbutils
 
 def create_device(device_name):
-    if(dbutils.get_device_by_name(device_name)):
+    if(dbutils.is_device_present(device_name)):
         raise Exception(400, f"Device {device_name} is already registered!")
     try:
         # Return Format: {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}

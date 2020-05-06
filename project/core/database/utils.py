@@ -15,6 +15,12 @@ def get_device_by_name(device_name):
         raise Exception(404, f'Device with name {device_name} not found' )
     return device
 
+def is_device_present(device_name):
+    device = DeviceModel.query.filter_by(device_name=device_name).first()
+    if device is None:
+        return False
+    return True
+
 def get_device_list():
     return DeviceModel.query.all()
 
