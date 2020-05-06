@@ -1,5 +1,5 @@
 import netifaces
-from core import db
+from core.database import db
 from core.models import HostModel, InterfaceModel
 
 

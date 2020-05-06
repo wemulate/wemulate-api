@@ -1,10 +1,10 @@
-from core import db
+from core.database import db
 from core.database.models import ProfileModel, DeviceModel, InterfaceModel, \
     LogicalInterfaceModel, ConnectionModel, ParameterModel
 import string
 
 def get_device(device_id):
-    device = DeviceModel.query.filter_by(device_id=device_id)
+    device = DeviceModel.query.filter_by(device_id=device_id).first()
     if device is None:
         raise Exception(404, f'Device with id {device_id} not found' )
     return device
@@ -19,7 +19,7 @@ def get_device_list():
     return DeviceModel.query.all()
 
 def get_active_profile(device):
-    profile = ProfileModel.query.filter_by(belongs_to_device=device)
+    profile = ProfileModel.query.filter_by(belongs_to_device=device).first()
     if profile is None:
         raise Exception(404, f'Profile for device with id {device.device_id} not found!')
     return profile
@@ -42,6 +42,8 @@ def get_logical_interface_by_name(logical_interface_name):
         raise Exception(404, f'Logical interface with name {logical_interface_name} not found')
     return l_interface
 
+def get_logical_interface_list():
+    return LogicalInterfaceModel.query.all()
 
 def create_profile(device_name):
     profile = ProfileModel("default_" + device_name)

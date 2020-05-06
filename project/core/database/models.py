@@ -1,5 +1,5 @@
 import json
-from core import db
+from core.database import db
 
 class ProfileModel(db.Model):
     __tablename__ = 'profile'

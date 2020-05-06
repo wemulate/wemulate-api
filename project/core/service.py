@@ -1,4 +1,5 @@
-from core import db, salt_api
+from core import salt_api
+from core.database import db
 import core.database.utils as dbutils
 
 def create_device(device_name, management_ip):

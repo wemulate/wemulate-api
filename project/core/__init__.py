@@ -1,12 +1,12 @@
 from flask import Flask
 from flask_restplus import Api
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from apis import create_salt_api
+from core.database import db
+import core.database.utils as dbutils
 from config import configure_app
 from mockup.salt_mockup import SaltMockup
 
-db = SQLAlchemy()
 try:
     salt_api = create_salt_api()
 except Exception as e:
@@ -22,6 +22,12 @@ def create_app():
     app.app_context().push()
     db.drop_all()  # Used for Test Purposes
     db.create_all()
+
+    # Create logical interfaces if not exist
+    if not len(dbutils.get_logical_interface_list()):
+        dbutils.create_logical_interfaces()
+        db.session.commit()
+
     CORS(app)
 
     api = Api(
