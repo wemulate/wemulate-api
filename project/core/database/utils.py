@@ -16,10 +16,7 @@ def get_device_by_name(device_name):
     return device
 
 def is_device_present(device_name):
-    device = DeviceModel.query.filter_by(device_name=device_name).first()
-    if device is None:
-        return False
-    return True
+    return DeviceModel.query.filter_by(device_name=device_name).first() is not None
 
 def get_device_list():
     return DeviceModel.query.all()
