@@ -23,6 +23,7 @@ import core.database.utils as dbutils
 
 app, api = create_app()
 
+
 @pytest.fixture(autouse=True)
 def recreate_database():
     db.drop_all()
