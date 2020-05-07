@@ -18,20 +18,20 @@ def add_connection(bandwidth=1000, corruption=0, duplication=0, delay=0, jitter=
     connection_config = {
         "connections":[
             {
-                "bandwidth":bandwidth,
-                "connection_name":"test",
+                "bandwidth": bandwidth,
+                "connection_name": "test",
                 "corruption": corruption,
                 "duplication": duplication,
-                "delay":delay,
-                "interface1":"LAN-A",
-                "interface2":"LAN-B",
-                "jitter":jitter,
-                "packet_loss":packet_loss
+                "delay": delay,
+                "interface1": "LAN-A",
+                "interface2": "LAN-B",
+                "jitter": jitter,
+                "packet_loss": packet_loss
             }
         ]
     }
 
-    r = requests.put(url = URI, headers = HEADER, data = json.dumps(connection_config))
+    r = requests.put(url=URI, headers=HEADER, data=json.dumps(connection_config))
     return r
 
 
