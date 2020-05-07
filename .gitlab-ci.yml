@@ -31,7 +31,7 @@ pytest:
     - python -c "import sys;print(sys.path)"
     - python3 -m pytest --ignore=tests/manual
   variables:
-    -  WEMULATE_TESTING: "True" 
+    WEMULATE_TESTING: "True" 
 
 
 coverage:
