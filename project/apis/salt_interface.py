@@ -1,7 +1,7 @@
 from mockup.salt_mockup import SaltMockup
 from apis.salt import SaltApi
 import asyncio
-
+from exception import WemulateException
 
 class SaltInterface:
 
@@ -16,7 +16,7 @@ class SaltInterface:
 
     def __check_init(self):
         if self.salt_api is None:
-            raise Exception(500, 'SaltInterface not initialized')
+            raise WemulateException(500, 'SaltInterface not initialized')
 
     def ready(self):
         self.__check_init()

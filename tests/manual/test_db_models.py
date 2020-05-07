@@ -1,18 +1,32 @@
 import sys
+import pytest
 sys.path.insert(0, '../../project/')
 
-from core import db, create_app
-from core.models import ProfileModel, DeviceModel, InterfaceModel, LogicalInterfaceModel
-from core.models import ConnectionModel, ParameterModel, OnOffTimerModel
+from core import create_app
+from core.database import db
+from core.database.models import ProfileModel, DeviceModel, InterfaceModel, LogicalInterfaceModel
+from core.database.models import ConnectionModel, ParameterModel, OnOffTimerModel
+import core.database.utils as dbutils
+
 
 ''' ##### Prerequisites ##### '''
 
-''' ADD env var: export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' '''
+''' ADD env var: export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' WEMULATE_TESTING='True'''
 
 ''' RUN TEST with ` pytest -v test_db_models.py --disable-pytest-warnings` '''
 
 ''' ##### Create DB and necessary parts ##### '''
-app, api, host_ns = create_app()
+
+
+app, api = create_app()
+
+@pytest.fixture(autouse=True)
+def recreate_database():
+    db.drop_all()
+    db.create_all()
+    if not len(dbutils.get_logical_interface_list()):
+        dbutils.create_logical_interfaces()
+        db.session.commit()
 
 ''' ##### Helper Functions ##### '''
 def commit_to_database(object_to_add):
@@ -57,11 +71,11 @@ def find_interface_in_database(interface_id):
 def compare_interface(interface1, interface2, device):
     if interface1.has_logical_interface_id is not None and interface2.has_logical_interface_id is not None:
         return (interface1.belongs_to_device_id == interface2.belongs_to_device_id == device.device_id
-        and interface1.physical_name == interface1.physical_name
+        and interface1.physical_name == interface2.physical_name
         and interface1.has_logical_interface_id == interface2.has_logical_interface_id)
     else:
         return (interface1.belongs_to_device_id == interface2.belongs_to_device_id == device.device_id
-               and interface1.physical_name == interface1.physical_name)
+               and interface1.physical_name == interface2.physical_name)
 
 def create_logical_interface(logical_name):
     logical_interface_to_add = LogicalInterfaceModel(logical_name)
@@ -88,7 +102,7 @@ def compare_connection(connection1, connection2, profile):
            and connection1.connection_name == connection2.connection_name
            and connection1.bidirectional == connection2.bidirectional
            and connection1.first_logical_interface_id == connection2.first_logical_interface_id
-           and connection1.second_logical_interface_id == connection1.second_logical_interface_id
+           and connection1.second_logical_interface_id == connection2.second_logical_interface_id
            and connection1.belongs_to_profile_id == connection2.belongs_to_profile_id)
 
 def create_parameter(parameter_name, value, connection_id, on_off_timer_id=None):
@@ -129,7 +143,7 @@ def test_create_device_without_interfaces():
     test_device = create_device("wemulate", test_profile.profile_id)
     device_from_db = find_device_in_database(test_device.device_id)
     assert compare_device(test_device, device_from_db, test_profile)
-    # Test if management ip == local loopback address
+    # Test if management ip == local loopback address because no mgmt ip was set
     assert device_from_db.management_ip == '127.0.0.1'
 
 def test_create_interface_without_logical_interface():
@@ -154,11 +168,8 @@ def test_create_interface_with_logical_interface():
 
 def test_create_connection_without_parameter():
     test_profile = create_profile("profile2")
-    test_device = create_device("wemulate-host2", test_profile.profile_id)
     test_logical_interface1 = create_logical_interface("LAN A")
     test_logical_interface2 = create_logical_interface("LAN B")
-    test_interface1 = create_interface("ens1234", test_device.device_id, test_logical_interface1.logical_interface_id)
-    test_interface2 = create_interface("ens5678", test_device.device_id, test_logical_interface2.logical_interface_id)
     connection_name = test_logical_interface1.logical_name + " to " + test_logical_interface2.logical_name
     test_connection = create_connection(connection_name, test_logical_interface1.logical_interface_id,
                                         test_logical_interface2.logical_interface_id, test_profile.profile_id)
@@ -167,18 +178,12 @@ def test_create_connection_without_parameter():
 
 def test_create_parameter():
     test_profile = create_profile("profile3")
-    test_device = create_device("wemulate-host3", test_profile.profile_id)
     test_logical_interface1 = create_logical_interface("LAN C ")
     test_logical_interface2 = create_logical_interface("LAN D")
-    test_interface1 = create_interface("ens1111", test_device.device_id, test_logical_interface1.logical_interface_id)
-    test_interface2 = create_interface("ens2222", test_device.device_id, test_logical_interface2.logical_interface_id)
+
     connection_name = test_logical_interface1.logical_name + " to " + test_logical_interface2.logical_name
     test_connection = create_connection(connection_name, test_logical_interface1.logical_interface_id,
                                         test_logical_interface2.logical_interface_id, test_profile.profile_id)
     test_parameter = create_parameter("delay", 100, test_connection.connection_id)
     parameter_from_db = find_parameter_in_database(test_parameter.parameter_id)
     assert compare_parameter(test_parameter, parameter_from_db, test_connection)
-
-
-
-# Todo Implement OnOffTimer 
