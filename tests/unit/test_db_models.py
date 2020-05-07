@@ -14,12 +14,11 @@ import core.database.utils as dbutils
 
 ''' ##### Prerequisites ##### '''
 
-''' ADD env var: export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' WEMULATE_TESTING='True'''
+''' ADD env var: export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' WEMULATE_TESTING='True' '''
 
 ''' RUN TEST with ` pytest -v test_db_models.py --disable-pytest-warnings` '''
 
 ''' ##### Create DB and necessary parts ##### '''
-
 
 app, api = create_app()
 
