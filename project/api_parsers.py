@@ -1,7 +1,7 @@
 class ConnectionParser:
 
-    def __init__(self, flaskApi):
-        self.parser = flaskApi.parser()
+    def __init__(self, flask_api):
+        self.parser = flask_api.parser()
         self.parser.add_argument(
             'connections',
             type=list,
@@ -15,8 +15,8 @@ class ConnectionParser:
 
 class DeviceParser:
 
-    def __init__(self, flaskApi):
-        self.parser = flaskApi.parser()
+    def __init__(self, flask_api):
+        self.parser = flask_api.parser()
         self.parser.add_argument(
             'device_name',
             type=str,

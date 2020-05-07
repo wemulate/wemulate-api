@@ -1,7 +1,7 @@
 from flask_restplus import Resource, Namespace
 from flask import jsonify
-import core.service as wemulate_service
 from api_parsers import ConnectionParser, DeviceParser
+import core.service as wemulate_service
 import api_models as models
 
 
