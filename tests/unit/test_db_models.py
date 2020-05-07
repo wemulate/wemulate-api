@@ -18,6 +18,7 @@ import core.database.utils as dbutils
 
 ''' RUN TEST with ` pytest -v test_db_models.py --disable-pytest-warnings` '''
 
+
 ''' ##### Create DB and necessary parts ##### '''
 
 app, api = create_app()
