@@ -1,6 +1,9 @@
 import sys
+import os
 import pytest
-sys.path.insert(0, '../../project/')
+
+path = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, f'{path}/../../project')
 
 from core import create_app
 from core.database import db
