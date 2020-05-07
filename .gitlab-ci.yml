@@ -28,6 +28,7 @@ pytest:
   script:
     - "source venv/bin/activate"
     - export PYTHONPATH="$PYTHONPATH:."
+    - export WEMULATE_TESTING="True"
     - python -c "import sys;print(sys.path)"
     - python3 -m pytest --ignore=tests/manual
 
