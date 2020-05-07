@@ -20,6 +20,7 @@ import core.database.utils as dbutils
 
 ''' ##### Create DB and necessary parts ##### '''
 
+
 app, api = create_app()
 
 @pytest.fixture(autouse=True)
