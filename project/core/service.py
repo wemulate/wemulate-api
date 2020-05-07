@@ -128,11 +128,11 @@ def update_connection(device_id, connections):
 
         for connection in old_connections:
             __delete_connection(device, connection)
-    
+
         db.session.commit()
-    except Exception:
+    except Exception as e:
         db.session.rollback()
-        raise Exception(500, 'Error when updating connection')
+        raise Exception(500, 'Error when updating connection: ' + e.args[1])
 
     return [connection.serialize() for connection in active_device_profile.connections]
 
