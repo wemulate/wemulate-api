@@ -70,7 +70,7 @@ def get_connection_list(device):
 
     return [connection.serialize() for connection in profile.connections]
 
-def update_connection(device_id, connections):
+def update_connections(device_id, connections):
     device = dbutils.get_device(device_id)
 
     active_device_profile = dbutils.get_active_profile(device)

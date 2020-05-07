@@ -7,6 +7,7 @@ sys.path.insert(0, f'{path}/../../project')
 import mock
 import pytest
 from pytest_mock import mocker
+from mockup.object_mockup import ObjectMockup, ConnectionMockup
 from types import SimpleNamespace
 from unittest.mock import call
 
@@ -40,28 +41,33 @@ def setup_mocks(mocker):
     mocker.patch.object(utils, 'create_device')
     mocker.patch.object(utils, 'create_connection')
     mocker.patch.object(utils, 'create_interface')
+    mocker.patch.object(utils, 'create_parameter')
     mocker.patch.object(utils, 'update_parameter')
     mocker.patch.object(utils, 'update_connection')
     mocker.patch.object(utils, 'delete_connection')
+    logical_interfaces = [SimpleNamespace(logical_interface_id=i) for i in range(1, 5)]
+    connection = ConnectionMockup(
+        connection_name='connection 1',
+        first_logical_interface=logical_interfaces[3],
+        second_logical_interface=logical_interfaces[1],
+        active_device_profile=9
+    )
     utils.get_device.return_value = SimpleNamespace(device_id=8,
                                                     device_name='test device name',
                                                     active_profile=9,
                                                     management_ip='192.168.0.1',
                                                     interfaces=[
                                                         SimpleNamespace(physical_name='eth1', device_id=8,
-                                                                        logical_interface_id=1),
+                                                                        has_logical_interface=logical_interfaces[0]),
                                                         SimpleNamespace(physical_name='eth2', device_id=8,
-                                                                        logical_interface_id=2),
+                                                                        has_logical_interface=logical_interfaces[1]),
                                                         SimpleNamespace(physical_name='eth3', device_id=8,
-                                                                        logical_interface_id=3),
+                                                                        has_logical_interface=logical_interfaces[2]),
                                                         SimpleNamespace(physical_name='eth4', device_id=8,
-                                                                        logical_interface_id=4)
+                                                                        has_logical_interface=logical_interfaces[3])
                                                     ],
                                                     connections=[
-                                                        SimpleNamespace(connection_name='connection 1',
-                                                                        logical_interface1=4,
-                                                                        logical_interface2=2,
-                                                                        active_device_profile=9)
+                                                        connection
                                                     ])
     utils.is_device_present.return_value = False
     utils.get_device_list.return_value = [
@@ -70,10 +76,7 @@ def setup_mocks(mocker):
     utils.get_active_profile.return_value = SimpleNamespace(profile_id=8,
                                                             profile_name='profile 8 name',
                                                             connections=[
-                                                                SimpleNamespace(connection_name='connection 1',
-                                                                                logical_interface1=4,
-                                                                                logical_interface2=2,
-                                                                                active_device_profile=9)
+                                                                connection
                                                             ])
     utils.get_all_interfaces.return_value = [
         SimpleNamespace(physical_name='eth1', device_id=8, logical_interface_id=1),
@@ -81,12 +84,8 @@ def setup_mocks(mocker):
         SimpleNamespace(physical_name='eth3', device_id=8, logical_interface_id=3),
         SimpleNamespace(physical_name='eth4', device_id=8, logical_interface_id=4)
     ]
-    utils.get_logical_interface.side_effect = [
-        SimpleNamespace(logical_interface_id=1),
-        SimpleNamespace(logical_interface_id=2),
-        SimpleNamespace(logical_interface_id=3),
-        SimpleNamespace(logical_interface_id=4)
-    ]
+    utils.get_logical_interface.side_effect = logical_interfaces
+    utils.get_logical_interface_by_name.side_effect = logical_interfaces
     utils.create_profile.return_value = SimpleNamespace(profile_id=9)
     utils.create_device.return_value = SimpleNamespace(device_id=8)
     utils.create_connection.return_value = SimpleNamespace(connection_id=1)
@@ -176,7 +175,20 @@ def test_get_connection_list_emtpy(mocker):
     assert connection_list == []
 
 def test_add_connection(mocker):
-    pass
+
+    service.update_connections(8, [
+        {
+            'connection_name': 'connection 1',
+            'interface1': 'LAN_A',
+            'interface2': 'LAN_B',
+            'bandwidth': 500,
+            'delay': 10,
+            'packet_loss': 30,
+            'jitter': 15,
+            'corruption': 40,
+            'duplication': 50
+        }
+    ])
 
 def test_delete_connection(mocker):
     pass
