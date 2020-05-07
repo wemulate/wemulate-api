@@ -13,6 +13,7 @@ from unittest.mock import call
 from core import service
 from apis import salt_api
 from core.database import db, utils
+from exception import WemulateException
 
 @pytest.fixture(autouse=True)
 def setup_mocks(mocker):
@@ -123,8 +124,8 @@ def test_create_duplicate_device(mocker):
 
     try:
         service.create_device('test device name')
-        assert False
-    except Exception as e:
+        assert False  # should not be reached
+    except WemulateException as e:
         e.args[0] == 400
         e.args[1] == "Device test device name is already registered!"
         db.session.commit.assert_called_once()
@@ -150,10 +151,44 @@ def test_get_device_list_empty(mocker):
     assert device_list == []
 
 def test_get_device_inexistent(mocker):
-    utils.get_device.side_effect=Exception(404, "Device with id 4 not found")
+    utils.get_device.side_effect=WemulateException(404, "Device with id 4 not found")
     try:
         service.get_device(4)
-        assert False
-    except Exception as e:
+        assert False  # should not be reached
+    except WemulateException as e:
         assert e.args[0] == 404
         assert e.args[1] == "Device with id 4 not found"
+
+# missing test for non empty, would need serlialize function
+def test_get_interface_list_empty(mocker):
+    utils.get_all_interfaces.return_value = []
+
+    interface_list = service.get_interface_list(8)
+
+    assert interface_list == []
+
+# missing test for non empty, would need serlialize function
+def test_get_connection_list_emtpy(mocker):
+    utils.get_active_profile.return_value = SimpleNamespace(connections=[])
+
+    connection_list = service.get_connection_list(8)
+
+    assert connection_list == []
+
+def test_add_connection(mocker):
+    pass
+
+def test_delete_connection(mocker):
+    pass
+
+def test_update_connection(mocker):
+    pass
+
+def test_add_second_connection(mocker):
+    pass
+
+def test_delete_second_connection(mocker):
+    pass
+
+def test_no_update_connection(mocker):
+    pass
