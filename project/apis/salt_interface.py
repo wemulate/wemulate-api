@@ -22,7 +22,7 @@ class SaltInterface:
         self.__check_init()
         return self.salt_api.ready()
 
-    def await_ready(self):
+    def await_login(self):
         self.__check_init()
         self.salt_api.await_ready()
 

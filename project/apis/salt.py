@@ -13,39 +13,45 @@ DEFAULT_PARAMETERS = {
 }
 
 MAX_RETRIES = 6
+SECONDS_BETWEEN_RETRIES = 10
 
 class SaltApi(object):
     def __init__(self, url, user, sharedsecret):
         self.api = Pepper(url)
+        self.__login_success = False
         self.loginTask = Thread(target=self.__login, args=(user, sharedsecret, ), daemon=True)
         self.loginTask.start()
 
     def __login(self, user, sharedsecret):
         print('SaltApi: Login started')
         retries = 0
-        while True:
+        while not self.__login_success:
             try:
                 self.api.login(user, sharedsecret, 'sharedsecret')
-                break
+                self.__login_success = True
             except Exception as e:
-                retries += 1
-                print(f'SaltApi: Login retry {retries}/{MAX_RETRIES}')
                 if retries < MAX_RETRIES:
-                    time.sleep(10)
+                    retries += 1
+                    print(f'SaltApi: Login retry {retries}/{MAX_RETRIES}')
+                    time.sleep(SECONDS_BETWEEN_RETRIES)
                 else:
                     raise Exception(500, f'SaltApi: Error during login to salt: {str(e.args)}')
         print('SaltApi: Login completed')
 
     def __check_ready(self):
-        if self.ready():
-            return
+        if self.loginTask.is_alive():
+            raise Exception(500, f'SaltApi: Not ready yet')
         else:
-            raise Exception(500, f'SaltApi: Not ready')
+            if self.__login_success:
+                # SaltApi is ready
+                return
+            else:
+                raise Exception(500, f'SaltApi: Login to Salt Master failed')
 
     def ready(self):
-        return not self.loginTask.is_alive()
+        return self.__login_success
 
-    def await_ready(self):
+    def await_login(self):
         self.loginTask.join()
 
     def get_interfaces(self, device_name):
