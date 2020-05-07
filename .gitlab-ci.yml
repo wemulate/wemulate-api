@@ -28,16 +28,11 @@ pytest:
   script:
     - "source venv/bin/activate"
     - export PYTHONPATH="$PYTHONPATH:."
-    - export WEMULATE_TESTING="True"
-    - export SALT_API="http://localhost:8000" 
-    - export SALT_PASSWORD="testing"
-    - export POSTGRES_USER="wemulate"
-    - export POSTGRES_PASSWORD="testing"
-    - export POSTGRES_DB="wemulate"
-    - export POSTGRES_HOST="localhost"
-    - export POSTGRES_PORT="5432"
     - python -c "import sys;print(sys.path)"
     - python3 -m pytest --ignore=tests/manual
+  variables:
+    -  WEMULATE_TESTING: "True" 
+
 
 coverage:
   stage: testing
