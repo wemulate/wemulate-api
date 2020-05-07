@@ -1,6 +1,6 @@
 from pepper import Pepper
 import time
-import asyncio
+from threading import Thread
 
 # Default Interface Parameters
 DEFAULT_PARAMETERS = {
@@ -17,9 +17,11 @@ MAX_RETRIES = 6
 class SaltApi(object):
     def __init__(self, url, user, sharedsecret):
         self.api = Pepper(url)
-        self.loginTask = asyncio.create_task(self.__login(user, sharedsecret))
+        self.loginTask = Thread(target=self.__login, args=(user, sharedsecret, ), daemon=True)
+        self.loginTask.start()
 
-    async def __login(self, user, sharedsecret):
+    def __login(self, user, sharedsecret):
+        print('SaltApi: Login started')
         retries = 0
         while True:
             try:
@@ -27,11 +29,12 @@ class SaltApi(object):
                 break
             except Exception as e:
                 retries += 1
-                print(f"SaltApi: Login failed {retries}/{MAX_RETRIES} times")
+                print(f'SaltApi: Login retry {retries}/{MAX_RETRIES}')
                 if retries < MAX_RETRIES:
-                    await asyncio.sleep(10)
+                    time.sleep(10)
                 else:
                     raise Exception(500, f'SaltApi: Error during login to salt: {str(e.args)}')
+        print('SaltApi: Login completed')
 
     def __check_ready(self):
         if self.ready():
@@ -40,10 +43,10 @@ class SaltApi(object):
             raise Exception(500, f'SaltApi: Not ready')
 
     def ready(self):
-        return self.loginTask.done()
+        return not self.loginTask.is_alive()
 
-    async def await_ready(self):
-        await asyncio.gather(self.loginTask)
+    def await_ready(self):
+        self.loginTask.join()
 
     def get_interfaces(self, device_name):
         self.__check_ready()

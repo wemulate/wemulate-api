@@ -22,9 +22,9 @@ class SaltInterface:
         self.__check_init()
         return self.salt_api.ready()
 
-    async def await_ready(self):
+    def await_ready(self):
         self.__check_init()
-        await self.salt_api.await_ready()
+        self.salt_api.await_ready()
 
     def get_interfaces(self, device_name):
         self.__check_init()
