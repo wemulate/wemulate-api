@@ -31,7 +31,10 @@ pytest:
     - python -c "import sys;print(sys.path)"
     - python3 -m pytest --ignore=tests/manual
   variables:
-    WEMULATE_TESTING: "True" 
+    WEMULATE_TESTING: "True"
+    SALT_PASSWORD: "EPJ@2020!!"
+    SALT_API: "http://localhost:8000"
+
 
 
 coverage:
