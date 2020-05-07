@@ -14,7 +14,8 @@ from core import service
 from apis import salt_api
 from core.database import db, utils
 
-def test_create_device(mocker):
+@pytest.fixture(autouse=True)
+def setup_mocks(mocker):
     mocker.patch.object(salt_api, 'get_interfaces')
     mocker.patch.object(salt_api, 'get_management_ip')
     salt_api.get_interfaces.return_value = {'return': [{'test_device': ['eth1', 'eth2', 'eth3']}]}
@@ -36,6 +37,8 @@ def test_create_device(mocker):
     mocker.patch.object(db.session, 'rollback')
     mocker.patch.object(db.session, 'commit')
 
+
+def test_create_device(mocker):
     service.create_device('test_device')
 
     salt_api.get_interfaces.assert_called_with('test_device')
@@ -49,3 +52,4 @@ def test_create_device(mocker):
 
     db.session.commit.assert_called_once()
     db.session.rollback.assert_not_called()
+
