@@ -44,12 +44,15 @@ def interface_matches_criteria(interface_name):
 
 def add_connection(connection_name, interface1_name, interface2_name):
     include_str = 'source /etc/network/interfaces.d/*'
-    with open('/etc/network/interfaces', 'a+') as f:
+    with open('/etc/network/interfaces', 'r+') as f:
         if not any(include_str == x.rstrip('\r\n') for x in f):
             f.write(include_str + '\n')
 
     connection_template = f"# Bridge Setup {connection_name}\nauto {connection_name}\niface {connection_name} inet manual\n    bridge_ports {interface1_name} {interface2_name}\n    bridge_stp off\n"
 
+    if not os.path.exists('/etc/network/interfaces.d'):
+        os.makedirs('/etc/network/interfaces.d')
+    
     with open(f"/etc/network/interfaces.d/{connection_name}", "w") as file:
         file.write(connection_template)
 
