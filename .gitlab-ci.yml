@@ -29,6 +29,8 @@ pytest:
     - "source venv/bin/activate"
     - export PYTHONPATH="$PYTHONPATH:."
     - export WEMULATE_TESTING="True"
+    - export SALT_API=http://localhost:8000 
+    - export SALT_PASSWORD='testing'
     - python -c "import sys;print(sys.path)"
     - python3 -m pytest --ignore=tests/manual
 
