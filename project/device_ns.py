@@ -74,7 +74,7 @@ class DeviceInformation(Resource):
         '''Update Device Connection Configuration'''
         connections = connection_parser.parse_arguments()
         try:
-            connection_list = wemulate_service.update_connection(device_id, connections)
+            connection_list = wemulate_service.update_connections(device_id, connections)
         except Exception as e:
             device_ns.abort(*(e.args))
         return jsonify(connections=connection_list)

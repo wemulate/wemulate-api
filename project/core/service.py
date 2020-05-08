@@ -45,6 +45,8 @@ def get_device(device_id):
         active_device_profile = dbutils.get_active_profile(device)
         all_interfaces_of_device = dbutils.get_all_interfaces(device)
     except Exception as e:
+        if e.args[0] == 404:
+            raise e
         raise WemulateException(500, "Error when getting device: " + str(e.args))
 
     data = device.serialize()
@@ -68,7 +70,7 @@ def get_connection_list(device):
 
     return [connection.serialize() for connection in profile.connections]
 
-def update_connection(device_id, connections):
+def update_connections(device_id, connections):
     device = dbutils.get_device(device_id)
 
     active_device_profile = dbutils.get_active_profile(device)
