@@ -1,10 +1,11 @@
 from apis import salt_api
 from core.database import db
+from exception import WemulateException
 import core.database.utils as dbutils
 
 def create_device(device_name):
     if(dbutils.is_device_present(device_name)):
-        raise Exception(400, f"Device {device_name} is already registered!")
+        raise WemulateException(400, f"Device {device_name} is already registered!")
     try:
         # Return Format: {'return': [{'wemulate_host1': ['enp0s31f6', "eth0", "eth1"]}]}
         salt_return = salt_api.get_interfaces(device_name)
@@ -26,7 +27,7 @@ def create_device(device_name):
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        raise Exception(500, "Error when creating device: " + str(e.args))
+        raise WemulateException(500, "Error when creating device: " + str(e.args))
 
     return device
 
@@ -34,7 +35,7 @@ def get_device_list():
     try:
         devices = dbutils.get_device_list()
     except Exception as e:
-        raise Exception(500, "Error when getting device list: " + str(e.args))
+        raise WemulateException(500, "Error when getting device list: " + str(e.args))
 
     return [device.serialize() for device in devices]
 
@@ -44,7 +45,7 @@ def get_device(device_id):
         active_device_profile = dbutils.get_active_profile(device)
         all_interfaces_of_device = dbutils.get_all_interfaces(device)
     except Exception as e:
-        raise Exception(500, "Error when getting device: " + str(e.args))
+        raise WemulateException(500, "Error when getting device: " + str(e.args))
 
     data = device.serialize()
     data['interfaces'] = [interface.serialize() for interface in all_interfaces_of_device]
@@ -55,7 +56,7 @@ def get_interface_list(device):
     try:
         interfaces = dbutils.get_all_interfaces(device)
     except Exception as e:
-        raise Exception(500, "Error when getting interface list: " + str(e.args))
+        raise WemulateException(500, "Error when getting interface list: " + str(e.args))
 
     return [interface.serialize() for interface in interfaces]
 
@@ -63,7 +64,7 @@ def get_connection_list(device):
     try:
         profile = dbutils.get_active_profile(device)
     except Exception as e:
-        raise Exception(500, "Error when getting connection list: " + str(e.args))
+        raise WemulateException(500, "Error when getting connection list: " + str(e.args))
 
     return [connection.serialize() for connection in profile.connections]
 
@@ -93,7 +94,7 @@ def update_connection(device_id, connections):
             physical_interface1_name = __get_physical_interface(device, logical_interface1)
             physical_interface2_name = __get_physical_interface(device, logical_interface2)
             if(physical_interface1_name is None or physical_interface2_name is None):
-                raise Exception(500, f'Bad Physical Interface Mapping in {connection}!')
+                raise WemulateException(500, f'Bad Physical Interface Mapping in {connection}!')
 
             active_connection = __get_active_connection(logical_interface1, logical_interface2, old_connections)
 
@@ -132,7 +133,7 @@ def update_connection(device_id, connections):
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        raise Exception(500, 'Error when updating connection: ' + e.args[1])
+        raise WemulateException(500, 'Error when updating connection: ' + e.args[1])
 
     return [connection.serialize() for connection in active_device_profile.connections]
 

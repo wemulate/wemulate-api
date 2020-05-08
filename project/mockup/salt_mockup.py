@@ -1,4 +1,5 @@
 from core.database import db
+from exception import WemulateException
 import core.database.utils as dbutils
 
 # Default Interface Parameters
@@ -34,13 +35,14 @@ class SaltMockup:
                                                  logical_interface.logical_interface_id)
                         interface_id += 1
                 except Exception as e:
-                    raise Exception(f'SaltMockup: Error when creating device {device_name}: {str(e.args)}')
+                    raise WemulateException(500, f'SaltMockup: Error when creating device {device_name}: {str(e.args)}')
             db.session.commit()
 
     def read(self):
         return True
 
     def await_ready(self):
+        # No implementation needed in mockup
         pass
 
     def get_interfaces(self, device_name):
@@ -52,15 +54,19 @@ class SaltMockup:
         return {'return': [{device_name: device['management_ip']}]}
 
     def add_connection(self, device_name, connection_name, interface1_name, interface2_name):
+        # No implementation needed in mockup
         pass
 
     def remove_connection(self, device_name, connection_name):
+        # No implementation needed in mockup
         pass
 
     def set_parameters(self, device_name, interface_name, parameters):
+        # No implementation needed in mockup
         pass
 
     def remove_parameters(self, device_name, interface_name):
+        # No implementation needed in mockup
         pass
 
     def update_connection(self, device_name, connection_name, interface1_name, interface2_name):

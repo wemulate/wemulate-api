@@ -1,18 +1,20 @@
 from core.database import db
 from core.database.models import ProfileModel, DeviceModel, InterfaceModel, \
     LogicalInterfaceModel, ConnectionModel, ParameterModel
+from exception import WemulateException
 import string
+
 
 def get_device(device_id):
     device = DeviceModel.query.filter_by(device_id=device_id).first()
     if device is None:
-        raise Exception(404, f'Device with id {device_id} not found' )
+        raise WemulateException(404, f'Device with id {device_id} not found' )
     return device
 
 def get_device_by_name(device_name):
     device = DeviceModel.query.filter_by(device_name=device_name).first()
     if device is None:
-        raise Exception(404, f'Device with name {device_name} not found' )
+        raise WemulateException(404, f'Device with name {device_name} not found' )
     return device
 
 def is_device_present(device_name):
@@ -24,25 +26,25 @@ def get_device_list():
 def get_active_profile(device):
     profile = ProfileModel.query.filter_by(belongs_to_device=device).first()
     if profile is None:
-        raise Exception(404, f'Profile for device with id {device.device_id} not found!')
+        raise WemulateException(404, f'Profile for device with id {device.device_id} not found!')
     return profile
 
 def get_all_interfaces(device):
     interfaces = InterfaceModel.query.filter_by(belongs_to_device_id=device.device_id).all()
     if not len(interfaces):
-        raise Exception(404, f'No interfaces for device with id {device.device_id} found!')
+        raise WemulateException(404, f'No interfaces for device with id {device.device_id} found!')
     return interfaces
 
 def get_logical_interface(logical_interface_id):
     l_interface = LogicalInterfaceModel.query.filter_by(logical_interface_id=logical_interface_id).first()
     if l_interface is None:
-        raise Exception(404, f'Logical interface with id {logical_interface_id} not found')
+        raise WemulateException(404, f'Logical interface with id {logical_interface_id} not found')
     return l_interface
 
 def get_logical_interface_by_name(logical_interface_name):
     l_interface = LogicalInterfaceModel.query.filter_by(logical_name=logical_interface_name).first()
     if l_interface is None:
-        raise Exception(404, f'Logical interface with name {logical_interface_name} not found')
+        raise WemulateException(404, f'Logical interface with name {logical_interface_name} not found')
     return l_interface
 
 def get_logical_interface_list():

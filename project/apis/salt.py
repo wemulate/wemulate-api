@@ -1,6 +1,7 @@
 from pepper import Pepper
 import time
 from threading import Thread
+from exception import WemulateException
 
 # Default Interface Parameters
 DEFAULT_PARAMETERS = {
@@ -19,8 +20,8 @@ class SaltApi(object):
     def __init__(self, url, user, sharedsecret):
         self.api = Pepper(url)
         self.__login_success = False
-        self.loginTask = Thread(target=self.__login, args=(user, sharedsecret, ), daemon=True)
-        self.loginTask.start()
+        self.login_task = Thread(target=self.__login, args=(user, sharedsecret, ), daemon=True)
+        self.login_task.start()
 
     def __login(self, user, sharedsecret):
         print('SaltApi: Login started')
@@ -35,24 +36,24 @@ class SaltApi(object):
                     print(f'SaltApi: Login retry {retries}/{MAX_RETRIES}')
                     time.sleep(SECONDS_BETWEEN_RETRIES)
                 else:
-                    raise Exception(500, f'SaltApi: Error during login to salt: {str(e.args)}')
+                    raise WemulateException(500, f'SaltApi: Error during login to salt - Arguments: {str(e.args)}')
         print('SaltApi: Login completed')
 
     def __check_ready(self):
-        if self.loginTask.is_alive():
-            raise Exception(500, f'SaltApi: Not ready yet')
+        if self.login_task.is_alive():
+            raise WemulateException(500, f'SaltApi: Not ready yet')
         else:
             if self.__login_success:
                 # SaltApi is ready
                 return
             else:
-                raise Exception(500, f'SaltApi: Login to Salt Master failed')
+                raise WemulateException(500, f'SaltApi: Login to Salt Master failed')
 
     def ready(self):
         return self.__login_success
 
     def await_login(self):
-        self.loginTask.join()
+        self.login_task.join()
 
     def get_interfaces(self, device_name):
         self.__check_ready()

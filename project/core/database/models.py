@@ -1,6 +1,15 @@
 import json
 from core.database import db
 
+DEFAULT_PARAMETERS = {
+    'bandwidth': 1000,
+    'delay': 0,
+    'jitter': 0,
+    'packet_loss': 0,
+    'corruption': 0,
+    'duplication': 0
+}
+
 class ProfileModel(db.Model):
     __tablename__ = 'profile'
     profile_id = db.Column(
@@ -139,9 +148,15 @@ class InterfaceModel(db.Model):
             })
 
     def serialize(self):
+        if self.has_logical_interface_id is not None:
+            return {
+                'interface_id': self.interface_id,
+                'logical_name': self.has_logical_interface.logical_name,
+                'physical_name': self.physical_name
+            }
         return {
             'interface_id': self.interface_id,
-            'logical_name': self.has_logical_interface.logical_name,
+            'logical_name': "None",
             'physical_name': self.physical_name
         }
 
@@ -205,12 +220,12 @@ class ConnectionModel(db.Model):
         })
 
     def serialize(self):
-        delay = 0
-        packet_loss = 0
-        bandwidth = 1000
-        jitter = 0
-        corruption = 0
-        duplication = 0
+        delay = DEFAULT_PARAMETERS['delay']
+        packet_loss = DEFAULT_PARAMETERS['packet_loss']
+        bandwidth = DEFAULT_PARAMETERS['bandwidth']
+        jitter = DEFAULT_PARAMETERS['jitter']
+        corruption = DEFAULT_PARAMETERS['corruption']
+        duplication = DEFAULT_PARAMETERS['duplication']
 
         for parameter in self.parameters:
             if parameter.parameter_name == 'delay':

@@ -1,18 +1,48 @@
 import sys
-sys.path.insert(0, '../../project/')
+import os
+import pytest
+import json
 
-from core import db, create_app
-from core.models import ProfileModel, DeviceModel, InterfaceModel, LogicalInterfaceModel
-from core.models import ConnectionModel, ParameterModel, OnOffTimerModel
+
+path = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, f'{path}/../../project')
+
+from core import create_app
+from core.database import db
+from core.database.models import ProfileModel, DeviceModel, InterfaceModel, LogicalInterfaceModel
+from core.database.models import ConnectionModel, ParameterModel, OnOffTimerModel
+import core.database.utils as dbutils
+
+
+DEFAULT_PARAMETERS = {
+    'bandwidth': 1000,
+    'delay': 0,
+    'jitter': 0,
+    'packet_loss': 0,
+    'corruption': 0,
+    'duplication': 0
+}
+
 
 ''' ##### Prerequisites ##### '''
 
-''' ADD env var: export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' '''
+''' ADD env var: export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' WEMULATE_TESTING='True' '''
 
 ''' RUN TEST with ` pytest -v test_db_models.py --disable-pytest-warnings` '''
 
+
 ''' ##### Create DB and necessary parts ##### '''
-app, api, host_ns = create_app()
+
+app, api = create_app()
+
+
+@pytest.fixture(autouse=True)
+def recreate_database():
+    db.drop_all()
+    db.create_all()
+    if not len(dbutils.get_logical_interface_list()):
+        dbutils.create_logical_interfaces()
+        db.session.commit()
 
 ''' ##### Helper Functions ##### '''
 def commit_to_database(object_to_add):
@@ -57,11 +87,11 @@ def find_interface_in_database(interface_id):
 def compare_interface(interface1, interface2, device):
     if interface1.has_logical_interface_id is not None and interface2.has_logical_interface_id is not None:
         return (interface1.belongs_to_device_id == interface2.belongs_to_device_id == device.device_id
-        and interface1.physical_name == interface1.physical_name
+        and interface1.physical_name == interface2.physical_name
         and interface1.has_logical_interface_id == interface2.has_logical_interface_id)
     else:
         return (interface1.belongs_to_device_id == interface2.belongs_to_device_id == device.device_id
-               and interface1.physical_name == interface1.physical_name)
+               and interface1.physical_name == interface2.physical_name)
 
 def create_logical_interface(logical_name):
     logical_interface_to_add = LogicalInterfaceModel(logical_name)
@@ -88,7 +118,7 @@ def compare_connection(connection1, connection2, profile):
            and connection1.connection_name == connection2.connection_name
            and connection1.bidirectional == connection2.bidirectional
            and connection1.first_logical_interface_id == connection2.first_logical_interface_id
-           and connection1.second_logical_interface_id == connection1.second_logical_interface_id
+           and connection1.second_logical_interface_id == connection2.second_logical_interface_id
            and connection1.belongs_to_profile_id == connection2.belongs_to_profile_id)
 
 def create_parameter(parameter_name, value, connection_id, on_off_timer_id=None):
@@ -108,11 +138,44 @@ def compare_parameter(parameter1, parameter2, connection):
            and parameter1.belongs_to_connection_id == parameter2.belongs_to_connection_id
            and parameter1.belongs_to_connection_id == connection.connection_id and parameter1.active == parameter2.active)
 
+def get_parameters_of_connection(connection):
+    delay = DEFAULT_PARAMETERS['delay']
+    packet_loss = DEFAULT_PARAMETERS['packet_loss']
+    bandwidth = DEFAULT_PARAMETERS['bandwidth']
+    jitter = DEFAULT_PARAMETERS['jitter']
+    corruption = DEFAULT_PARAMETERS['corruption']
+    duplication = DEFAULT_PARAMETERS['duplication']
+
+    for parameter in connection.parameters:
+        if parameter.parameter_name == 'delay':
+            delay = parameter.value
+
+        if parameter.parameter_name == 'packet_loss':
+            packet_loss = parameter.value
+
+        if parameter.parameter_name == 'bandwidth':
+            bandwidth = parameter.value
+
+        if parameter.parameter_name == 'jitter':
+            jitter = parameter.value
+
+        if parameter.parameter_name == 'corruption':
+            corruption = parameter.value
+
+        if parameter.parameter_name == 'duplication':
+            duplication = parameter.value
+    return delay, packet_loss, bandwidth, jitter, corruption, duplication
+
 ''' ##### Test Functions ##### '''
 def test_create_profile():
     test_profile = create_profile("test_profile")
     profile_from_db = find_profile_in_database(test_profile.profile_id)
     assert compare_profile(test_profile, profile_from_db)
+    assert (repr(profile_from_db) == json.dumps({
+            'profile_id': test_profile.profile_id,
+            'profile_name': test_profile.profile_name
+            }))
+
 
 def test_update_profile():
     test_profile = create_profile("initial_value")
@@ -129,8 +192,20 @@ def test_create_device_without_interfaces():
     test_device = create_device("wemulate", test_profile.profile_id)
     device_from_db = find_device_in_database(test_device.device_id)
     assert compare_device(test_device, device_from_db, test_profile)
-    # Test if management ip == local loopback address
+    # Test if management ip == local loopback address because no mgmt ip was set
     assert device_from_db.management_ip == '127.0.0.1'
+    assert (repr(device_from_db) == json.dumps({
+            'device_id': test_device.device_id,
+            'device_name': test_device.device_name,
+            'management_ip': test_device.management_ip,
+            'active_profile_id': test_device.active_profile_id
+            }))
+    assert(device_from_db.serialize() == {
+           'device_id': test_device.device_id,
+           'device_name': test_device.device_name,
+           'management_ip': test_device.management_ip,
+           'active_profile_name': test_device.active_profile.profile_name
+           })
 
 def test_create_interface_without_logical_interface():
     test_profile = create_profile("default-wemulate")
@@ -138,11 +213,29 @@ def test_create_interface_without_logical_interface():
     test_interface = create_interface("ens123", test_device.device_id)
     interface_from_db = find_interface_in_database(test_interface.interface_id)
     assert compare_interface(test_interface, interface_from_db, test_device)
+    assert (repr(interface_from_db) == json.dumps({
+            'interface_id': test_interface.interface_id,
+            'physical_name': test_interface.physical_name,
+            'has_logical_interface_id': None,
+            'belongs_to_device_id': test_interface.belongs_to_device_id,
+            'status': test_interface.interface_status
+            }))
+    assert(interface_from_db.serialize() == {
+           'interface_id': test_interface.interface_id,
+           'logical_name': "None",
+           'physical_name': test_interface.physical_name
+           })
+
 
 def test_create_logical_interface():
     test_logical_interface = create_logical_interface("LAN A")
     logical_interface_from_db = find_logical_interface_in_database(test_logical_interface.logical_interface_id)
     assert compare_logical_interface(test_logical_interface, logical_interface_from_db)
+    assert (repr(logical_interface_from_db) == json.dumps({
+            'logical_interface_id': test_logical_interface.logical_interface_id,
+            'logical_name': test_logical_interface.logical_name
+            }))
+
 
 def test_create_interface_with_logical_interface():
     test_profile = create_profile("profile1")
@@ -151,34 +244,79 @@ def test_create_interface_with_logical_interface():
     test_interface = create_interface("ens1234567", test_device.device_id, test_logical_interface.logical_interface_id)
     interface_from_db = find_interface_in_database(test_interface.interface_id)
     assert compare_interface(test_interface, interface_from_db, test_device)
+    assert (repr(interface_from_db) == json.dumps({
+            'interface_id': test_interface.interface_id,
+            'physical_name': test_interface.physical_name,
+            'has_logical_interface_id': test_interface.has_logical_interface_id,
+            'belongs_to_device_id': test_interface.belongs_to_device_id,
+            'status': test_interface.interface_status
+            }))
+    assert(interface_from_db.serialize() == {
+           'interface_id': test_interface.interface_id,
+           'logical_name': test_interface.has_logical_interface.logical_name,
+           'physical_name': test_interface.physical_name
+           })
+
 
 def test_create_connection_without_parameter():
     test_profile = create_profile("profile2")
-    test_device = create_device("wemulate-host2", test_profile.profile_id)
     test_logical_interface1 = create_logical_interface("LAN A")
     test_logical_interface2 = create_logical_interface("LAN B")
-    test_interface1 = create_interface("ens1234", test_device.device_id, test_logical_interface1.logical_interface_id)
-    test_interface2 = create_interface("ens5678", test_device.device_id, test_logical_interface2.logical_interface_id)
     connection_name = test_logical_interface1.logical_name + " to " + test_logical_interface2.logical_name
     test_connection = create_connection(connection_name, test_logical_interface1.logical_interface_id,
                                         test_logical_interface2.logical_interface_id, test_profile.profile_id)
     connection_from_db = find_connection_in_database(test_connection.connection_id)
     assert compare_connection(test_connection, connection_from_db, test_profile)
+    assert (repr(connection_from_db) == json.dumps({
+            'connection_id': test_connection.connection_id,
+            'connection_name': test_connection.connection_name,
+            'bidirectional': test_connection.bidirectional,
+            'first_logical_interface_id': test_connection.first_logical_interface_id,
+            'first_logical_interface_name': test_connection.first_logical_interface.logical_name,
+            'second_logical_interface_id': test_connection.second_logical_interface_id,
+            'second_logical_interface_name': test_connection.second_logical_interface.logical_name,
+            'belongs_to_profile_id': test_connection.belongs_to_profile_id
+            }))
+    assert(connection_from_db.serialize() == {
+           'connection_name': test_connection.connection_name,
+           'interface1': test_connection.first_logical_interface.  logical_name,
+           'interface2': test_connection.second_logical_interface. logical_name,
+           'corruption': DEFAULT_PARAMETERS['corruption'],
+           'delay': DEFAULT_PARAMETERS['delay'],
+           'duplication': DEFAULT_PARAMETERS['duplication'],
+           'packet_loss': DEFAULT_PARAMETERS['packet_loss'],
+           'bandwidth': DEFAULT_PARAMETERS['bandwidth'],
+           'jitter': DEFAULT_PARAMETERS['jitter'],
+           })
 
 def test_create_parameter():
     test_profile = create_profile("profile3")
-    test_device = create_device("wemulate-host3", test_profile.profile_id)
     test_logical_interface1 = create_logical_interface("LAN C ")
     test_logical_interface2 = create_logical_interface("LAN D")
-    test_interface1 = create_interface("ens1111", test_device.device_id, test_logical_interface1.logical_interface_id)
-    test_interface2 = create_interface("ens2222", test_device.device_id, test_logical_interface2.logical_interface_id)
+
     connection_name = test_logical_interface1.logical_name + " to " + test_logical_interface2.logical_name
     test_connection = create_connection(connection_name, test_logical_interface1.logical_interface_id,
                                         test_logical_interface2.logical_interface_id, test_profile.profile_id)
     test_parameter = create_parameter("delay", 100, test_connection.connection_id)
     parameter_from_db = find_parameter_in_database(test_parameter.parameter_id)
     assert compare_parameter(test_parameter, parameter_from_db, test_connection)
-
-
-
-# Todo Implement OnOffTimer 
+    assert (repr(parameter_from_db) == json.dumps({
+            'parameter_id': test_parameter.parameter_id,
+            'parameter_name': test_parameter.parameter_name,
+            'value': test_parameter.value,
+            'connection_id': test_parameter.belongs_to_connection_id,
+            'active': test_parameter.active,
+            'on_off_timer_id': test_parameter.has_on_off_timer_id
+            }))
+    delay, packet_loss, bandwidth, jitter, corruption, duplication = get_parameters_of_connection(test_connection)
+    assert(test_connection.serialize() == {
+           'connection_name': test_connection.connection_name,
+           'interface1': test_connection.first_logical_interface.logical_name,
+           'interface2': test_connection.second_logical_interface.logical_name,
+           'corruption': corruption,
+           'delay': delay,
+           'duplication': duplication,
+           'packet_loss': packet_loss,
+           'bandwidth': bandwidth,
+           'jitter': jitter,
+           })
