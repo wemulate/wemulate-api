@@ -1,6 +1,8 @@
 import sys
 import os
 import pytest
+import json
+
 
 path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, f'{path}/../../project')
@@ -131,6 +133,11 @@ def test_create_profile():
     test_profile = create_profile("test_profile")
     profile_from_db = find_profile_in_database(test_profile.profile_id)
     assert compare_profile(test_profile, profile_from_db)
+    assert (repr(profile_from_db) == json.dumps({
+            'profile_id': test_profile.profile_id,
+            'profile_name': test_profile.profile_name
+            }))
+
 
 def test_update_profile():
     test_profile = create_profile("initial_value")
@@ -149,6 +156,12 @@ def test_create_device_without_interfaces():
     assert compare_device(test_device, device_from_db, test_profile)
     # Test if management ip == local loopback address because no mgmt ip was set
     assert device_from_db.management_ip == '127.0.0.1'
+    assert (repr(device_from_db) == json.dumps({
+            'device_id': test_device.device_id,
+            'device_name': test_device.device_name,
+            'management_ip': test_device.management_ip,
+            'active_profile_id': test_device.active_profile_id
+            }))
 
 def test_create_interface_without_logical_interface():
     test_profile = create_profile("default-wemulate")
@@ -156,11 +169,22 @@ def test_create_interface_without_logical_interface():
     test_interface = create_interface("ens123", test_device.device_id)
     interface_from_db = find_interface_in_database(test_interface.interface_id)
     assert compare_interface(test_interface, interface_from_db, test_device)
+    assert (repr(interface_from_db) == json.dumps({
+            'interface_id': test_interface.interface_id,
+            'physical_name': test_interface.physical_name,
+            'has_logical_interface_id': None,
+            'belongs_to_device_id': test_interface.belongs_to_device_id,
+            'status': test_interface.interface_status
+            }))
 
 def test_create_logical_interface():
     test_logical_interface = create_logical_interface("LAN A")
     logical_interface_from_db = find_logical_interface_in_database(test_logical_interface.logical_interface_id)
     assert compare_logical_interface(test_logical_interface, logical_interface_from_db)
+    assert (repr(logical_interface_from_db) == json.dumps({
+            'logical_interface_id': test_logical_interface.logical_interface_id,
+            'logical_name': test_logical_interface.logical_name
+            }))
 
 def test_create_interface_with_logical_interface():
     test_profile = create_profile("profile1")
@@ -169,6 +193,14 @@ def test_create_interface_with_logical_interface():
     test_interface = create_interface("ens1234567", test_device.device_id, test_logical_interface.logical_interface_id)
     interface_from_db = find_interface_in_database(test_interface.interface_id)
     assert compare_interface(test_interface, interface_from_db, test_device)
+    assert (repr(interface_from_db) == json.dumps({
+            'interface_id': test_interface.interface_id,
+            'physical_name': test_interface.physical_name,
+            'has_logical_interface_id': test_interface.has_logical_interface_id,
+            'belongs_to_device_id': test_interface.belongs_to_device_id,
+            'status': test_interface.interface_status
+            }))
+
 
 def test_create_connection_without_parameter():
     test_profile = create_profile("profile2")
@@ -179,6 +211,16 @@ def test_create_connection_without_parameter():
                                         test_logical_interface2.logical_interface_id, test_profile.profile_id)
     connection_from_db = find_connection_in_database(test_connection.connection_id)
     assert compare_connection(test_connection, connection_from_db, test_profile)
+    assert (repr(connection_from_db) == json.dumps({
+            'connection_id': test_connection.connection_id,
+            'connection_name': test_connection.connection_name,
+            'bidirectional': test_connection.bidirectional,
+            'first_logical_interface_id': test_connection.first_logical_interface_id,
+            'first_logical_interface_name': test_connection.first_logical_interface.logical_name,
+            'second_logical_interface_id': test_connection.second_logical_interface_id,
+            'second_logical_interface_name': test_connection.second_logical_interface.logical_name,
+            'belongs_to_profile_id': test_connection.belongs_to_profile_id
+            }))
 
 def test_create_parameter():
     test_profile = create_profile("profile3")
@@ -191,3 +233,11 @@ def test_create_parameter():
     test_parameter = create_parameter("delay", 100, test_connection.connection_id)
     parameter_from_db = find_parameter_in_database(test_parameter.parameter_id)
     assert compare_parameter(test_parameter, parameter_from_db, test_connection)
+    assert (repr(parameter_from_db) == json.dumps({
+            'parameter_id': test_parameter.parameter_id,
+            'parameter_name': test_parameter.parameter_name,
+            'value': test_parameter.value,
+            'connection_id': test_parameter.belongs_to_connection_id,
+            'active': test_parameter.active,
+            'on_off_timer_id': test_parameter.has_on_off_timer_id
+            }))
