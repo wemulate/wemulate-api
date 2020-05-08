@@ -14,6 +14,16 @@ from core.database.models import ConnectionModel, ParameterModel, OnOffTimerMode
 import core.database.utils as dbutils
 
 
+DEFAULT_PARAMETERS = {
+    'bandwidth': 1000,
+    'delay': 0,
+    'jitter': 0,
+    'packet_loss': 0,
+    'corruption': 0,
+    'duplication': 0
+}
+
+
 ''' ##### Prerequisites ##### '''
 
 ''' ADD env var: export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' WEMULATE_TESTING='True' '''
@@ -128,6 +138,34 @@ def compare_parameter(parameter1, parameter2, connection):
            and parameter1.belongs_to_connection_id == parameter2.belongs_to_connection_id
            and parameter1.belongs_to_connection_id == connection.connection_id and parameter1.active == parameter2.active)
 
+def get_parameters_of_connection(connection):
+    delay = DEFAULT_PARAMETERS['delay']
+    packet_loss = DEFAULT_PARAMETERS['packet_loss']
+    bandwidth = DEFAULT_PARAMETERS['bandwidth']
+    jitter = DEFAULT_PARAMETERS['jitter']
+    corruption = DEFAULT_PARAMETERS['corruption']
+    duplication = DEFAULT_PARAMETERS['duplication']
+
+    for parameter in connection.parameters:
+        if parameter.parameter_name == 'delay':
+            delay = parameter.value
+
+        if parameter.parameter_name == 'packet_loss':
+            packet_loss = parameter.value
+
+        if parameter.parameter_name == 'bandwidth':
+            bandwidth = parameter.value
+
+        if parameter.parameter_name == 'jitter':
+            jitter = parameter.value
+
+        if parameter.parameter_name == 'corruption':
+            corruption = parameter.value
+
+        if parameter.parameter_name == 'duplication':
+            duplication = parameter.value
+    return delay, packet_loss, bandwidth, jitter, corruption, duplication
+
 ''' ##### Test Functions ##### '''
 def test_create_profile():
     test_profile = create_profile("test_profile")
@@ -162,6 +200,12 @@ def test_create_device_without_interfaces():
             'management_ip': test_device.management_ip,
             'active_profile_id': test_device.active_profile_id
             }))
+    assert(device_from_db.serialize() == {
+           'device_id': test_device.device_id,
+           'device_name': test_device.device_name,
+           'management_ip': test_device.management_ip,
+           'active_profile_name': test_device.active_profile.profile_name
+           })
 
 def test_create_interface_without_logical_interface():
     test_profile = create_profile("default-wemulate")
@@ -176,6 +220,12 @@ def test_create_interface_without_logical_interface():
             'belongs_to_device_id': test_interface.belongs_to_device_id,
             'status': test_interface.interface_status
             }))
+    assert(interface_from_db.serialize() == {
+           'interface_id': test_interface.interface_id,
+           'logical_name': "None",
+           'physical_name': test_interface.physical_name
+           })
+
 
 def test_create_logical_interface():
     test_logical_interface = create_logical_interface("LAN A")
@@ -185,6 +235,7 @@ def test_create_logical_interface():
             'logical_interface_id': test_logical_interface.logical_interface_id,
             'logical_name': test_logical_interface.logical_name
             }))
+
 
 def test_create_interface_with_logical_interface():
     test_profile = create_profile("profile1")
@@ -200,6 +251,11 @@ def test_create_interface_with_logical_interface():
             'belongs_to_device_id': test_interface.belongs_to_device_id,
             'status': test_interface.interface_status
             }))
+    assert(interface_from_db.serialize() == {
+           'interface_id': test_interface.interface_id,
+           'logical_name': test_interface.has_logical_interface.logical_name,
+           'physical_name': test_interface.physical_name
+           })
 
 
 def test_create_connection_without_parameter():
@@ -221,6 +277,17 @@ def test_create_connection_without_parameter():
             'second_logical_interface_name': test_connection.second_logical_interface.logical_name,
             'belongs_to_profile_id': test_connection.belongs_to_profile_id
             }))
+    assert(connection_from_db.serialize() == {
+           'connection_name': test_connection.connection_name,
+           'interface1': test_connection.first_logical_interface.  logical_name,
+           'interface2': test_connection.second_logical_interface. logical_name,
+           'corruption': DEFAULT_PARAMETERS['corruption'],
+           'delay': DEFAULT_PARAMETERS['delay'],
+           'duplication': DEFAULT_PARAMETERS['duplication'],
+           'packet_loss': DEFAULT_PARAMETERS['packet_loss'],
+           'bandwidth': DEFAULT_PARAMETERS['bandwidth'],
+           'jitter': DEFAULT_PARAMETERS['jitter'],
+           })
 
 def test_create_parameter():
     test_profile = create_profile("profile3")
@@ -241,3 +308,15 @@ def test_create_parameter():
             'active': test_parameter.active,
             'on_off_timer_id': test_parameter.has_on_off_timer_id
             }))
+    delay, packet_loss, bandwidth, jitter, corruption, duplication = get_parameters_of_connection(test_connection)
+    assert(test_connection.serialize() == {
+           'connection_name': test_connection.connection_name,
+           'interface1': test_connection.first_logical_interface.logical_name,
+           'interface2': test_connection.second_logical_interface.logical_name,
+           'corruption': corruption,
+           'delay': delay,
+           'duplication': duplication,
+           'packet_loss': packet_loss,
+           'bandwidth': bandwidth,
+           'jitter': jitter,
+           })
