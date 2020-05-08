@@ -1,6 +1,7 @@
 import json
 from core.database import db
 
+
 DEFAULT_PARAMETERS = {
     'bandwidth': 1000,
     'delay': 0,
