@@ -18,13 +18,13 @@ import logging
 import yaml
 
 
-RUN_CMD = __salt__['cmd.run']
 __virtualname__ = 'wemulate'
 log = logging.getLogger(__name__)
 
 def __virtual__():
     return __virtualname__
 
+RUN_CMD = __salt__['cmd.run']
 
 # ----------------------------------------------------------------------------------------------------------------------
 # callable functions
