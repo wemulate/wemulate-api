@@ -24,8 +24,6 @@ log = logging.getLogger(__name__)
 def __virtual__():
     return __virtualname__
 
-RUN_CMD = __salt__['cmd.run']
-
 # ----------------------------------------------------------------------------------------------------------------------
 # callable functions
 # ----------------------------------------------------------------------------------------------------------------------
@@ -58,7 +56,7 @@ def add_connection(connection_name, interface1_name, interface2_name):
     with open(f"/etc/network/interfaces.d/{connection_name}", "w") as file:
         file.write(connection_template)
 
-    RUN_CMD("sudo systemctl restart networking.service")
+    __salt__['cmd.run']("sudo systemctl restart networking.service")
     return connection_template
 
 
@@ -67,7 +65,7 @@ def remove_connection(connection_name):
     x = ip.link_lookup(ifname=connection_name)[0]
     ip.link("set", index=x, state="down")
 
-    RUN_CMD(f"sudo brctl delbr {connection_name}")
+    __salt__['cmd.run'](f"sudo brctl delbr {connection_name}")
 
     connection_file = f"/etc/network/interfaces.d/{connection_name}"
     if os.path.exists(connection_file):
@@ -89,7 +87,7 @@ def set_parameters(interface_name, parameters):
     netem_command = add_corruption(netem_command, parameters)
 
     if any(parameter in parameters for parameter in ("delay", "jitter", "packet_loss", "duplication", "corruption")):
-        RUN_CMD(netem_command)
+        __salt__['cmd.run'](netem_command)
         log.info(netem_command)
 
     if "bandwidth" in parameters:
@@ -124,7 +122,7 @@ def add_packet_loss(command, parameters):
 def add_bandwidth(interface_name, parameters):
     bandwidth_in_kbit = parameters["bandwidth"] * 1000
     command = f'sudo /home/wemulate/wondershaper/wondershaper -a {interface_name} -u {bandwidth_in_kbit} -d {bandwidth_in_kbit}'
-    RUN_CMD(command)
+    __salt__['cmd.run'](command)
     return f'bandwidth {parameters["bandwidth"]} on {interface_name} set'
 
 def add_duplication(command, parameters):
@@ -139,9 +137,9 @@ def add_corruption(command, parameters):
 
 def remove_parameters(interface_name):
     command = f'sudo tc qdisc del dev {interface_name} root'
-    RUN_CMD(command)
+    __salt__['cmd.run'](command)
     command = f'sudo /home/wemulate/wondershaper/wondershaper -c -a {interface_name}'
-    RUN_CMD(command)
+    __salt__['cmd.run'](command)
     return f"Successfully removed parameters"
 
 
