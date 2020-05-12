@@ -29,6 +29,7 @@ class Device(Resource):
 
     @device_ns.doc('fetch_devices')
     @device_ns.doc(model=models.device_list_model)
+    @device_ns.response(500, '{"message": "Error when getting device list: <error>"}')
     def get(self):
         '''Fetch a List of Devices with related Information'''
         try:
@@ -40,7 +41,8 @@ class Device(Resource):
     @device_ns.doc('create_device')
     @device_ns.expect(models.device_post_model, validate=True)
     @device_ns.marshal_with(models.device_model, code=201)
-    @device_ns.response(400, '{"message": Device <device_name> is already in use!"}')
+    @device_ns.response(400, '{"message": "Device <device_name> is already in use!"}')
+    @device_ns.response(500, '{"message": "Error when creating device: <error>"}')
     def post(self):
         '''Create a new Device'''
         device_name = device_parser.parse_arguments()
@@ -56,7 +58,8 @@ class Device(Resource):
 class DeviceInformation(Resource):
     @device_ns.doc('fetch_device_information')
     @device_ns.doc(model=models.device_information_model)
-    @device_ns.response(404, '{"message": Device or allocated Profile not found!"}')
+    @device_ns.response(404, '{"message": "Device or allocated Profile not found!"}')
+    @device_ns.response(500, '{"message": "Error when getting device: <error>"}')
     def get(self, device_id):
         '''Fetch a Device Information and Configuration'''
         try:
@@ -68,8 +71,9 @@ class DeviceInformation(Resource):
     @device_ns.doc('update_connection_config')
     @device_ns.expect(models.connection_list_model, validate=True)
     @device_ns.doc(model=models.connection_list_model)
-    @device_ns.response(404, '{"message": Device or allocated Profile not found!"}')
-    @device_ns.response(400, '{"message": Bad Physical Interface Mapping in {<connection>}!"}')
+    @device_ns.response(404, '{"message": "Device or allocated Profile not found!"}')
+    @device_ns.response(500, '{"message": "Bad Physical Interface Mapping in <connection>!"}')
+    @device_ns.response(500, '{"message": "Error when updating connection: <error>"}')
     def put(self, device_id):
         '''Update Device Connection Configuration'''
         connections = connection_parser.parse_arguments()
@@ -81,7 +85,8 @@ class DeviceInformation(Resource):
 
 
 @device_ns.route('/<int:device_id>/interfaces/')
-@device_ns.response(404, '{"message": Device or allocated Profile not found!"}')
+@device_ns.response(404, '{"message": "Device or allocated profile not found!"}')
+@device_ns.response(500, '{"message": "Error when getting interface list: <error>"}')
 @device_ns.param('device_id', 'The device identifier')
 class InterfaceList(Resource):
     @device_ns.doc('fetch_interfaces')
@@ -97,7 +102,8 @@ class InterfaceList(Resource):
 
 
 @device_ns.route('/<int:device_id>/connections/')
-@device_ns.response(404, '{"message": "Device not found"}')
+@device_ns.response(404, '{"message": "Device or allocated profile not found"}')
+@device_ns.response(500, '{"message": "Error when getting connection list: <error>"}')
 @device_ns.param('device_id', 'The device identifier')
 class ConnectionList(Resource):
     @device_ns.doc('fetch_connections')
