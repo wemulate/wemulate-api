@@ -5,7 +5,7 @@ WEmulate - WAN Emulator
 Functions which can be used to emulate network traffic.
 Module can be used to add different parameters to an interface.
 Parameters are packet loss, delay, jitter and bandwith (more will follow)-to unit tests.
-:codeauthor: WEmulate Team <severin.dellsperger@hsr.ch> <dominic.gabriel@hsr.ch> <uben.william.broennimann@hsr.ch>> <julian.klaiber@hsr.ch>
+:codeauthor: WEmulate Team <severin.dellsperger@hsr.ch> <dominic.gabriel@hsr.ch> <ruben.william.broennimann@hsr.ch>> <julian.klaiber@hsr.ch>
 :maturity:   new
 :depends:    tc
 :platform:   unix
@@ -19,10 +19,19 @@ import yaml
 
 
 __virtualname__ = 'wemulate'
+
 log = logging.getLogger(__name__)
 
 def __virtual__():
     return __virtualname__
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# helper functions
+# ----------------------------------------------------------------------------------------------------------------------
+
+def _execute_in_shell(command):
+    __salt__['cmd.run'](command)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # callable functions
@@ -52,11 +61,11 @@ def add_connection(connection_name, interface1_name, interface2_name):
 
     if not os.path.exists('/etc/network/interfaces.d'):
         os.makedirs('/etc/network/interfaces.d')
-    
+
     with open(f"/etc/network/interfaces.d/{connection_name}", "w") as file:
         file.write(connection_template)
 
-    __salt__['cmd.run']("sudo systemctl restart networking.service")
+    _execute_in_shell("sudo systemctl restart networking.service")
     return connection_template
 
 
@@ -65,7 +74,7 @@ def remove_connection(connection_name):
     x = ip.link_lookup(ifname=connection_name)[0]
     ip.link("set", index=x, state="down")
 
-    __salt__['cmd.run'](f"sudo brctl delbr {connection_name}")
+    _execute_in_shell(f"sudo brctl delbr {connection_name}")
 
     connection_file = f"/etc/network/interfaces.d/{connection_name}"
     if os.path.exists(connection_file):
@@ -87,7 +96,7 @@ def set_parameters(interface_name, parameters):
     netem_command = add_corruption(netem_command, parameters)
 
     if any(parameter in parameters for parameter in ("delay", "jitter", "packet_loss", "duplication", "corruption")):
-        __salt__['cmd.run'](netem_command)
+        _execute_in_shell(netem_command)
         log.info(netem_command)
 
     if "bandwidth" in parameters:
@@ -122,7 +131,7 @@ def add_packet_loss(command, parameters):
 def add_bandwidth(interface_name, parameters):
     bandwidth_in_kbit = parameters["bandwidth"] * 1000
     command = f'sudo /home/wemulate/wondershaper/wondershaper -a {interface_name} -u {bandwidth_in_kbit} -d {bandwidth_in_kbit}'
-    __salt__['cmd.run'](command)
+    _execute_in_shell(command)
     return f'bandwidth {parameters["bandwidth"]} on {interface_name} set'
 
 def add_duplication(command, parameters):
@@ -137,9 +146,9 @@ def add_corruption(command, parameters):
 
 def remove_parameters(interface_name):
     command = f'sudo tc qdisc del dev {interface_name} root'
-    __salt__['cmd.run'](command)
+    _execute_in_shell(command)
     command = f'sudo /home/wemulate/wondershaper/wondershaper -c -a {interface_name}'
-    __salt__['cmd.run'](command)
+    _execute_in_shell(command)
     return f"Successfully removed parameters"
 
 
