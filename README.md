@@ -22,7 +22,7 @@ Repository for the WEmulate Backend written in Python.
 For development purposes the backend can be used with mocked dependencies. To use a mocked environment with a temporaty SQLite database the steps in the follwing subchapters have to be executed.
 
 #### Install Dependencies
-To start the backend in the development modus a few requirements are necessary. Following are the necessary steps to install the required software parts:
+To start the backend in the development modus with the mocked ressources a few requirements are necessary. Following are the necessary steps to install the required software parts:
 
 1. Install Python (Python 3.7 Recommended): `sudo apt install python3.7` 
 2. Install pip: `sudo apt-get install python3-pip`
@@ -42,6 +42,8 @@ The project is now ready to [start](#start-project)
 It is also possible to start the backend with all dependencies and surrounding systems.
 
 #### Install Dependencies
+To start the backend in the development modus with a started salt-api and also a postgres database following requirements are necessary:
+
 1. Install Python  (Python 3.7 Recommended): `sudo apt install python3.7`
 2. Install pip: `sudo apt-get install python3-pip`
 3. Install virtualenv: using pip3 `sudo pip3 install virtualenv`
