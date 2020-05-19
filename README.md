@@ -36,6 +36,7 @@ The backend uses environment variables to read out information which are needed 
 ```
 export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' WEMULATE_TESTING='True'
 ```
+The project is now ready to [start](#start-project)
 
 ### Without Mockup
 It is also possible to start the backend with all dependencies and surrounding systems.
