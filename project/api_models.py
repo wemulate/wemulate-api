@@ -33,6 +33,8 @@ interface_list_model = Model('interface_list_model', {
 
 connection_model = Model('connection_model', {
     'connection_name': fields.String,
+    'corruption': fields.Integer,
+    'duplication': fields.Integer,
     'interface1': fields.String,
     'interface2': fields.String,
     'delay': fields.Integer,
