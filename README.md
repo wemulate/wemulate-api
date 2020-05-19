@@ -54,11 +54,8 @@ To start the backend in the development modus with a started salt-api and also a
 8. Change the Address, where the Minion search its Master, to localhost (127.0.0.1)
    * `sudo vim /etc/salt/minion`
    * Change config line from `master: salt` to `master: 127.0.0.1`
-9. Change master config to acceppt all public keys
-   * `sudo vim /etc/salt/master`
-   * Change the line `# auto_accept: False` to `auto_accept: True`
-10. Copy the local files to mountpoint: `sudo cp -r salt/ /mnt/srv` 
-11. Start Salt and Postgres container: ` docker-compose -f local-development/docker-compose.yml up -d`
+9. Copy the local files to mountpoint: `sudo cp -r salt/ /mnt/srv` 
+10. Start Salt and Postgres container: ` docker-compose -f local-development/docker-compose.yml up -d`
 
 #### Set Environment Variables
 The backend uses environment variables to read out information which are needed to connect to the database and also the Salt API.
@@ -66,6 +63,7 @@ Following environment variables has to be set  that the backend can find the cor
 ```
 export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' WEMULATE_TESTING='False'
 ```
+The project is now ready to [start](#start-project)
 
 ### Start Project
 With and also without mocking the web server interface gateway `gunicorn` has to be started to start the application. Following commands can be used.
