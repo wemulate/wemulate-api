@@ -68,7 +68,7 @@ The project is now ready to [start](#start-project)
 ### Start Project
 With and also without mocking the web server interface gateway `gunicorn` has to be started to start the application. Following commands can be used.
 ```
-cd gunicorn --bind 0.0.0.0:5000 project/wsgi:app
+gunicorn --bind 0.0.0.0:5000 project/wsgi:app
 ```
 
 ### Start Frontend (Optional)
