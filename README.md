@@ -2,42 +2,82 @@
 
 Repository for the WEmulate Backend written in Python.
 
-## Prototype
-1. Install **pip** first `sudo apt-get install python3-pip`
-2. Install **virtualenv** using pip3 `sudo pip3 install virtualenv`
-3. Create a virtual environment `virtualenv venv`
-4. Activate virtualenv `source venv/bin/activate`
-5. Install Postgres and Python extensions: `sudo apt-get install libpq-dev python-dev`
-6. Install all requirements `pip install -r requirements.txt`
-7. Start Postgres (DB) container: `docker run --name wemulate-db -e POSTGRES_PASSWORD=wemulateEPJ2020 -d -p 5432:5432 postgres`
-7. Start WSGI `cd project` 
-   `gunicorn --bind 0.0.0.0:5000 wsgi:app`
+## Content
+* [Development Setup](#development-setup)
+   * [With Mockup](#with-mockup)
+      * [Install Dependencies](#install-dependencies)
+      * [Set Environment Variables](#set-environment-variables)
+   * [Without Mockup](#with-mockup) 
+      * [Install Dependencies](#install-dependencies-1)
+      * [Set Environment Variables](#set-environment-variables-1)
+   * [Start Project](#start-project)
+   * [Start Frontend (Optional)](#start-frontend-(optional))
+* [Production Setup](#production-setup)
 
-### Salt
-1. `sudo apt install -y salt-master salt-minion salt-api`
-2. Change Minion Name: `sudo vim /etc/salt/minion_id`
-3. Change the Address, where the Minion search its Master, to localhost (127.0.0.1)
+
+## Development Setup
+
+### With Mockup
+
+For development purposes the backend can be used with mocked dependencies. To use a mocked environment with a temporaty SQLite database the steps in the follwing subchapters have to be executed.
+
+#### Install Dependencies
+To start the backend in the development modus with the mocked ressources a few requirements are necessary. Following are the necessary steps to install the required software parts:
+
+1. Install Python (Python 3.7 Recommended): `sudo apt install python3.7` 
+2. Install pip: `sudo apt-get install python3-pip`
+3. Install virtualenv: using pip3 `sudo pip3 install virtualenv`
+4. Activate virtualenv: `source venv/bin/activate`
+5. Install all requirements: `pip install -r requirements.txt`
+
+
+#### Set Environment Variables
+The backend uses environment variables to read out information which are needed to connect to the database and also the Salt API. The environment variable `WEMULATE_TESTING` has to be set to `True` to tell the backend it should use mocked dependencies. The following command can be used for this purpose:
+```
+export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' WEMULATE_TESTING='True'
+```
+The project is now ready to [start](#start-project)
+
+### Without Mockup
+It is also possible to start the backend with all dependencies and surrounding systems.
+
+#### Install Dependencies
+To start the backend in the development modus with a started salt-api and also a postgres database following requirements are necessary:
+
+1. Install Python  (Python 3.7 Recommended): `sudo apt install python3.7`
+2. Install pip: `sudo apt-get install python3-pip`
+3. Install virtualenv: using pip3 `sudo pip3 install virtualenv`
+4. Activate virtualenv: `source venv/bin/activate`
+5. Install all requirements: `pip install -r requirements.txt`
+6. Install Salt-Minion locally: `sudo apt install -y salt-minion`
+7. Change Minion Name: `sudo vim /etc/salt/minion_id`
+8. Change the Address, where the Minion search its Master, to localhost (127.0.0.1)
    * `sudo vim /etc/salt/minion`
    * Change config line from `master: salt` to `master: 127.0.0.1`
-4. Change master config to acceppt all public keys
-   * `sudo vim /etc/salt/master`
-   * Change the line `# auto_accept: False` to `auto_accept: True`
-5. Start the Salt-Master with `sudo salt-master` or start it as daemon: `sudo salt-master -d`
-6. Start the Salt-Minion with `sudo salt-minion` or start it as daemon: `sudo salt-minion -d`
-7. Start the Salt-API  `sudo salt-api` or start it as daemon: `sudo salt-api -d`
-   * **Hint**: [Run Salt as unpriviledged user](https://docs.saltstack.com/en/master/ref/configuration/nonroot.html#configuration-non-root-user)
-6. Check if the Public Key has been accepted: `salt-key -L`
-7. Add API config to master (in `/etc/salt/master.d/api.conf`):
-```yaml
-rest_cherrypy:
-  port: 8000
-  disable_ssl: True
-external_auth:
-    sharedsecret:
-        salt: ['.*', '@wheel', '@jobs', '@runner']
-sharedsecret: "EPJ@2020!!"
+9. Copy the local files to mountpoint: `sudo cp -r salt/ /mnt/srv` 
+10. Start Salt and Postgres container: ` docker-compose -f local-development/docker-compose.yml up -d`
+
+#### Set Environment Variables
+The backend uses environment variables to read out information which are needed to connect to the database and also the Salt API.
+Following environment variables has to be set  that the backend can find the corresponding container resources:
 ```
-8. Copy the module (found in the git repo under salt/modules) to the minion:
-   * Copy the module folder in the FILE_ROOTS (default /srv/salt/_modules)
-   * Sync the files from the master to the minions --> `sudo salt-run saltutil.sync_all`
-   * (Eventually first run `sudo salt '*' saltutil.clear_cache`)
+export POSTGRES_USER=wemulate POSTGRES_PASSWORD=wemulateEPJ2020 POSTGRES_DB=wemulate POSTGRES_HOST=localhost POSTGRES_PORT=5432 SALT_API=http://localhost:8000 SALT_PASSWORD='EPJ@2020!!' WEMULATE_TESTING='False'
+```
+The project is now ready to [start](#start-project)
+
+### Start Project
+With and also without mocking the web server interface gateway `gunicorn` has to be started to start the application. Following commands can be used.
+```
+gunicorn --bind 0.0.0.0:5000 project/wsgi:app
+```
+
+### Start Frontend (Optional)
+For testing reasons it's often desired to also start the front end component. More information you can find [here](https://gitlab.dev.ifs.hsr.ch/epj/2020/wemulate/wemulate-frontend/)
+
+_Hint: use the `quasar dev` approach_
+
+
+ ## Production Setup
+ The GitLab pipeline creates a working production container each time you commit to the repository.
+In order to deploy the whole WEmulate project. Please have a look at the [Deployment Repository](https://gitlab.dev.ifs.hsr.ch/epj/2020/wemulate/wemulate-deployment).
+

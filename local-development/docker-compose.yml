@@ -1,0 +1,29 @@
+version: '2.4'
+
+services:
+  wemulate_db:
+    container_name: wemulate_db
+    image: postgres:9.6.17-alpine
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_USER: wemulate
+      POSTGRES_PASSWORD: wemulateEPJ2020
+      POSTGRES_DB: wemulate
+    volumes:
+      - /mnt/postgres:/var/lib/postgresql/data
+  
+  wemulate_salt:
+    container_name: wemulate_salt
+    image: saltstack/salt
+    ports:
+      - 4505:4505
+      - 4506:4506
+      - 8000:8000
+    restart: always
+    volumes:
+      - /mnt/srv/salt:/srv/salt
+    environment:
+      SALT_MASTER_CONFIG: '{"log_level": "debug", "reactor": [{"salt/auth": ["/srv/salt/reactors/accept_key.sls"]}]}'      
+      SALT_API_CONFIG: '{"rest_cherrypy": {"port": 8000, "disable_ssl": true}, "external_auth": {"sharedsecret": {"salt": [".*", "@wheel", "@jobs", "@runner"]}}, "sharedsecret": "EPJ@2020!!"}'
