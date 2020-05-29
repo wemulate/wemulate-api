@@ -13,7 +13,7 @@ Parameters are packet loss, delay, jitter and bandwith (more will follow)-to uni
 
 import os
 import netifaces
-from pyroute2 import IPRoute as ip
+from pyroute2 import IPRoute
 import logging
 import yaml
 
@@ -44,7 +44,7 @@ def _interface_matches_criteria(interface_name):
 # callable functions
 # ----------------------------------------------------------------------------------------------------------------------
 BRIDGE_CONFIG_PATH = '/etc/network/interfaces.d'
-
+ip = IPRoute()
 
 def get_interfaces():
     interfaces_list = []
