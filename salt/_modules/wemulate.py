@@ -13,7 +13,7 @@ Parameters are packet loss, delay, jitter and bandwith (more will follow)-to uni
 
 import os
 import netifaces
-from pyroute2 import IPRoute
+from pyroute2 import IPRoute as ip
 import logging
 import yaml
 
@@ -33,54 +33,70 @@ def __virtual__():
 def _execute_in_shell(command):
     __salt__['cmd.run'](command)
 
-# ----------------------------------------------------------------------------------------------------------------------
-# callable functions
-# ----------------------------------------------------------------------------------------------------------------------
-
-def get_interfaces():
-    interfaces_list = []
-    for name in netifaces.interfaces():
-        if interface_matches_criteria(name):
-            interfaces_list.append(name)
-    return interfaces_list
-
-def interface_matches_criteria(interface_name):
+def _interface_matches_criteria(interface_name):
     with open('/etc/wemulate/config.yaml') as file:
         config = yaml.full_load(file)
     if interface_name.startswith(("eth", "en")) and interface_name not in config['management_interfaces']:
         return True
     return False
 
+# ----------------------------------------------------------------------------------------------------------------------
+# callable functions
+# ----------------------------------------------------------------------------------------------------------------------
+BRIDGE_CONFIG_PATH = '/etc/network/interfaces.d'
+
+
+def get_interfaces():
+    interfaces_list = []
+    for name in netifaces.interfaces():
+        if _interface_matches_criteria(name):
+            interfaces_list.append(name)
+    return interfaces_list
+
+
+def get_management_ip():
+    with open('/etc/wemulate/config.yaml') as file:
+        config = yaml.full_load(file)
+    if config['management_interfaces']:
+        interface_name = config['management_interfaces'][0]
+    else:
+        return '0.0.0.0'
+
+    index_list = ip.link_lookup(ifname=interface_name)
+    if index_list:
+        interface = ip.get_addr(index=index_list[0])
+        interface_ip = interface[0]['attrs'][0][1]
+    else:
+        interface_ip = '10.0.0.10'
+    return interface_ip
+
+
 def add_connection(connection_name, interface1_name, interface2_name):
-    include_str = 'source /etc/network/interfaces.d/*'
-    with open('/etc/network/interfaces', 'r+') as f:
-        if not any(include_str == x.rstrip('\r\n') for x in f):
-            f.write(include_str + '\n')
+    INTERFACE_CONFIG_PATH = '/etc/network/interfaces'
+
+    with open(INTERFACE_CONFIG_PATH, 'r+') as interfaces_config_file:
+        if BRIDGE_CONFIG_PATH not in interfaces_config_file.read():
+            interfaces_config_file.write(f'source {BRIDGE_CONFIG_PATH}/*\n')
 
     connection_template = f"# Bridge Setup {connection_name}\nauto {connection_name}\niface {connection_name} inet manual\n    bridge_ports {interface1_name} {interface2_name}\n    bridge_stp off\n"
 
-    if not os.path.exists('/etc/network/interfaces.d'):
-        os.makedirs('/etc/network/interfaces.d')
+    if not os.path.exists('BRIDGE_CONFIG_PATH'):
+        os.makedirs('BRIDGE_CONFIG_PATH')
 
-    with open(f"/etc/network/interfaces.d/{connection_name}", "w") as file:
-        file.write(connection_template)
+    with open(f"{BRIDGE_CONFIG_PATH}/{connection_name}", "w") as connection_file:
+        connection_file.write(connection_template)
 
     _execute_in_shell("sudo systemctl restart networking.service")
     return connection_template
 
 
 def remove_connection(connection_name):
-    ip = IPRoute()
-    x = ip.link_lookup(ifname=connection_name)[0]
-    ip.link("set", index=x, state="down")
-
+    ip.link("set", index=ip.link_lookup(ifname=connection_name)[0], state="down")
     _execute_in_shell(f"sudo brctl delbr {connection_name}")
 
-    connection_file = f"/etc/network/interfaces.d/{connection_name}"
+    connection_file = f"{BRIDGE_CONFIG_PATH}/{connection_name}"
     if os.path.exists(connection_file):
         os.remove(connection_file)
-    else:
-        print("file does not exist")
 
     return f"Successfully removed connection {connection_name}"
 
@@ -150,21 +166,3 @@ def remove_parameters(interface_name):
     command = f'sudo /home/wemulate/wondershaper/wondershaper -c -a {interface_name}'
     _execute_in_shell(command)
     return f"Successfully removed parameters"
-
-
-def get_management_ip():
-    with open('/etc/wemulate/config.yaml') as file:
-        config = yaml.full_load(file)
-    if config['management_interfaces']:
-        interface_name = config['management_interfaces'][0]
-    else:
-        return '0.0.0.0'
-
-    ip = IPRoute()
-    index_list = ip.link_lookup(ifname=interface_name)
-    if index_list:
-        interface = ip.get_addr(index=index_list[0])
-        interface_ip = interface[0]['attrs'][0][1]
-    else:
-        interface_ip = '10.0.0.10'
-    return interface_ip
