@@ -79,5 +79,5 @@ _Hint: use the `quasar dev` approach_
 
  ## Production Setup
  The GitLab pipeline creates a working production container each time you commit to the repository.
-In order to deploy the whole WEmulate project. Please have a look at the [Deployment Repository](https://gitlab.dev.ifs.hsr.ch/epj/2020/wemulate/wemulate-deployment).
+In order to deploy the whole WEmulate project. Please have a look at the [Deployment Repository](https://github.com/wemulate/wemulate-deployment).
 
