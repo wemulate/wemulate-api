@@ -102,67 +102,47 @@ def remove_connection(connection_name):
 
 
 def set_parameters(interface_name, parameters):
-    base_command = f'sudo tc qdisc add dev {interface_name} '
-    netem_command = base_command + 'root handle 1: netem'
+    command = f'tcset {interface_name}'
+    mean_delay = 0
+    if parameters:
+        if 'delay' in parameters:
+            mean_delay = parameters['delay']
+            if 'jitter' not in parameters:
+                command += add_delay_command(mean_delay)
+        if 'jitter' in parameters:
+            command += add_jitter_command(mean_delay, parameters['jitter'])
+        if 'packet_loss' in parameters:
+            command += add_packet_loss_command(parameters['packet_loss'])
+        if 'bandwidth' in parameters:
+            command += add_bandwidth_command(parameters['bandwidth'])
+        if 'duplication' in parameters:
+            command += add_duplication_command(parameters['duplication'])
+        if 'corruption' in parameters:
+            command += add_corruption_command(parameters['corruption'])
 
-    netem_command = add_delay(netem_command, parameters)
-    netem_command = add_jitter(netem_command, parameters)
-    netem_command = add_packet_loss(netem_command, parameters)
-    netem_command = add_duplication(netem_command, parameters)
-    netem_command = add_corruption(netem_command, parameters)
+        log.info(command)
+        return _execute_in_shell(command)
 
-    if any(parameter in parameters for parameter in ("delay", "jitter", "packet_loss", "duplication", "corruption")):
-        _execute_in_shell(netem_command)
-        log.info(netem_command)
+def add_delay_command(delay_value):
+    return f'--delay {delay_value}ms'
 
-    if "bandwidth" in parameters:
-        bw_result = add_bandwidth(interface_name, parameters)
-        log.info(bw_result)
-
-    return "Successfully added parameters"
-
-
-def add_delay(command, parameters):
-    if "delay" in parameters:
-        return command + ' ' + f'delay {parameters["delay"]}ms'
-    return command
-
-
-def add_jitter(command, parameters):
-    if "jitter" in parameters:
-        jitter = parameters["jitter"] / 2
-        if "delay" in parameters:
-            return command + ' ' + f'{jitter}ms distribution normal'
-        else:
-            return command + ' ' + f'delay 0.1ms {jitter}ms distribution normal'
-    return command
+def add_jitter_command(mean_delay, jitter_value):
+    return f'--delay {mean_delay}ms --delay-distro {jitter_value}'
 
 
-def add_packet_loss(command, parameters):
-    if "packet_loss" in parameters:
-        return command + ' ' + f'loss {parameters["packet_loss"]}%'
-    return command
+def add_packet_loss_command(packet_loss_value):
+    return f'--loss {packet_loss_value}%'
 
 
-def add_bandwidth(interface_name, parameters):
-    bandwidth_in_kbit = parameters["bandwidth"] * 1000
-    command = f'sudo /home/wemulate/wondershaper/wondershaper -a {interface_name} -u {bandwidth_in_kbit} -d {bandwidth_in_kbit}'
-    _execute_in_shell(command)
-    return f'bandwidth {parameters["bandwidth"]} on {interface_name} set'
+def add_bandwidth_command(bandwidth_value):
+    return f'--rate {bandwidth_value}Mbps'
 
-def add_duplication(command, parameters):
-    if "duplication" in parameters:
-        return command + ' ' + f'duplicate {parameters["duplication"]}%'
-    return command
+def add_duplication_command(duplication_value):
+    return f'--duplicate {duplication_value}%'
 
-def add_corruption(command, parameters):
-    if "corruption" in parameters:
-        return command + ' ' + f'corrupt {parameters["corruption"]}%'
-    return command
+def add_corruption_command(corruption_value):
+    return f'--corrupt {corruption_value}%'
 
 def remove_parameters(interface_name):
-    command = f'sudo tc qdisc del dev {interface_name} root'
-    _execute_in_shell(command)
-    command = f'sudo /home/wemulate/wondershaper/wondershaper -c -a {interface_name}'
-    _execute_in_shell(command)
-    return f"Successfully removed parameters"
+    command = f'tcdel {interface_name} --all'
+    return _execute_in_shell(command)
