@@ -114,7 +114,7 @@ def remove_connection(connection_name):
 
 def set_parameters(interface_name, parameters):
     outgoing_config_command = f'tcset {interface_name} --overwrite '
-    incoming_config_command = f'tcset {interface_name} -- '
+    incoming_config_command = f'tcset {interface_name} --add '
     command_list = []
     mean_delay = 0.001  # smallest possible delay
     if parameters:
