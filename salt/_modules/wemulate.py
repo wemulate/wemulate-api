@@ -43,7 +43,7 @@ def _execute_commands(command_list):
             _execute_in_shell(command)
         except Exception as e:
             raise e
-    return True
+    return "Successfully executed commands"
 
 def _interface_matches_criteria(interface_name):
     with open('/etc/wemulate/config.yaml') as file:
@@ -113,33 +113,34 @@ def remove_connection(connection_name):
 
 
 def set_parameters(interface_name, parameters):
-    command = f'tcset {interface_name} --add '
+    outgoing_config_command = f'tcset {interface_name} --overwrite '
+    incoming_config_command = f'tcset {interface_name} --overwrite '
     command_list = []
     mean_delay = 0.001  # smallest possible delay
     if parameters:
         if 'delay' in parameters:
             mean_delay = parameters['delay']
             if 'jitter' not in parameters:
-                command_list.append(command + add_delay_command(mean_delay))
+                outgoing_config_command += outgoing_config_command + add_delay_command(mean_delay)
         if 'jitter' in parameters:
             jitter = parameters['jitter']
             if mean_delay < jitter:
                 correction = jitter - mean_delay  # needed to compansate normal distribution
-                command_list.append(command + add_jitter_command(mean_delay, jitter + correction))
+                outgoing_config_command += outgoing_config_command + add_jitter_command(mean_delay, jitter + correction)
             else:
-                command_list.append(command + add_jitter_command(mean_delay, parameters['jitter']))
+                outgoing_config_command += outgoing_config_command + add_jitter_command(mean_delay, parameters['jitter'])
         if 'packet_loss' in parameters:
-            command_list.append(command + add_packet_loss_command(parameters['packet_loss']))
+            outgoing_config_command += outgoing_config_command + add_packet_loss_command(parameters['packet_loss'])
         if 'duplication' in parameters:
-            command_list.append(command + add_duplication_command(parameters['duplication']))
+            outgoing_config_command += outgoing_config_command + add_duplication_command(parameters['duplication'])
         if 'corruption' in parameters:
-            command_list.append(command + add_corruption_command(parameters['corruption']))
+            outgoing_config_command += outgoing_config_command + add_corruption_command(parameters['corruption'])
         if 'bandwidth' in parameters:
-            command_list.append(command + add_bandwidth_incoming_command(parameters['bandwidth']))
-            command_list.append(command + add_bandwidth_outgoing_command(parameters['bandwidth']))
-
+            outgoing_config_command += outgoing_config_command + add_bandwidth_outgoing_command(parameters['bandwidth'])
+            incoming_config_command += outgoing_config_command + add_bandwidth_incoming_command(parameters['bandwidth'])
+            command_list.append(incoming_config_command)
+        command_list.append(outgoing_config_command)
         return _execute_commands(command_list)
-
     return "No parameters were given!"
 
 def add_delay_command(delay_value):
