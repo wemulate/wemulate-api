@@ -102,8 +102,8 @@ def remove_connection(connection_name):
 
 
 def set_parameters(interface_name, parameters):
-    command = f'tcset {interface_name} '
-    mean_delay = 0
+    command = f'tcset {interface_name} --override '
+    mean_delay = 0.001  # smallest possible delay
     if parameters:
         if 'delay' in parameters:
             mean_delay = parameters['delay']
@@ -127,7 +127,7 @@ def add_delay_command(delay_value):
     return f'--delay {delay_value}ms'
 
 def add_jitter_command(mean_delay, jitter_value):
-    return f'--delay {mean_delay}ms --delay-distro {jitter_value}'
+    return f'--delay {mean_delay}ms --delay-distro {jitter_value}ms'
 
 
 def add_packet_loss_command(packet_loss_value):
