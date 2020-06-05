@@ -110,7 +110,12 @@ def set_parameters(interface_name, parameters):
             if 'jitter' not in parameters:
                 command += add_delay_command(mean_delay)
         if 'jitter' in parameters:
-            command += add_jitter_command(mean_delay, parameters['jitter'])
+            jitter = parameters['jitter']
+            if mean_delay < jitter:
+                time_compensation = jitter - mean_delay  # needed to compansate normal distribution
+                command += add_jitter_command(mean_delay, mean_delay + time_compensation)
+            else:
+                command += add_jitter_command(mean_delay, parameters['jitter'])
         if 'packet_loss' in parameters:
             command += add_packet_loss_command(parameters['packet_loss'])
         if 'bandwidth' in parameters:
