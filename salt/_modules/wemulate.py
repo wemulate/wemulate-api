@@ -102,7 +102,7 @@ def remove_connection(connection_name):
 
 
 def set_parameters(interface_name, parameters):
-    command = f'tcset {interface_name} --override '
+    command = f'tcset {interface_name} --overwrite '
     mean_delay = 0.001  # smallest possible delay
     if parameters:
         if 'delay' in parameters:
