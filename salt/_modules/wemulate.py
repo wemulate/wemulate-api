@@ -102,7 +102,7 @@ def remove_connection(connection_name):
 
 
 def set_parameters(interface_name, parameters):
-    command = f'tcset {interface_name}'
+    command = f'tcset {interface_name} '
     mean_delay = 0
     if parameters:
         if 'delay' in parameters:
