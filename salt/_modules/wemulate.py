@@ -30,13 +30,20 @@ def __virtual__():
 # helper functions
 # ----------------------------------------------------------------------------------------------------------------------
 
-def _execute_in_shell(command_list):
+def _execute_in_shell(command):
+    try:
+        log.info(f'Execute: {command}')
+        return __salt__['cmd.run'](command)
+    except Exception as e:
+        raise e
+
+def _execute_commands(command_list):
     for command in command_list:
         try:
-            log.info(command)
-            __salt__['cmd.run'](command)
+            _execute_in_shell(command)
         except Exception as e:
             raise e
+    return True
 
 def _interface_matches_criteria(interface_name):
     with open('/etc/wemulate/config.yaml') as file:
@@ -82,6 +89,7 @@ def add_connection(connection_name, interface1_name, interface2_name):
     with open(INTERFACE_CONFIG_PATH, 'r+') as interfaces_config_file:
         if BRIDGE_CONFIG_PATH not in interfaces_config_file.read():
             interfaces_config_file.write(f'source {BRIDGE_CONFIG_PATH}/*\n')
+
     connection_template = f"# Bridge Setup {connection_name}\nauto {connection_name}\niface {connection_name} inet manual\n    bridge_ports {interface1_name} {interface2_name}\n    bridge_stp off\n"
 
     if not os.path.exists('BRIDGE_CONFIG_PATH'):
@@ -90,8 +98,7 @@ def add_connection(connection_name, interface1_name, interface2_name):
     with open(f"{BRIDGE_CONFIG_PATH}/{connection_name}", "w") as connection_file:
         connection_file.write(connection_template)
 
-    _execute_in_shell("sudo systemctl restart networking.service")
-    return connection_template
+    return _execute_in_shell("sudo systemctl restart networking.service")
 
 
 def remove_connection(connection_name):
@@ -131,7 +138,8 @@ def set_parameters(interface_name, parameters):
             command.append(command + add_bandwidth_incoming_command(parameters['bandwidth']))
             command.append(command + add_bandwidth_outgoing_command(parameters['bandwidth']))
 
-        return _execute_in_shell(command_list)
+        return _execute_commands(command_list)
+
     return "No parameters were given!"
 
 def add_delay_command(delay_value):
