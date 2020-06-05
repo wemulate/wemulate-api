@@ -121,23 +121,23 @@ def set_parameters(interface_name, parameters):
         if 'delay' in parameters:
             mean_delay = parameters['delay']
             if 'jitter' not in parameters:
-                outgoing_config_command += outgoing_config_command + add_delay_command(mean_delay)
+                outgoing_config_command += add_delay_command(mean_delay)
         if 'jitter' in parameters:
             jitter = parameters['jitter']
             if mean_delay < jitter:
                 correction = jitter - mean_delay  # needed to compansate normal distribution
-                outgoing_config_command += outgoing_config_command + add_jitter_command(mean_delay, jitter + correction)
+                outgoing_config_command += add_jitter_command(mean_delay, jitter + correction)
             else:
-                outgoing_config_command += outgoing_config_command + add_jitter_command(mean_delay, parameters['jitter'])
+                outgoing_config_command += add_jitter_command(mean_delay, parameters['jitter'])
         if 'packet_loss' in parameters:
-            outgoing_config_command += outgoing_config_command + add_packet_loss_command(parameters['packet_loss'])
+            outgoing_config_command += add_packet_loss_command(parameters['packet_loss'])
         if 'duplication' in parameters:
-            outgoing_config_command += outgoing_config_command + add_duplication_command(parameters['duplication'])
+            outgoing_config_command += add_duplication_command(parameters['duplication'])
         if 'corruption' in parameters:
-            outgoing_config_command += outgoing_config_command + add_corruption_command(parameters['corruption'])
+            outgoing_config_command += add_corruption_command(parameters['corruption'])
         if 'bandwidth' in parameters:
-            outgoing_config_command += outgoing_config_command + add_bandwidth_outgoing_command(parameters['bandwidth'])
-            incoming_config_command += outgoing_config_command + add_bandwidth_incoming_command(parameters['bandwidth'])
+            outgoing_config_command += add_bandwidth_outgoing_command(parameters['bandwidth'])
+            incoming_config_command += add_bandwidth_incoming_command(parameters['bandwidth'])
             command_list.append(incoming_config_command)
         command_list.append(outgoing_config_command)
         return _execute_commands(command_list)
