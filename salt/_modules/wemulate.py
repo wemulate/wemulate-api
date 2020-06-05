@@ -113,12 +113,11 @@ def remove_connection(connection_name):
 
 
 def set_parameters(interface_name, parameters):
-    outgoing_config_command = f'tcset {interface_name} --overwrite '
+    outgoing_config_command = f'tcset {interface_name} '
     incoming_config_command = f'tcset {interface_name} --add '
     command_list = []
     mean_delay = 0.001  # smallest possible delay
     if parameters:
-        command_list.append(outgoing_config_command)
         if 'delay' in parameters:
             mean_delay = parameters['delay']
             if 'jitter' not in parameters:
@@ -140,6 +139,7 @@ def set_parameters(interface_name, parameters):
             outgoing_config_command += add_bandwidth_outgoing_command(parameters['bandwidth'])
             incoming_config_command += add_bandwidth_incoming_command(parameters['bandwidth'])
             command_list.append(incoming_config_command)
+        command_list.append(outgoing_config_command)
         return _execute_commands(command_list)
     return "No parameters were given!"
 
