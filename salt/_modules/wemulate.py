@@ -144,26 +144,26 @@ def set_parameters(interface_name, parameters):
     return "No parameters were given!"
 
 def add_delay_command(delay_value):
-    return f'--delay {delay_value}ms'
+    return f' --delay {delay_value}ms'
 
 def add_jitter_command(mean_delay, jitter_value):
-    return f'--delay {mean_delay}ms --delay-distro {jitter_value}ms'
+    return f' --delay {mean_delay}ms --delay-distro {jitter_value}ms'
 
 
 def add_packet_loss_command(packet_loss_value):
-    return f'--loss {packet_loss_value}%'
+    return f' --loss {packet_loss_value}%'
 
 def add_bandwidth_incoming_command(bandwidth_value):
-    return f'--direction incoming --rate {bandwidth_value}Mbps'
+    return f' --direction incoming --rate {bandwidth_value}Mbps'
 
 def add_bandwidth_outgoing_command(bandwidth_value):
-    return f'--direction outgoing --rate {bandwidth_value}Mbps'
+    return f' --direction outgoing --rate {bandwidth_value}Mbps'
 
 def add_duplication_command(duplication_value):
-    return f'--duplicate {duplication_value}%'
+    return f' --duplicate {duplication_value}%'
 
 def add_corruption_command(corruption_value):
-    return f'--corrupt {corruption_value}%'
+    return f' --corrupt {corruption_value}%'
 
 def remove_parameters(interface_name):
     command = f'tcdel {interface_name} --all'
