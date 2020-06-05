@@ -30,8 +30,13 @@ def __virtual__():
 # helper functions
 # ----------------------------------------------------------------------------------------------------------------------
 
-def _execute_in_shell(command):
-    __salt__['cmd.run'](command)
+def _execute_in_shell(command_list):
+    for command in command_list:
+        try:
+            log.info(command)
+            __salt__['cmd.run'](command)
+        except Exception as e:
+            raise e
 
 def _interface_matches_criteria(interface_name):
     with open('/etc/wemulate/config.yaml') as file:
@@ -77,7 +82,6 @@ def add_connection(connection_name, interface1_name, interface2_name):
     with open(INTERFACE_CONFIG_PATH, 'r+') as interfaces_config_file:
         if BRIDGE_CONFIG_PATH not in interfaces_config_file.read():
             interfaces_config_file.write(f'source {BRIDGE_CONFIG_PATH}/*\n')
-
     connection_template = f"# Bridge Setup {connection_name}\nauto {connection_name}\niface {connection_name} inet manual\n    bridge_ports {interface1_name} {interface2_name}\n    bridge_stp off\n"
 
     if not os.path.exists('BRIDGE_CONFIG_PATH'):
@@ -102,31 +106,33 @@ def remove_connection(connection_name):
 
 
 def set_parameters(interface_name, parameters):
-    command = f'tcset {interface_name} --overwrite '
+    command = f'tcset {interface_name} --add '
+    command_list = []
     mean_delay = 0.001  # smallest possible delay
     if parameters:
         if 'delay' in parameters:
             mean_delay = parameters['delay']
             if 'jitter' not in parameters:
-                command += add_delay_command(mean_delay)
+                command_list.append(command + add_delay_command(mean_delay))
         if 'jitter' in parameters:
             jitter = parameters['jitter']
             if mean_delay < jitter:
-                time_compensation = jitter - mean_delay  # needed to compansate normal distribution
-                command += add_jitter_command(mean_delay, mean_delay + time_compensation)
+                correction = jitter - mean_delay  # needed to compansate normal distribution
+                command_list.append(command + add_jitter_command(mean_delay, jitter + correction))
             else:
-                command += add_jitter_command(mean_delay, parameters['jitter'])
+                command.append(command + add_jitter_command(mean_delay, parameters['jitter']))
         if 'packet_loss' in parameters:
-            command += add_packet_loss_command(parameters['packet_loss'])
-        if 'bandwidth' in parameters:
-            command += add_bandwidth_command(parameters['bandwidth'])
+            command.append(command + add_packet_loss_command(parameters['packet_loss']))
         if 'duplication' in parameters:
-            command += add_duplication_command(parameters['duplication'])
+            command.append(command + add_duplication_command(parameters['duplication']))
         if 'corruption' in parameters:
-            command += add_corruption_command(parameters['corruption'])
+            command.append(command + add_corruption_command(parameters['corruption']))
+        if 'bandwidth' in parameters:
+            command.append(command + add_bandwidth_incoming_command(parameters['bandwidth']))
+            command.append(command + add_bandwidth_outgoing_command(parameters['bandwidth']))
 
-        log.info(command)
-        return _execute_in_shell(command)
+        return _execute_in_shell(command_list)
+    return "No parameters were given!"
 
 def add_delay_command(delay_value):
     return f'--delay {delay_value}ms'
@@ -138,9 +144,11 @@ def add_jitter_command(mean_delay, jitter_value):
 def add_packet_loss_command(packet_loss_value):
     return f'--loss {packet_loss_value}%'
 
+def add_bandwidth_incoming_command(bandwidth_value):
+    return f'--direction incoming --rate {bandwidth_value}Mbps'
 
-def add_bandwidth_command(bandwidth_value):
-    return f'--rate {bandwidth_value}Mbps'
+def add_bandwidth_outgoing_command(bandwidth_value):
+    return f'--direction outgoing --rate {bandwidth_value}Mbps'
 
 def add_duplication_command(duplication_value):
     return f'--duplicate {duplication_value}%'
