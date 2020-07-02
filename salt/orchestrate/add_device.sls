@@ -26,7 +26,7 @@ sync_all_modules:
 
 copy_distribution_data:
   salt.function:
-    - name: cp.get_file:
+    - name: cp.get_file
     - arg:
       - salt://files/uniform.dist
       - /usr/lib/tc
