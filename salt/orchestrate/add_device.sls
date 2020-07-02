@@ -24,6 +24,13 @@ sync_all_modules:
     - name: saltutil.sync_all
     - tgt: {{ data.id }}
 
+copy_distribution_data:
+  salt.function:
+    - name: cp.get_file:
+    - arg:
+      - salt://files/uniform.dist
+      - /usr/lib/tc
+
 add_device_to_database:
   salt.runner:
     - name: http.query
