@@ -30,7 +30,7 @@ copy_distribution_data:
     - tgt:  {{ data.id }}
     - arg:
       - salt://files/uniform.dist
-      - /usr/lib/tc
+      - /usr/lib/tc/
 
 add_device_to_database:
   salt.runner:

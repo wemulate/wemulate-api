@@ -98,7 +98,7 @@ def add_connection(connection_name, interface1_name, interface2_name):
     with open(f"{BRIDGE_CONFIG_PATH}/{connection_name}", "w") as connection_file:
         connection_file.write(connection_template)
 
-    _execute_in_shell('sudo iptables -I DOCKER-USER -i {connection_name} -o {connection_name} -j ACCEPT')
+    _execute_in_shell(f'sudo iptables -I DOCKER-USER -i {connection_name} -o {connection_name} -j ACCEPT')
 
     return _execute_in_shell("sudo systemctl restart networking.service")
 
@@ -111,14 +111,14 @@ def remove_connection(connection_name):
     if os.path.exists(connection_file):
         os.remove(connection_file)
 
-    _execute_in_shell('sudo iptables -D DOCKER-USER -i {connection_name} -o {connection_name} -j ACCEPT')
+    _execute_in_shell(f'sudo iptables -D DOCKER-USER -i {connection_name} -o {connection_name} -j ACCEPT')
 
     return f"Successfully removed connection {connection_name}"
 
 
 def set_parameters(interface_name, parameters):
-    outgoing_config_command = f'tcset {interface_name} '
-    incoming_config_command = f'tcset {interface_name} --add '
+    outgoing_config_command = f'sudo tcset {interface_name} '
+    incoming_config_command = f'sudo tcset {interface_name} --add '
     command_list = []
     mean_delay = 0.001  # smallest possible delay
     if parameters:
@@ -165,5 +165,5 @@ def add_corruption_command(corruption_value):
     return f' --corrupt {corruption_value}%'
 
 def remove_parameters(interface_name):
-    command = f'tcdel {interface_name} --all'
+    command = f'sudo tcdel {interface_name} --all'
     return _execute_in_shell(command)
