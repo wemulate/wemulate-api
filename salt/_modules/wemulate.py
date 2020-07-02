@@ -129,8 +129,6 @@ def set_parameters(interface_name, parameters):
         if 'jitter' in parameters:
             jitter = parameters['jitter']
             outgoing_config_command += add_jitter_command(mean_delay, 2 * jitter)
-            else:
-                outgoing_config_command += add_jitter_command(mean_delay, parameters['jitter'])
         if 'packet_loss' in parameters:
             outgoing_config_command += add_packet_loss_command(parameters['packet_loss'])
         if 'duplication' in parameters:
