@@ -63,7 +63,7 @@ class DeviceInformation(Resource):
     def get(self, device_id):
         '''Fetch a Device Information and Configuration'''
         try:
-            device = wemulate_service.get_device(device_id)
+            device = wemulate_service.get_all_device_info(device_id)
         except Exception as e:
             device_ns.abort(*(e.args))
         return jsonify(device)

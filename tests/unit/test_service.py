@@ -29,7 +29,7 @@ def setup_mocks(mocker):
     salt_api.get_interfaces.return_value = {'return': [{'test device name': ['eth1', 'eth2', 'eth3', 'eth4']}]}
     salt_api.get_management_ip.return_value = {'return': [{'test device name': '192.168.0.1'}]}
 
-    mocker.patch.object(utils, 'get_device')
+    mocker.patch.object(utils, 'get_all_device_info')
     mocker.patch.object(utils, 'is_device_present')
     mocker.patch.object(utils, 'get_device_list')
     mocker.patch.object(utils, 'get_active_profile')
@@ -76,7 +76,7 @@ def setup_mocks(mocker):
                           connections=[
                               connection
                           ])
-    utils.get_device.return_value = device
+    utils.get_all_device_info.return_value = device
     utils.is_device_present.return_value = False
     utils.get_device_list.return_value = [
         device
@@ -148,9 +148,9 @@ def test_get_device_list_empty(mocker):
     assert device_list == []
 
 def test_get_device_inexistent(mocker):
-    utils.get_device.side_effect=WemulateException(404, "Device with id 4 not found")
+    utils.get_all_device_info.side_effect=WemulateException(404, "Device with id 4 not found")
     try:
-        service.get_device(4)
+        service.get_all_device_info(4)
         assert False  # should not be reached
     except WemulateException as e:
         assert e.args[0] == 404
@@ -226,7 +226,7 @@ def test_add_connection(mocker):
                           interfaces=interfaces,
                           connections=[]
                           )
-    utils.get_device.return_value = device
+    utils.get_all_device_info.return_value = device
     utils.get_active_profile.return_value = profile
     utils.get_all_interfaces.return_value = interfaces
     utils.get_logical_interface.side_effect = logical_interfaces
@@ -305,7 +305,7 @@ def test_delete_connection(mocker):
                           connections=[
                               connection
                           ])
-    utils.get_device.return_value = device
+    utils.get_all_device_info.return_value = device
     utils.get_active_profile.return_value = profile
     utils.get_all_interfaces.return_value = interfaces
     utils.get_logical_interface.side_effect = logical_interfaces
@@ -360,7 +360,7 @@ def test_update_connection(mocker):
                           connections=[
                               connection
                           ])
-    utils.get_device.return_value = device
+    utils.get_all_device_info.return_value = device
     utils.get_active_profile.return_value = profile
     utils.get_all_interfaces.return_value = interfaces
     utils.get_logical_interface.side_effect = logical_interfaces

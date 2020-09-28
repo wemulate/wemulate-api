@@ -42,12 +42,20 @@ def get_device_list():
 def get_device(device_id):
     try:
         device = dbutils.get_device(device_id)
+        return device
+    except Exception as e:
+        raise WemulateException(500, "Error when getting device: " + str(e.args))
+
+
+def get_all_device_info(device_id):
+    try:
+        device = dbutils.get_device(device_id)
         active_device_profile = dbutils.get_active_profile(device)
         all_interfaces_of_device = dbutils.get_all_interfaces(device)
     except Exception as e:
         if e.args[0] == 404:
             raise e
-        raise WemulateException(500, "Error when getting device: " + str(e.args))
+        raise WemulateException(500, "Error when getting all device information: " + str(e.args))
 
     data = device.serialize()
     data['interfaces'] = [interface.serialize() for interface in all_interfaces_of_device]
