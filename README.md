@@ -1,5 +1,5 @@
 # WEmulate Backend
-
+![Docker Image CI](https://github.com/wemulate/wemulate-backend/workflows/Docker%20Image%20CI/badge.svg)  
 Repository for the WEmulate Backend written in Python.
 
 ## Content
