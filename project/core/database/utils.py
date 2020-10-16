@@ -123,7 +123,9 @@ def create_logical_interfaces():
 
 def delete_present_connection():
     try:
-        db.session.query(ConnectionModel).delete()
+        connection_list = ConnectionModel.query.all()
+        for connection in connection_list:
+            db.session.delete(connection)
         db.session.commit()
     except:
         print('Flushing Connection Table')
