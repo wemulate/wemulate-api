@@ -147,7 +147,7 @@ def add_delay_command(delay_value):
     return f' --delay {delay_value}ms'
 
 def add_jitter_command(mean_delay, jitter_value):
-    return f' --delay {mean_delay}ms --delay-distro {jitter_value}ms --delay-distro-method uniform'
+    return f' --delay {mean_delay}ms --delay-distro {jitter_value}ms'
 
 def add_packet_loss_command(packet_loss_value):
     return f' --loss {packet_loss_value}%'

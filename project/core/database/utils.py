@@ -50,6 +50,9 @@ def get_logical_interface_by_name(logical_interface_name):
 def get_logical_interface_list():
     return LogicalInterfaceModel.query.all()
 
+def get_connection_list():
+    return ConnectionModel.query.all()
+
 def create_profile(device_name):
     profile = ProfileModel("default_" + device_name)
     db.session.add(profile)
@@ -117,3 +120,11 @@ def create_logical_interfaces():
         logical_interface = LogicalInterfaceModel("LAN-" + character)
         db.session.add(logical_interface)
     db.session.flush()
+
+def delete_present_connection():
+    try:
+        db.session.query(ConnectionModel).delete()
+        db.session.commit()
+    except:
+        print('Flushing Connection Table')
+        

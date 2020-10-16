@@ -2,7 +2,7 @@
     "editor.codeActionsOnSave": {
         "source.fixAll": true
     },
-    "python.pythonPath": "venv/bin/python3.7",
+    "python.pythonPath": "venv/bin/python",
     "python.linting.flake8Args": [
         "--max-line-length=120",
         "--ignore=E402,F841,F401,E302,E305",
