@@ -11,4 +11,4 @@ pyrsistent==0.18.0
 pytz==2021.3
 six==1.16.0
 Werkzeug==2.0.2
-wemulate=1.0.1
+wemulate==1.0.2
