@@ -28,12 +28,12 @@ f.close()
 setup(
     name="wemulate-api",
     version="0.0.1",
-    description="API for a modern WAN Emulator (WEmulate)",
+    description="API for the modern WAN Emulator (WEmulate)",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     author="Julian Klaiber, Severin Dellsperger",
     author_email="julian.klaiber@ost.ch, severin.dellsperger@ost.ch",
-    url="https://github.com/wemulate/wemulate-backend",
+    url="https://github.com/wemulate/wemulate-api",
     license="GPL-3.0",
     packages=find_packages(exclude=["tests*"]),
     include_package_data=True,
@@ -42,5 +42,5 @@ setup(
         wemulate-api = api.api:main
     """,
     install_requires=requires,
-    dependency_lins=links,
+    dependency_links=links,
 )
