@@ -35,4 +35,4 @@ class Connection(Resource):
 
     def delete(self, connection_id):
         utils.delete_connection(connection_id)
-        return "Connection deleted successfully", 204
+        return "Connection deleted successfully", 200
