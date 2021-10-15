@@ -27,7 +27,7 @@ f.close()
 
 setup(
     name="wemulate-api",
-    version="0.0.1-1",
+    version="0.0.1-2",
     description="API for the modern WAN Emulator (WEmulate)",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
