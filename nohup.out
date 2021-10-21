@@ -1,0 +1,1482 @@
+ * Serving Flask app 'app' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+Traceback (most recent call last):
+  File "wemulate_api/app.py", line 11, in <module>
+    app.run(debug=True, port=80, host="0.0.0.0")
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 920, in run
+    run_simple(t.cast(str, host), port, self, **options)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/werkzeug/serving.py", line 984, in run_simple
+    s.bind(server_address)
+OSError: [Errno 98] Address already in use
+ * Serving Flask app 'app' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://10.18.10.10:80/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 481-017-983
+152.96.122.128 - - [14/Oct/2021 09:48:15] "GET /api/doc HTTP/1.1" 200 -
+152.96.122.128 - - [14/Oct/2021 09:48:15] "[36mGET /swaggerui/droid-sans.css HTTP/1.1[0m" 304 -
+152.96.122.128 - - [14/Oct/2021 09:48:15] "[36mGET /swaggerui/swagger-ui.css HTTP/1.1[0m" 304 -
+152.96.122.128 - - [14/Oct/2021 09:48:15] "[36mGET /swaggerui/swagger-ui-bundle.js HTTP/1.1[0m" 304 -
+152.96.122.128 - - [14/Oct/2021 09:48:15] "[36mGET /swaggerui/swagger-ui-standalone-preset.js HTTP/1.1[0m" 304 -
+152.96.122.128 - - [14/Oct/2021 09:48:16] "GET /swagger.json HTTP/1.1" 200 -
+152.96.122.128 - - [14/Oct/2021 09:48:16] "GET /swaggerui/favicon-32x32.png HTTP/1.1" 200 -
+ * Serving Flask app 'app' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://10.18.10.10:80/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 481-017-983
+152.96.122.128 - - [14/Oct/2021 09:48:37] "GET /api/doc HTTP/1.1" 200 -
+152.96.122.128 - - [14/Oct/2021 09:48:38] "[36mGET /swaggerui/droid-sans.css HTTP/1.1[0m" 304 -
+152.96.122.128 - - [14/Oct/2021 09:48:38] "[36mGET /swaggerui/swagger-ui.css HTTP/1.1[0m" 304 -
+152.96.122.128 - - [14/Oct/2021 09:48:38] "[36mGET /swaggerui/swagger-ui-bundle.js HTTP/1.1[0m" 304 -
+152.96.122.128 - - [14/Oct/2021 09:48:38] "[36mGET /swaggerui/swagger-ui-standalone-preset.js HTTP/1.1[0m" 304 -
+152.96.122.128 - - [14/Oct/2021 09:48:38] "GET /swagger.json HTTP/1.1" 200 -
+152.96.122.128 - - [14/Oct/2021 09:48:38] "GET /swaggerui/favicon-32x32.png HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:48:49] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:48:49] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:48:49] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:48:49] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:51:30] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:51:31] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:51:39] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:51:39] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:17] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:18] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:28] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:29] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:46] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:46] "[35m[1mPUT /api/v1/connections/1 HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 34, in put
+    return utils.update_connection(request.json)
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 130, in update_connection
+    _set_parameter(parameter["connection_name"], parameter_to_apply)
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 122, in _set_parameter
+    wemulate_utils.set_parameter(connection_name, parameter)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/set.py", line 19, in set_parameter
+    dbutils.delete_all_parameter_on_connection(connection.connection_id)
+AttributeError: 'NoneType' object has no attribute 'connection_id'
+152.96.122.109 - - [14/Oct/2021 09:52:50] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:50] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:51] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:51] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:55] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:52:55] "[35m[1mPUT /api/v1/connections/1 HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 34, in put
+    return utils.update_connection(request.json)
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 130, in update_connection
+    _set_parameter(parameter["connection_name"], parameter_to_apply)
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 122, in _set_parameter
+    wemulate_utils.set_parameter(connection_name, parameter)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/set.py", line 19, in set_parameter
+    dbutils.delete_all_parameter_on_connection(connection.connection_id)
+AttributeError: 'NoneType' object has no attribute 'connection_id'
+152.96.122.109 - - [14/Oct/2021 09:53:08] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 09:53:09] "[35m[1mPUT /api/v1/connections/1 HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 34, in put
+    return utils.update_connection(request.json)
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 130, in update_connection
+    _set_parameter(parameter["connection_name"], parameter_to_apply)
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 122, in _set_parameter
+    wemulate_utils.set_parameter(connection_name, parameter)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/set.py", line 19, in set_parameter
+    dbutils.delete_all_parameter_on_connection(connection.connection_id)
+AttributeError: 'NoneType' object has no attribute 'connection_id'
+152.96.122.109 - - [14/Oct/2021 11:16:24] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:16:24] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:16:24] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:16:24] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:18:18] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:18:18] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:18:18] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:18:18] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:20:08] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:20:08] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:20:09] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:20:09] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:20:13] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:20:13] "[35m[1mPUT /api/v1/connections/1 HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 34, in put
+    return utils.update_connection(request.json)
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 130, in update_connection
+    _set_parameter(parameter["connection_name"], parameter_to_apply)
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 122, in _set_parameter
+    wemulate_utils.set_parameter(connection_name, parameter)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/set.py", line 19, in set_parameter
+    dbutils.delete_all_parameter_on_connection(connection.connection_id)
+AttributeError: 'NoneType' object has no attribute 'connection_id'
+152.96.122.109 - - [14/Oct/2021 11:20:23] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:20:24] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:21:06] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:21:06] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:21:06] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:21:06] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:21:07] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:21:08] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:21:26] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:21:26] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:21:39] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:21:41] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:29:50] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:29:50] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:29:50] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:29:50] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:29:56] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:29:57] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:30:03] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:30:04] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:30:09] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:30:09] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:30:09] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:30:09] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:33:54] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:33:55] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:34:52] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:34:53] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:05] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:05] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'both "name" and "dev" cannot be used when creating devices.\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 11:35:09] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:09] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:09] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:09] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:14] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:14] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:22] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:22] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:29] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:29] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'both "name" and "dev" cannot be used when creating devices.\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 11:35:32] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:32] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:32] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:32] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:46] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:35:46] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:39:24] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:39:24] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:39:24] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:39:24] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:47:16] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:47:16] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:47:16] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:47:16] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:47:17] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:47:17] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:47:17] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:47:17] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:49:13] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:49:13] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:49:13] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:49:13] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:49:19] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:49:19] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:49:19] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:49:19] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:53:25] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:53:26] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:53:26] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:53:26] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:56:26] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:56:26] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:56:26] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:56:26] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:56:27] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:56:27] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:56:39] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:56:39] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:56:39] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:56:39] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:58:03] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:58:03] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:58:13] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:58:14] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:58:35] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 11:58:35] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:01:21] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:01:21] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:01:21] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:01:21] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:01:33] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:01:33] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:01:33] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:01:33] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:03:17] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:03:17] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:03:17] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:03:17] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:06:12] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:06:12] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:06:12] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:06:12] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:06:28] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:06:28] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:06:35] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:06:35] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:07:02] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:07:02] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:07:02] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:07:02] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:10:01] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:10:01] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:10:01] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:10:01] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:10:21] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:10:21] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:14:44] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:14:44] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'Not enough information: "type" argument is required\n' | exitcode: 1
+152.96.122.109 - - [14/Oct/2021 12:14:56] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:14:56] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:15:08] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:15:09] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:15:18] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:15:18] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'/bin/sh: 1: Syntax error: Unterminated quoted string\n' | exitcode: 2
+152.96.122.109 - - [14/Oct/2021 12:16:29] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:16:29] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:17:21] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:17:22] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:19:33] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:19:33] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:19:33] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:19:33] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:19:58] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:19:58] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:20:34] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:20:34] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:20:34] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:20:34] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:20:40] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:20:40] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'Error: argument "adasdsaddasdasdasdasdasdasdasdasdas" is wrong: "name" not a valid ifname\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 12:22:01] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:01] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'Error: argument "12312312345645645612" is wrong: "name" not a valid ifname\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 12:22:03] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:03] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:03] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:04] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:11] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:12] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:13] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:14] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:24] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:24] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'Error: argument "asdasasdasdfasdf" is wrong: "name" not a valid ifname\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 12:22:33] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:33] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:39] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:39] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:54] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:22:54] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'Error: argument "22asdfdfffdffdfs" is wrong: "name" not a valid ifname\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 12:23:00] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:23:00] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:23:11] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:23:11] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:23:24] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:23:24] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:23:35] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:23:35] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:23:50] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:23:50] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:27:03] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:27:03] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:27:03] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:27:03] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:27:09] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:27:10] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:27:43] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:27:43] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:27:43] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:27:43] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:28:33] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:28:33] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'Error: either "dev" is duplicate, or "abc" is a garbage.\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 12:29:32] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:29:32] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:29:32] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:29:32] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:29:32] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:29:33] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:32:47] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:32:47] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:32:47] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:32:47] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:05] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:05] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'both "name" and "dev" cannot be used when creating devices.\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 12:33:14] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:14] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:14] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:14] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:15] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:15] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:21] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:21] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'both "name" and "dev" cannot be used when creating devices.\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 12:33:25] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:25] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:25] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:25] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:32] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:33:32] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'both "name" and "dev" cannot be used when creating devices.\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 12:34:22] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:22] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'both "name" and "dev" cannot be used when creating devices.\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 12:34:25] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:25] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:25] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:25] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:26] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:26] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:26] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:26] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:32] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:32] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'both "name" and "dev" cannot be used when creating devices.\n' | exitcode: 255
+152.96.122.109 - - [14/Oct/2021 12:34:45] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:45] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:45] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:45] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:46] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:34:46] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:36:14] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:36:14] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:36:14] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:36:14] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:38:09] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:38:09] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:38:09] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:38:09] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:40:21] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:40:21] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:40:21] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:40:21] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:41:02] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:41:02] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:59:11] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:59:11] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:59:11] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:59:11] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:59:13] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 12:59:13] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:00:45] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:00:45] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:00:45] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:00:45] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:01:04] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:01:04] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:01:31] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:01:31] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:03:21] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:03:21] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:03:28] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:03:28] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'/bin/sh: 1: up: not found\nCannot find device "asd"\n' | exitcode: 127
+152.96.122.109 - - [14/Oct/2021 13:03:34] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:03:34] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:03:35] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:03:36] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:03:42] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:03:42] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'/bin/sh: 1: up: not found\nCommand line is not complete. Try option "help"\n' | exitcode: 127
+152.96.122.109 - - [14/Oct/2021 13:04:23] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:04:23] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:04:24] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:04:25] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:04:31] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:04:31] "[35m[1mPOST /api/v1/connections/ HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 671, in error_router
+    return original_handler(f)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_cors/extension.py", line 165, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 669, in error_router
+    return self.handle_error(e)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/api.py", line 403, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask/views.py", line 84, in view
+    return current_app.ensure_sync(self.dispatch_request)(*args, **kwargs)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/flask_restx/resource.py", line 49, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/ins/wemulate-backend/wemulate_api/api/v1.py", line 24, in post
+    return utils.create_connection(
+  File "/home/ins/wemulate-backend/wemulate_api/core/utils.py", line 51, in create_connection
+    wemulate_utils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/ext/utils/add.py", line 29, in add_connection
+    tcutils.add_connection(
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 138, in add_connection
+    _add_and_activate_linux_bridge(connection_name)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 99, in _add_and_activate_linux_bridge
+    _execute_commands(commands)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 30, in _execute_commands
+    _execute_in_shell(command)
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 23, in _execute_in_shell
+    raise e
+  File "/home/ins/wemulate-backend/env/lib/python3.8/site-packages/wemulate/utils/tcconfig.py", line 19, in _execute_in_shell
+    raise WEmulateExecutionError(
+wemulate.core.exc.WEmulateExecutionError: stdout: b'' | stderr: b'RTNETLINK answers: Invalid argument\n' | exitcode: 2
+152.96.122.109 - - [14/Oct/2021 13:09:07] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:07] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:10] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:10] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:30] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:30] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:30] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:30] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:46] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:46] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:46] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:09:46] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:12:25] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:12:25] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:12:25] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:12:25] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:12:48] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:12:48] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:12:48] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:12:48] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:14:41] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:14:41] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:14:41] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:14:41] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:18:31] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:18:31] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:18:31] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:18:31] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:20:35] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:20:35] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:20:35] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:20:35] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:30:11] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:30:11] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:30:11] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:30:11] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:30:54] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:30:54] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:26] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:26] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:26] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:26] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:29] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:29] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:39] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:39] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:46] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:46] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:46] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:46] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:50] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:37:51] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:38:09] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:38:09] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:38:09] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:38:09] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:38:13] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:38:14] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:41:49] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:41:49] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:41:49] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:41:49] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:41:50] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:41:50] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:00] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:00] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:05] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:05] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:05] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:05] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:06] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:06] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:08] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:08] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:09] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:09] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:09] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:09] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:10] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:10] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:10] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:10] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:14] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:42:15] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:44:21] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:44:22] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:44:49] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:44:49] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:44:49] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:44:49] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:26] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:26] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:26] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:26] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:27] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:27] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:29] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:29] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:30] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:30] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:30] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:30] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:31] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:31] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:32] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:32] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:39] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:39] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:48] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:45:49] "PUT /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:36] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:36] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:36] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:36] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:37] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:37] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:38] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:38] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:39] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:39] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:40] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 13:46:40] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 14:08:54] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 14:08:54] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 14:08:54] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [14/Oct/2021 14:08:54] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:02:54] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:02:54] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:02:54] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:02:57] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:02:57] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:02:58] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:02:58] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:03:00] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:03:00] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:03:06] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:03:06] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:03:13] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:03:14] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:03:29] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 07:03:29] "POST /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:06:12] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:06:12] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:06:13] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:06:13] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:13:14] "OPTIONS /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:13:14] "GET /api/v1/device HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:13:15] "OPTIONS /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:13:15] "GET /api/v1/connections HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:16:04] "OPTIONS /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:16:05] "DELETE /api/v1/connections/1 HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:16:24] "OPTIONS /api/v1/connections/ HTTP/1.1" 200 -
+152.96.122.109 - - [15/Oct/2021 13:16:24] "POST /api/v1/connections/ HTTP/1.1" 200 -
