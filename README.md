@@ -12,4 +12,4 @@ $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/i
 
 ## Development
 1. Install the requirements with `pip install -r requirements-dev.txt`
-2. Start with `python wemulate_api/app.py`
+2. Start with `python api/app.py`

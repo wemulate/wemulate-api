@@ -39,7 +39,7 @@ setup(
     include_package_data=True,
     entry_points="""
         [console_scripts]
-        wemulate-api = wemulate_api.app:main
+        wemulate-api = api.app:main
     """,
     install_requires=requires,
     dependency_links=links,

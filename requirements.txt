@@ -13,3 +13,5 @@ pytz==2021.3
 six==1.16.0
 Werkzeug==2.0.2
 wemulate==1.0.3
+fastapi==0.70.0
+uvicorn==0.15.0
