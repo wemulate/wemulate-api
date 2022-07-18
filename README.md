@@ -11,5 +11,15 @@ $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/i
 ```
 
 ## Development
-1. Install the requirements with `pip install -r requirements-dev.txt`
-2. Start with `python api/app.py`
+Configure poetry to create the environment inside the project path, in order that VSCode can recognize the virtual environment.
+```
+$ poetry config virtualenvs.in-project true
+```
+Install the virtualenv.
+```
+$ poetry install
+```
+Start the application with the following command:
+```
+$ uvicorn api.app:app --host 0.0.0.0 --port 8080 --reload
+```
