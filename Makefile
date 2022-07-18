@@ -4,11 +4,9 @@ clean:
 	find . -name '*.py[co]' -delete
 
 virtualenv:
-	virtualenv --prompt '|> wemulate-api <| ' env
-	env/bin/pip install -r requirements-dev.txt
-	env/bin/python setup.py develop
+	poetry install
 	@echo
-	@echo "VirtualENV Setup Complete. Now run: source env/bin/activate"
+	@echo "VirtualENV Setup Complete. Now run: poetry shell"
 	@echo
 
 test:
@@ -21,8 +19,7 @@ test:
 
 dist: clean
 	rm -rf dist/*
-	python setup.py sdist
-	python setup.py bdist_wheel
+	poetry build
 
 dist-upload:
 	twine upload dist/*
