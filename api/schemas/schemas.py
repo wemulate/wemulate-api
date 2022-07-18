@@ -1,10 +1,10 @@
-from typing import List
+from typing import List, Dict
 from pydantic import BaseModel
 
 
 class Device(BaseModel):
-    mgmt_interfaces: List[str]
-    logical_interfaces: List[str]
+    mgmt_interfaces: List[Dict]
+    logical_interfaces: List[Dict]
 
 
 class ConnectionBase(BaseModel):

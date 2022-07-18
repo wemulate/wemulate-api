@@ -1,6 +1,7 @@
-from typing import List
+from typing import List, Dict
 from fastapi.params import Body
 from fastapi.routing import APIRouter
+from fastapi import Request
 from api.schemas.schemas import ConnectionResponse, Device, Connection, ConnectionBase
 import api.core.utils as utils
 
@@ -15,7 +16,7 @@ def get_device():
     }
 
 
-@router.get("/connections", response_model=List[Connection])
+@router.get("/connections", response_model=Dict)
 def get_connections():
     return {"connections": utils.get_all_connections()}
 
@@ -30,8 +31,8 @@ def post_connections(connection: ConnectionBase):
 
 
 @router.put("/connections/{connection_id}")
-def put_connection(connection_id, connection: Connection):
-    return utils.update_connection(connection_id, connection)
+async def put_connection(connection_id, request: Request):
+    return utils.update_connection(await request.json())
 
 
 @router.delete("/connections/{connection_id}")

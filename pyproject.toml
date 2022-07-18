@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "wemulate-api"
+version = "1.0.4"
+description = "API for the modern WAN Emulator (WEmulate)"
+authors = ["Julian Klaiber <julian.klaiber@ost.ch>", "Severin Dellsperger <severin.dellsperger@ost.ch>"]
+license = "GNU General Public License v3.0"
+readme = "README.md"
+homepage = "https://wemulate.github.io/wemulate"
+documentation = "https://wemulate.github.io/wemulate"
+repository = "https://github.io/wemulate/wemulate"
+packages = [
+    { include = "api" },
+]
+
+[tool.poetry.scripts]
+wemulate-api = "api.app:app"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+aniso8601 = "9.0.1"
+attrs = "21.4.0"
+click = "8.1.3"
+itsdangerous = "2.1.2"
+Jinja2 = "3.1.2"
+jsonschema = "4.7.2"
+MarkupSafe = "2.1.1"
+pyrsistent = "0.18.1"
+pytz = "2022.1"
+six = "1.16.0"
+Werkzeug = "2.1.2"
+fastapi = "0.70.0"
+uvicorn = "0.15.0"
+wemulate = "1.0.3"
+
+[tool.poetry.dev-dependencies]
+black = "22.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
