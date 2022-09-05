@@ -9,7 +9,7 @@ from api.schemas.schemas import (
 import api.core.utils as utils
 from fastapi.encoders import jsonable_encoder
 
-router = APIRouter(prefix="/v1", tags=["v1"])
+router = APIRouter(prefix="/api/v1", tags=["v1"])
 
 
 @router.get("/device", response_model=Device)

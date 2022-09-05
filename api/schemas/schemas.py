@@ -18,7 +18,7 @@ class Device(BaseModel):
     logical_interfaces: List[LogicalInterface]
 
 
-class Parameter(BaseModel):
+class Settings(BaseModel):
     delay: int = 0
     packet_loss: int = 0
     bandwidth: int = 0
@@ -32,8 +32,8 @@ class ConnectionBase(BaseModel):
 
 
 class Connection(ConnectionBase):
-    incoming: Parameter
-    outgoing: Parameter
+    incoming: Settings
+    outgoing: Settings
 
 
 class ConnectionComplete(Connection):

@@ -17,7 +17,7 @@ from api.schemas.schemas import (
     Device,
     LogicalInterface,
     ManagementInterface,
-    Parameter,
+    Settings,
 )
 
 
@@ -96,10 +96,10 @@ def create_connection(
     )
 
 
-def _get_parameter(connection: ConnectionModel) -> Dict[str, Parameter]:
-    parameters: Dict[str, Parameter] = {
-        "incoming": Parameter(),
-        "outgoing": Parameter(),
+def _get_parameter(connection: ConnectionModel) -> Dict[str, Settings]:
+    parameters: Dict[str, Settings] = {
+        "incoming": Settings(),
+        "outgoing": Settings(),
     }
     if connection.parameters:
         for parameter in connection.parameters:
