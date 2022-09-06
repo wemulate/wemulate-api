@@ -1,27 +1,28 @@
-from typing import List, Dict
-from fastapi.params import Body
 from fastapi.routing import APIRouter
-from fastapi import Request
-from api.schemas.schemas import ConnectionResponse, Device, Connection, ConnectionBase
+from api.schemas.schemas import (
+    ConnectionList,
+    Device,
+    Connection,
+    ConnectionBase,
+    ConnectionComplete,
+)
 import api.core.utils as utils
+from fastapi.encoders import jsonable_encoder
 
-router = APIRouter(prefix="/v1", tags=["v1"])
+router = APIRouter(prefix="/api/v1", tags=["v1"])
 
 
 @router.get("/device", response_model=Device)
 def get_device():
-    return {
-        "mgmt_interfaces": utils.get_mgmt_interfaces(),
-        "logical_interfaces": utils.get_logical_interfaces(),
-    }
+    return utils.get_device_information()
 
 
-@router.get("/connections", response_model=Dict)
+@router.get("/connections", response_model=ConnectionList)
 def get_connections():
-    return {"connections": utils.get_all_connections()}
+    return utils.get_all_connections()
 
 
-@router.post("/connections", response_model=ConnectionResponse)
+@router.post("/connections", response_model=ConnectionComplete)
 def post_connections(connection: ConnectionBase):
     return utils.create_connection(
         connection.connection_name,
@@ -30,9 +31,10 @@ def post_connections(connection: ConnectionBase):
     )
 
 
-@router.put("/connections/{connection_id}")
-async def put_connection(connection_id, request: Request):
-    return utils.update_connection(await request.json())
+@router.put("/connections/{connection_id}", response_model=Connection)
+async def put_connection(connection_id, connection: Connection):
+    updated_connection = jsonable_encoder(connection)
+    return utils.update_connection(updated_connection)
 
 
 @router.delete("/connections/{connection_id}")
