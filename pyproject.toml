@@ -30,7 +30,7 @@ six = "1.16.0"
 Werkzeug = "2.1.2"
 fastapi = "0.70.0"
 uvicorn = "0.15.0"
-wemulate = {git = "git@github.com:wemulate/wemulate.git", rev = "directional-disturbance"}
+wemulate = "^2.0.0"
 
 [tool.poetry.dev-dependencies]
 black = "22.6.0"

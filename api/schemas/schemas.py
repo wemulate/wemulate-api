@@ -32,8 +32,8 @@ class ConnectionBase(BaseModel):
 
 
 class Connection(ConnectionBase):
-    incoming: Settings
-    outgoing: Settings
+    incoming: Settings = Settings()
+    outgoing: Settings = Settings()
 
 
 class ConnectionComplete(Connection):

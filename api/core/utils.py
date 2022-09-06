@@ -31,9 +31,7 @@ def _get_mgmt_interfaces() -> List[ManagementInterface]:
     for mgmt_interface_name in mgmt_interface_names:
         ip_address = _get_ip_of_interface(mgmt_interface_name)
         mgmt_interfaces.append(
-            ManagementInterface(
-                **{"ip": ip_address, "physical_name": mgmt_interface_name}
-            )
+            ManagementInterface(ip=ip_address, physical_name=mgmt_interface_name)
         )
     return mgmt_interfaces
 
@@ -49,11 +47,9 @@ def _get_logical_interfaces() -> List[LogicalInterface]:
         )
         logical_interfaces.append(
             LogicalInterface(
-                **{
-                    "interface_id": logical_interface.logical_interface_id,
-                    "logical_name": logical_interface.logical_name,
-                    "physical_name": physical_interface_name,
-                }
+                interface_id=logical_interface.logical_interface_id,
+                logical_name=logical_interface.logical_name,
+                physical_name=physical_interface_name,
             )
         )
     return logical_interfaces
@@ -61,10 +57,8 @@ def _get_logical_interfaces() -> List[LogicalInterface]:
 
 def get_device_information() -> Device:
     return Device(
-        **{
-            "mgmt_interfaces": _get_mgmt_interfaces(),
-            "logical_interfaces": _get_logical_interfaces(),
-        }
+        mgmt_interfaces=_get_mgmt_interfaces(),
+        logical_interfaces=_get_logical_interfaces(),
     )
 
 
@@ -83,16 +77,12 @@ def create_connection(
         ).logical_name,
     )
     return ConnectionComplete(
-        **{
-            "connection_id": wemulate_utils.get_connection_by_name(
-                connection_name
-            ).connection_id,
-            "connection_name": connection_name,
-            "first_logical_interface_id": first_logical_interface_id,
-            "second_logical_interface_id": second_logical_interface_id,
-            "incoming": {},
-            "outgoing": {},
-        }
+        connection_id=wemulate_utils.get_connection_by_name(
+            connection_name
+        ).connection_id,
+        connection_name=connection_name,
+        first_logical_interface_id=first_logical_interface_id,
+        second_logical_interface_id=second_logical_interface_id,
     )
 
 
@@ -119,13 +109,11 @@ def get_all_connections() -> ConnectionList:
     connection_information: ConnectionList = ConnectionList(connections=[])
     for connection in connections:
         complete_connection = ConnectionComplete(
-            **{
-                "connection_name": connection.connection_name,
-                "connection_id": connection.connection_id,
-                "first_logical_interface_id": connection.first_logical_interface_id,
-                "second_logical_interface_id": connection.second_logical_interface_id,
-                **_get_parameter(connection),
-            }
+            connection_name=connection.connection_name,
+            connection_id=connection.connection_id,
+            first_logical_interface_id=connection.first_logical_interface_id,
+            second_logical_interface_id=connection.second_logical_interface_id,
+            **_get_parameter(connection),
         )
         connection_information.connections.append(complete_connection)
     return connection_information
@@ -136,16 +124,11 @@ def _reset_connection(connection_name: str) -> None:
 
 
 def _detect_applied_parameters(parameters: Dict[str, int]) -> Dict[str, int]:
-    applied_parameter: Dict = {}
-    if parameters[JITTER] != DEFAULT_PARAMETERS[JITTER]:
-        applied_parameter[JITTER] = parameters[JITTER]
-    if parameters[BANDWIDTH] != DEFAULT_PARAMETERS[BANDWIDTH]:
-        applied_parameter[BANDWIDTH] = parameters[BANDWIDTH]
-    if parameters[DELAY] != DEFAULT_PARAMETERS[DELAY]:
-        applied_parameter[DELAY] = parameters[DELAY]
-    if parameters[PACKET_LOSS] != DEFAULT_PARAMETERS[PACKET_LOSS]:
-        applied_parameter[PACKET_LOSS] = parameters[PACKET_LOSS]
-    return applied_parameter
+    applied_parameters: Dict = {}
+    for name, default_value in DEFAULT_PARAMETERS.items():
+        if parameters.get(name) != default_value:
+            applied_parameters[name] = parameters[name]
+    return applied_parameters
 
 
 def _set_parameter(
