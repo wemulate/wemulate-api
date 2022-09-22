@@ -5,10 +5,7 @@ This is the API module which builds on the [CLI module](https://github.com/wemul
 Have a look at the [documentation](https://wemulate.github.io/wemulate) for detailed information.
 
 ## Installation
-Install the API module via the install script:
-```bash
-$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
-```
+It is installed with the `-a` parameter from the documented install command for [WEmulate](https://github.com/wemulate/wemulate).
 
 ## Development
 Configure poetry to create the environment inside the project path, in order that VSCode can recognize the virtual environment.
