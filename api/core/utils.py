@@ -5,10 +5,6 @@ from wemulate.core.database.models import (
     ConnectionModel,
     LogicalInterfaceModel,
     DEFAULT_PARAMETERS,
-    JITTER,
-    BANDWIDTH,
-    PACKET_LOSS,
-    DELAY,
 )
 from api.schemas.schemas import (
     Connection,
@@ -151,3 +147,7 @@ def delete_connection(connection_id: int) -> None:
     wemulate_utils.delete_connection(
         wemulate_utils.get_connection_by_id(connection_id).connection_name
     )
+
+
+def reset_device() -> None:
+    wemulate_utils.reset_device()
