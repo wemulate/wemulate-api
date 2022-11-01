@@ -17,6 +17,12 @@ def get_device():
     return utils.get_device_information()
 
 
+@router.delete("/device/reset")
+def reset_device():
+    utils.reset_device()
+    return "Device successfully resetted", 200
+
+
 @router.get("/connections", response_model=ConnectionList)
 def get_connections():
     return utils.get_all_connections()
