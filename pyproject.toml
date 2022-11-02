@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wemulate-api"
-version = "2.0.1"
+version = "2.0.2"
 description = "API for the modern WAN Emulator (WEmulate)"
 authors = ["Julian Klaiber <julian.klaiber@ost.ch>", "Severin Dellsperger <severin.dellsperger@ost.ch>"]
 license = "GNU General Public License v3.0"
@@ -30,7 +30,7 @@ six = "1.16.0"
 Werkzeug = "2.1.2"
 fastapi = "0.70.0"
 uvicorn = "0.15.0"
-wemulate = "^2.0.3"
+wemulate = "^2.0.4"
 
 [tool.poetry.dev-dependencies]
 black = "22.6.0"
