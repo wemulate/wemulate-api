@@ -120,6 +120,6 @@ dmypy.json
 *.db
 
 #VSCODE
-.vscode
+.vscode/*
 
 nohup.out
