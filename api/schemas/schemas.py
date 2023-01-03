@@ -19,10 +19,10 @@ class Device(BaseModel):
 
 
 class Settings(BaseModel):
-    delay: int = 0
-    packet_loss: int = 0
-    bandwidth: int = 0
-    jitter: int = 0
+    delay: float = 0
+    packet_loss: float = 0
+    bandwidth: float = 0
+    jitter: float = 0
 
 
 class ConnectionBase(BaseModel):
