@@ -119,7 +119,7 @@ def _reset_connection(connection_name: str) -> None:
     wemulate_utils.reset_connection(connection_name)
 
 
-def _detect_applied_parameters(parameters: Dict[str, int]) -> Dict[str, int]:
+def _detect_applied_parameters(parameters: Dict[str, float]) -> Dict[str, float]:
     applied_parameters: Dict = {}
     for name, default_value in DEFAULT_PARAMETERS.items():
         if parameters.get(name) != default_value:
@@ -128,7 +128,7 @@ def _detect_applied_parameters(parameters: Dict[str, int]) -> Dict[str, int]:
 
 
 def _set_parameter(
-    connection_name: str, parameters: Dict[str, int], direction: str
+    connection_name: str, parameters: Dict[str, float], direction: str
 ) -> None:
     wemulate_utils.set_parameter(connection_name, parameters, direction)
 
@@ -136,7 +136,7 @@ def _set_parameter(
 def update_connection(connection: Dict) -> Connection:
     _reset_connection(connection["connection_name"])
     for direction in ["incoming", "outgoing"]:
-        parameters_to_apply: Dict[str, int] = _detect_applied_parameters(
+        parameters_to_apply: Dict[str, float] = _detect_applied_parameters(
             connection[direction]
         )
         _set_parameter(connection["connection_name"], parameters_to_apply, direction)
